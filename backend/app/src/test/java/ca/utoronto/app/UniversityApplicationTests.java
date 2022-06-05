@@ -1,13 +1,11 @@
-package rs.ac.uns.app;
+package ca.utoronto.app;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UniversityOfNoviSadApplicationTests {
+class UniversityApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {}
 }

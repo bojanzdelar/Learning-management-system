@@ -10,15 +10,15 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>rs.ac.uns</groupId>
+    <groupId>ca.utoronto.app</groupId>
     <artifactId>app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>University of Novi Sad</name>
+    <name>University of Toronto</name>
 
     <properties>
         <java.version>17</java.version>
         <org.projectlombok.version>1.18.22</org.projectlombok.version>
-        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <org.mapstruct.version>1.5.0.Final</org.mapstruct.version>
     </properties>
 
     <dependencies>

@@ -1,5 +1,5 @@
 # Misc
 
 misc/
-*.pdf
 *.jdl
+generated/
