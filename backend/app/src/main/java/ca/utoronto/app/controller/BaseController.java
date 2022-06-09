@@ -1,11 +1,13 @@
 package ca.utoronto.app.controller;
 
+import ca.utoronto.app.dto.BaseDTO;
+import ca.utoronto.app.service.BaseService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ca.utoronto.app.dto.BaseDTO;
-import ca.utoronto.app.service.BaseService;
 
 import java.util.List;
 
@@ -13,9 +15,14 @@ import java.util.List;
 public abstract class BaseController<Model, DTO extends BaseDTO<ID>, ID> {
     private final BaseService<Model, DTO, ID> service;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<DTO>> getAll() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<DTO>> getAll(Pageable pageable) {
+        return new ResponseEntity<>(service.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

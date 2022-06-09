@@ -1,8 +1,10 @@
 package ca.utoronto.app.service;
 
-import lombok.AllArgsConstructor;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import ca.utoronto.app.mapper.BaseMapper;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
@@ -13,6 +15,10 @@ public abstract class BaseService<Model, DTO, ID> {
 
     public List<DTO> findAll() {
         return mapper.toDTO((List<Model>) repository.findAll());
+    }
+
+    public Page<DTO> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::toDTO);
     }
 
     public DTO findOne(ID id) {
