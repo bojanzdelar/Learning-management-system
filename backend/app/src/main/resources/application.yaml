@@ -1,4 +1,9 @@
+server:
+  port: 8081
+
 spring:
+  application:
+    name: app
   jpa:
     properties:
       hibernate:
@@ -12,3 +17,10 @@ spring:
     password: root
   jackson:
     default-property-inclusion: non_empty
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
