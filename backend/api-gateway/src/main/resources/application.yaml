@@ -7,10 +7,18 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: app
-          uri: lb://APP
+        - id: faculty-service
+          uri: lb://FACULTY-SERVICE
           predicates:
-            - Path=/api/**
+            - Path=/api/faculty-service/**
+        - id: subject-service
+          uri: lb://SUBJECT-SERVICE
+          predicates:
+            - Path=/api/subject-service/**
+        - id: exam-service
+          uri: lb://EXAM-SERVICE
+          predicates:
+            - Path=/api/exam-service/**
 
 eureka:
   instance:
