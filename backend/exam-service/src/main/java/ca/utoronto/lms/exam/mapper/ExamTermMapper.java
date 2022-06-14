@@ -6,6 +6,7 @@ import ca.utoronto.lms.exam.dto.ExamTermDTO;
 import ca.utoronto.lms.exam.model.Exam;
 import ca.utoronto.lms.exam.model.ExamPeriod;
 import ca.utoronto.lms.exam.model.ExamTerm;
+import ca.utoronto.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

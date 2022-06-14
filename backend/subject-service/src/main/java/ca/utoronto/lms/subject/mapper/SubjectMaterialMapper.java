@@ -1,5 +1,6 @@
 package ca.utoronto.lms.subject.mapper;
 
+import ca.utoronto.lms.shared.mapper.BaseMapper;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
 import ca.utoronto.lms.subject.dto.SubjectMaterialDTO;
 import ca.utoronto.lms.subject.dto.TeacherDTO;

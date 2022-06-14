@@ -1,10 +1,11 @@
 package ca.utoronto.lms.faculty.service;
 
-import org.springframework.stereotype.Service;
+import ca.utoronto.lms.shared.service.BaseService;
 import ca.utoronto.lms.faculty.dto.FacultyDTO;
 import ca.utoronto.lms.faculty.mapper.FacultyMapper;
 import ca.utoronto.lms.faculty.model.Faculty;
 import ca.utoronto.lms.faculty.repository.FacultyRepository;
+import org.springframework.stereotype.Service;
 
 @Service
 public class FacultyService extends BaseService<Faculty, FacultyDTO, Long> {

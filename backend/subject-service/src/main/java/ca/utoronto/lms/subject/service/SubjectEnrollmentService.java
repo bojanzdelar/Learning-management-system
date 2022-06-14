@@ -1,5 +1,6 @@
 package ca.utoronto.lms.subject.service;
 
+import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectEnrollmentDTO;
 import ca.utoronto.lms.subject.feign.FacultyFeignClient;
 import ca.utoronto.lms.subject.mapper.SubjectEnrollmentMapper;

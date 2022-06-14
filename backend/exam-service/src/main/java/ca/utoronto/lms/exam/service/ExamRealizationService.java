@@ -5,6 +5,7 @@ import ca.utoronto.lms.exam.feign.SubjectFeignClient;
 import ca.utoronto.lms.exam.mapper.ExamRealizationMapper;
 import ca.utoronto.lms.exam.model.ExamRealization;
 import ca.utoronto.lms.exam.repository.ExamRealizationRepository;
+import ca.utoronto.lms.shared.service.ExtendedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +31,9 @@ public class ExamRealizationService
         map(
                 examRealizations,
                 (examRealization) -> examRealization.getSubjectEnrollment(),
-                (examRealization, subjectEnrollment) -> examRealization.setSubjectEnrollment(subjectEnrollment),
-                (ID) -> subjectFeignClient.getSubjectEnrollment(ID)
-        );
+                (examRealization, subjectEnrollment) ->
+                        examRealization.setSubjectEnrollment(subjectEnrollment),
+                (ID) -> subjectFeignClient.getSubjectEnrollment(ID));
 
         return examRealizations;
     }

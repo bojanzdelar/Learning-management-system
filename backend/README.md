@@ -1,1 +1,1 @@
-# University of Toronto - Backend
+# Learning management system - Backend

@@ -3,6 +3,7 @@ package ca.utoronto.lms.exam.mapper;
 import ca.utoronto.lms.exam.dto.ExamPeriodDTO;
 import ca.utoronto.lms.exam.dto.FacultyDTO;
 import ca.utoronto.lms.exam.model.ExamPeriod;
+import ca.utoronto.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

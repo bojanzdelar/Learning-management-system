@@ -1,5 +1,6 @@
 package ca.utoronto.lms.faculty.controller;
 
+import ca.utoronto.lms.shared.controller.BaseController;
 import ca.utoronto.lms.faculty.dto.ThesisDTO;
 import ca.utoronto.lms.faculty.model.Thesis;
 import ca.utoronto.lms.faculty.service.ThesisService;

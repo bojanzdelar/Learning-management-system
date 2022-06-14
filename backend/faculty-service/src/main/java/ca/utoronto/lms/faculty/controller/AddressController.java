@@ -1,5 +1,6 @@
 package ca.utoronto.lms.faculty.controller;
 
+import ca.utoronto.lms.shared.controller.BaseController;
 import ca.utoronto.lms.faculty.dto.AddressDTO;
 import ca.utoronto.lms.faculty.model.Address;
 import ca.utoronto.lms.faculty.service.AddressService;

@@ -1,5 +1,6 @@
 package ca.utoronto.lms.subject.model;
 
+import ca.utoronto.lms.shared.model.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

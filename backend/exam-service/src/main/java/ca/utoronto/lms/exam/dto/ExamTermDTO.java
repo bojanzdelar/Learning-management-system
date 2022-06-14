@@ -1,5 +1,6 @@
 package ca.utoronto.lms.exam.dto;
 
+import ca.utoronto.lms.shared.dto.BaseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,5 +1,6 @@
 package ca.utoronto.lms.faculty.mapper;
 
+import ca.utoronto.lms.shared.mapper.BaseMapper;
 import ca.utoronto.lms.faculty.dto.TeacherDTO;
 import ca.utoronto.lms.faculty.dto.UserDTO;
 import ca.utoronto.lms.faculty.model.Teacher;

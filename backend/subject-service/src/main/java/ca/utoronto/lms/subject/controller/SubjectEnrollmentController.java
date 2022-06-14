@@ -1,5 +1,6 @@
 package ca.utoronto.lms.subject.controller;
 
+import ca.utoronto.lms.shared.controller.BaseController;
 import ca.utoronto.lms.subject.dto.SubjectEnrollmentDTO;
 import ca.utoronto.lms.subject.model.SubjectEnrollment;
 import ca.utoronto.lms.subject.service.SubjectEnrollmentService;

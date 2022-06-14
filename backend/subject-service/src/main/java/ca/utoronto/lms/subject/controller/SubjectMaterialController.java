@@ -1,5 +1,6 @@
 package ca.utoronto.lms.subject.controller;
 
+import ca.utoronto.lms.shared.controller.BaseController;
 import ca.utoronto.lms.subject.dto.SubjectMaterialDTO;
 import ca.utoronto.lms.subject.model.SubjectMaterial;
 import ca.utoronto.lms.subject.service.SubjectMaterialService;

@@ -1,10 +1,11 @@
 package ca.utoronto.lms.exam.service;
 
 import ca.utoronto.lms.exam.dto.ExamTermDTO;
-import ca.utoronto.lms.exam.repository.ExamTermRepository;
-import org.springframework.stereotype.Service;
 import ca.utoronto.lms.exam.mapper.ExamTermMapper;
 import ca.utoronto.lms.exam.model.ExamTerm;
+import ca.utoronto.lms.exam.repository.ExamTermRepository;
+import ca.utoronto.lms.shared.service.BaseService;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ExamTermService extends BaseService<ExamTerm, ExamTermDTO, Long> {

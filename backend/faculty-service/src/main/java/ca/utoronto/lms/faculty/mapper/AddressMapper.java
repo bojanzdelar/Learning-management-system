@@ -1,5 +1,6 @@
 package ca.utoronto.lms.faculty.mapper;
 
+import ca.utoronto.lms.shared.mapper.BaseMapper;
 import ca.utoronto.lms.faculty.dto.AddressDTO;
 import ca.utoronto.lms.faculty.dto.CityDTO;
 import ca.utoronto.lms.faculty.model.Address;

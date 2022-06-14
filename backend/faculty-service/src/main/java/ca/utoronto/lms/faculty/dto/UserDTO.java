@@ -1,5 +1,6 @@
 package ca.utoronto.lms.faculty.dto;
 
+import ca.utoronto.lms.shared.dto.BaseDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

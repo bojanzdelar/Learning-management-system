@@ -1,5 +1,6 @@
 package ca.utoronto.lms.faculty.controller;
 
+import ca.utoronto.lms.shared.controller.BaseController;
 import ca.utoronto.lms.faculty.dto.TeacherTitleDTO;
 import ca.utoronto.lms.faculty.model.TeacherTitle;
 import ca.utoronto.lms.faculty.service.TeacherTitleService;

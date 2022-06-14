@@ -5,6 +5,7 @@ import ca.utoronto.lms.exam.dto.ExamTermDTO;
 import ca.utoronto.lms.exam.dto.SubjectEnrollmentDTO;
 import ca.utoronto.lms.exam.model.ExamRealization;
 import ca.utoronto.lms.exam.model.ExamTerm;
+import ca.utoronto.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

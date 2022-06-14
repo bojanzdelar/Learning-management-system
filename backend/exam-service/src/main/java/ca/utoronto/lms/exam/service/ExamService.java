@@ -5,6 +5,7 @@ import ca.utoronto.lms.exam.feign.SubjectFeignClient;
 import ca.utoronto.lms.exam.mapper.ExamMapper;
 import ca.utoronto.lms.exam.model.Exam;
 import ca.utoronto.lms.exam.repository.ExamRepository;
+import ca.utoronto.lms.shared.service.ExtendedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

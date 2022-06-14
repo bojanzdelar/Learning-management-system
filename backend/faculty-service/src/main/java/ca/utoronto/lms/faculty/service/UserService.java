@@ -1,5 +1,6 @@
 package ca.utoronto.lms.faculty.service;
 
+import ca.utoronto.lms.shared.service.BaseService;
 import ca.utoronto.lms.faculty.dto.UserDTO;
 import ca.utoronto.lms.faculty.mapper.UserMapper;
 import ca.utoronto.lms.faculty.model.User;
