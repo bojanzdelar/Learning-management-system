@@ -30,8 +30,8 @@ public class SubjectMaterialService
     protected List<SubjectMaterialDTO> mapMissingValues(List<SubjectMaterialDTO> subjectMaterials) {
         map(
                 subjectMaterials,
-                (subjectMaterial) -> subjectMaterial.getTeacher(),
-                (subjectMaterial, teacher) -> subjectMaterial.setTeacher(teacher),
+                SubjectMaterialDTO::getTeacher,
+                SubjectMaterialDTO::setTeacher,
                 (ID) -> facultyFeignClient.getTeacher(ID));
 
         return subjectMaterials;

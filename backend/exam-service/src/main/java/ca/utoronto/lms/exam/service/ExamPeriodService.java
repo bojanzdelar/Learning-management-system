@@ -28,8 +28,8 @@ public class ExamPeriodService extends ExtendedService<ExamPeriod, ExamPeriodDTO
     protected List<ExamPeriodDTO> mapMissingValues(List<ExamPeriodDTO> examPeriods) {
         map(
                 examPeriods,
-                (examPeriod) -> examPeriod.getFaculty(),
-                (examPeriod, faculty) -> examPeriod.setFaculty(faculty),
+                ExamPeriodDTO::getFaculty,
+                ExamPeriodDTO::setFaculty,
                 (ID) -> facultyFeignClient.getFaculty(ID));
 
         return examPeriods;

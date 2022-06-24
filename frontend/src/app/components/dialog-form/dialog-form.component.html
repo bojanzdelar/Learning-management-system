@@ -1,0 +1,69 @@
+<h2 mat-dialog-title>
+  <ng-container *ngIf="form.value.id">Edit</ng-container>
+  <ng-container *ngIf="!form.value.id">Create</ng-container>
+  {{ name }}
+</h2>
+<mat-dialog-content class="mat-typography" align="right">
+  <form [formGroup]="form" novalidate class="space-y-4" class="mx-8">
+    <ng-container *ngFor="let attr of attributes">
+      <div>
+        <mat-label class="mr-6">{{ attr.name }}</mat-label>
+        <ng-container [ngSwitch]="attr.type">
+          <!-- Autocomplete field -->
+          <ng-container *ngSwitchCase="'select'">
+            <mat-form-field *ngIf="attr.display" appearance="fill">
+              <input
+                #input
+                matInput
+                [formControlName]="attr.key"
+                [matAutocomplete]="auto"
+                (keyup)="onAutocompleteKeyUp(input.value, attr)"
+              />
+              <mat-error *ngIf="form.controls[attr.key].errors">
+                Please select a value from the list.
+              </mat-error>
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                [displayWith]="getDisplay"
+              >
+                <mat-option
+                  *ngFor="let option of attr.filteredOptions | keyvalue"
+                  [value]="option.value"
+                >
+                  {{ option.value.display }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </ng-container>
+
+          <!-- Textarea field -->
+          <mat-form-field *ngSwitchCase="'lob'" appearance="fill">
+            <mat-error *ngIf="form.controls[attr.key].errors">
+              Please enter a valid text.
+            </mat-error>
+            <textarea matInput [formControlName]="attr.key" rows="5"></textarea>
+          </mat-form-field>
+
+          <!-- Input field -->
+          <mat-form-field *ngSwitchDefault appearance="fill">
+            <mat-error *ngIf="form.controls[attr.key].errors">
+              Please enter a valid text.
+            </mat-error>
+            <input
+              matInput
+              [formControlName]="attr.key"
+              [attr.type]="attr.type"
+            />
+          </mat-form-field>
+        </ng-container>
+      </div>
+    </ng-container>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <!-- Actions -->
+  <button mat-flat-button mat-dialog-close>Cancel</button>
+  <button (click)="confirm()" mat-flat-button cdkFocusInitial color="primary">
+    Confirm
+  </button>
+</mat-dialog-actions>

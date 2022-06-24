@@ -31,8 +31,8 @@ public class SubjectNotificationService
             List<SubjectNotificationDTO> subjectNotifications) {
         map(
                 subjectNotifications,
-                (subjectNotification) -> subjectNotification.getTeacher(),
-                (subjectNotification, teacher) -> subjectNotification.setTeacher(teacher),
+                SubjectNotificationDTO::getTeacher,
+                SubjectNotificationDTO::setTeacher,
                 (ID) -> facultyFeignClient.getTeacher(ID));
 
         return subjectNotifications;

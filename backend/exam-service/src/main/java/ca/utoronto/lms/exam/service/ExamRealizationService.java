@@ -30,9 +30,8 @@ public class ExamRealizationService
     protected List<ExamRealizationDTO> mapMissingValues(List<ExamRealizationDTO> examRealizations) {
         map(
                 examRealizations,
-                (examRealization) -> examRealization.getSubjectEnrollment(),
-                (examRealization, subjectEnrollment) ->
-                        examRealization.setSubjectEnrollment(subjectEnrollment),
+                ExamRealizationDTO::getSubjectEnrollment,
+                ExamRealizationDTO::setSubjectEnrollment,
                 (ID) -> subjectFeignClient.getSubjectEnrollment(ID));
 
         return examRealizations;

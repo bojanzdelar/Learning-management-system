@@ -31,8 +31,8 @@ public class SubjectEnrollmentService
             List<SubjectEnrollmentDTO> subjectEnrollments) {
         map(
                 subjectEnrollments,
-                (subjectEnrollment) -> subjectEnrollment.getStudent(),
-                (subjectEnrollment, student) -> subjectEnrollment.setStudent(student),
+                SubjectEnrollmentDTO::getStudent,
+                SubjectEnrollmentDTO::setStudent,
                 (ID) -> facultyFeignClient.getStudent(ID));
 
         return subjectEnrollments;

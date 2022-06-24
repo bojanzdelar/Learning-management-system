@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.github.bojanzdelar</groupId>
             <artifactId>learning-management-system-shared-library</artifactId>
-            <version>5b16c40718</version>
+            <version>77c54ba19b</version>
         </dependency>
 
         <dependency>

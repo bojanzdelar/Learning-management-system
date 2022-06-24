@@ -27,18 +27,18 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
     protected List<SubjectDTO> mapMissingValues(List<SubjectDTO> subjects) {
         map(
                 subjects,
-                (subject) -> subject.getStudyProgram(),
-                (subject, studyProgram) -> subject.setStudyProgram(studyProgram),
+                SubjectDTO::getStudyProgram,
+                SubjectDTO::setStudyProgram,
                 (ID) -> facultyFeignClient.getStudyProgram(ID));
         map(
                 subjects,
-                (subject) -> subject.getProfessor(),
-                (subject, professor) -> subject.setProfessor(professor),
+                SubjectDTO::getProfessor,
+                SubjectDTO::setProfessor,
                 (ID) -> facultyFeignClient.getTeacher(ID));
         map(
                 subjects,
-                (subject) -> subject.getAssistant(),
-                (subject, assistant) -> subject.setAssistant(assistant),
+                SubjectDTO::getAssistant,
+                SubjectDTO::setAssistant,
                 (ID) -> facultyFeignClient.getTeacher(ID));
 
         return subjects;

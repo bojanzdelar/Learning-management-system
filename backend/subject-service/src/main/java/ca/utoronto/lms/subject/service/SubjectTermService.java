@@ -28,8 +28,8 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
     protected List<SubjectTermDTO> mapMissingValues(List<SubjectTermDTO> subjectTerms) {
         map(
                 subjectTerms,
-                (subjectTerm) -> subjectTerm.getTeacher(),
-                (subjectTerm, teacher) -> subjectTerm.setTeacher(teacher),
+                SubjectTermDTO::getTeacher,
+                SubjectTermDTO::setTeacher,
                 (ID) -> facultyFeignClient.getTeacher(ID));
 
         return subjectTerms;

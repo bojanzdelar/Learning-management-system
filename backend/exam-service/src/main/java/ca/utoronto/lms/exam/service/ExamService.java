@@ -28,8 +28,8 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
     protected List<ExamDTO> mapMissingValues(List<ExamDTO> exams) {
         map(
                 exams,
-                (exam) -> exam.getSubject(),
-                (exam, subject) -> exam.setSubject(subject),
+                ExamDTO::getSubject,
+                ExamDTO::setSubject,
                 (ID) -> subjectFeignClient.getSubject(ID));
 
         return exams;
