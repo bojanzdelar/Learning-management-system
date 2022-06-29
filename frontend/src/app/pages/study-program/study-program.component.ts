@@ -2,21 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@shared/base-component';
 import { EntityAttribute } from '@models/entity-attribute.model';
-import { Faculty } from '@models/faculty.model';
+import { StudyProgram } from '@models/study-program.model';
+import { getFacultyDisplay } from '@models/faculty.model';
 import { getTeacherDisplay } from '@models/teacher.model';
-import { getAddressDisplay } from '@models/address.model';
+import { StudyProgramService } from '@services/study-program.service';
 import { FacultyService } from '@services/faculty.service';
-import { AddressService } from '@services/address.service';
 import { TeacherService } from '@services/teacher.service';
 
 @Component({
-  selector: 'app-faculty',
-  templateUrl: './faculty.component.html',
-  styleUrls: ['./faculty.component.scss'],
+  selector: 'app-study-program',
+  templateUrl: './study-program.component.html',
+  styleUrls: ['./study-program.component.scss'],
 })
-export class FacultyComponent extends BaseComponent<Faculty> implements OnInit {
-  title: string = 'Faculties';
-  name: string = 'faculty';
+export class StudyProgramComponent
+  extends BaseComponent<StudyProgram>
+  implements OnInit
+{
+  title: string = 'Study programs';
+  name: string = 'study program';
   attributes: EntityAttribute[] = [
     {
       key: 'id',
@@ -36,39 +39,33 @@ export class FacultyComponent extends BaseComponent<Faculty> implements OnInit {
       required: true,
     },
     {
-      key: 'email',
-      name: 'Email',
-      type: 'email',
+      key: 'faculty',
+      name: 'Faculty',
+      type: 'select',
       required: true,
+      display: getFacultyDisplay,
     },
     {
-      key: 'dean',
-      name: 'Dean',
+      key: 'manager',
+      name: 'Manager',
       type: 'select',
       required: true,
       display: getTeacherDisplay,
-    },
-    {
-      key: 'address',
-      name: 'Address',
-      type: 'select',
-      required: true,
-      display: getAddressDisplay,
     },
   ];
 
   constructor(
     public override dialog: MatDialog,
-    public override service: FacultyService,
-    public teacherService: TeacherService,
-    public addressService: AddressService
+    public override service: StudyProgramService,
+    public facultyService: FacultyService,
+    public teacherService: TeacherService
   ) {
     super();
   }
 
   ngOnInit(): void {
     this.getPage(this.pageRequest);
-    this.getOptions('dean', this.teacherService);
-    this.getOptions('address', this.addressService);
+    this.getOptions('faculty', this.facultyService);
+    this.getOptions('manager', this.teacherService);
   }
 }

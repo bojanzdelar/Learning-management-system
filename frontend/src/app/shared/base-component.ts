@@ -8,6 +8,7 @@ import { DialogDeleteComponent } from '@components/dialog-delete/dialog-delete.c
 import { EntityAttribute } from '@models/entity-attribute.model';
 
 export abstract class BaseComponent<T extends Base> {
+  abstract title: string;
   abstract name: string;
   abstract attributes: EntityAttribute[];
 

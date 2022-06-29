@@ -1,17 +1,27 @@
-<div>
-  <mat-form-field appearance="standard" class="search-input">
-    <input matInput placeholder="Enter search term" #input />
-  </mat-form-field>
-  <button mat-flat-button color="primary" (click)="makeSearch(input.value)">
-    Search
-  </button>
-  <button mat-flat-button color="primary" (click)="create()">Create new</button>
-  <button mat-flat-button color="warn" (click)="delete()">
-    Delete selected
-  </button>
+<h1 class="text-xl mb-2">{{ title }}</h1>
+
+<mat-divider></mat-divider>
+
+<div class="md:columns-2 md:h-20 h-36">
+  <div class="md:h-full flex items-center space-x-2">
+    <mat-form-field appearance="standard">
+      <input matInput placeholder="Enter search term" #input />
+    </mat-form-field>
+    <button mat-flat-button color="primary" (click)="makeSearch(input.value)">
+      Search
+    </button>
+  </div>
+  <div class="md:h-full md:float-right flex items-center space-x-2">
+    <button mat-flat-button color="primary" (click)="create()">
+      Create new
+    </button>
+    <button mat-flat-button color="warn" (click)="delete()">
+      Delete selected
+    </button>
+  </div>
 </div>
 
-<div class="mat-elevation-z8">
+<div class="mat-elevation-z2">
   <table
     mat-table
     [dataSource]="dataSource"
@@ -57,7 +67,7 @@
       <td mat-cell *matCellDef="let element">
         {{
           col.options
-            ? col.options[element[col.key].id].display
+            ? col.options[element[col.key]?.id]?.display
             : element[col.key]
         }}
       </td>

@@ -22,6 +22,9 @@ import { Base } from '@models/base.model';
 })
 export class TableComponent<T extends Base> implements OnInit {
   @Input()
+  title: string;
+
+  @Input()
   set columns(attributes: EntityAttribute[]) {
     attributes = attributes.filter(
       (attribute: EntityAttribute) => attribute.type !== 'lob'
