@@ -24,32 +24,11 @@
       "dom"
     ],
     "paths": {
-      "@models/*": [
-        "app/models/*"
-      ],
-      "@components/*": [
-        "app/components/*"
-      ],
-      "@services/*": [
-        "app/services/*"
-      ],
-      "@directives/*": [
-        "app/directives/*"
+      "@core/*": [
+        "app/core/*"
       ],
       "@shared/*": [
         "app/shared/*"
-      ],
-      "@interceptors/*": [
-        "app/interceptors/*"
-      ],
-      "@guards/*": [
-        "app/guards/*"
-      ],
-      "@pages/*": [
-        "app/pages/*"
-      ],
-      "@pipes/*": [
-        "app/pipes/*"
       ],
     },
   },

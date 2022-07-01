@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SubjectMaterialRepository extends BaseRepository<SubjectMaterial, Long> {
     @Override
@@ -14,4 +16,6 @@ public interface SubjectMaterialRepository extends BaseRepository<SubjectMateria
             "select x from #{#entityName} x where cast(x.id as string) like :search "
                     + "or x.name like :search or x.description like :search or cast(x.publicationDate as string) like :search")
     Page<SubjectMaterial> findContaining(Pageable pageable, String search);
+
+    List<SubjectMaterial> findBySubjectIdOrderByPublicationDate(Long id);
 }

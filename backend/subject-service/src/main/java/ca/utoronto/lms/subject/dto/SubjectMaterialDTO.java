@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class SubjectMaterialDTO extends BaseDTO<Long> {
     private String name;
     private String description;
+    private String resourceUrl;
     private LocalDateTime publicationDate;
     private TeacherDTO teacher;
     private SubjectDTO subject;

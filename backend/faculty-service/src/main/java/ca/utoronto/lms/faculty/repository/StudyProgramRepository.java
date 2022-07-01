@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface StudyProgramRepository extends BaseRepository<StudyProgram, Long> {
     @Override
@@ -14,4 +16,6 @@ public interface StudyProgramRepository extends BaseRepository<StudyProgram, Lon
             "select x from #{#entityName} x where cast(x.id as string) like :search "
                     + "or x.name like :search or x.description like :search")
     Page<StudyProgram> findContaining(Pageable pageable, String search);
+
+    List<StudyProgram> findByFacultyId(Long id);
 }

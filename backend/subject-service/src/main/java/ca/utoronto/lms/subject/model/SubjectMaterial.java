@@ -26,6 +26,9 @@ public class SubjectMaterial extends BaseEntity<Long> {
     private String description;
 
     @Column(nullable = false)
+    private String resourceUrl;
+
+    @Column(nullable = false)
     private LocalDateTime publicationDate;
 
     @Column(nullable = false)

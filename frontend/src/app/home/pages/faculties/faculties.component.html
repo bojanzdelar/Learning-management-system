@@ -1,0 +1,18 @@
+<app-container>
+  <h1 class="text-2xl sm:text-3xl text-center">Our faculties</h1>
+  <mat-card
+    *ngFor="let faculty of faculties"
+    (click)="viewFaculty(faculty)"
+    class="mat-elevation-z8"
+  >
+    <mat-card-header>
+      <mat-card-title class="text-blue-500 hover:text-blue-700">
+        {{ faculty.name }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      {{ faculty.description }}
+    </mat-card-content>
+  </mat-card>
+  <div *ngIf="!faculties || !faculties.length">No faculties are found!</div>
+</app-container>

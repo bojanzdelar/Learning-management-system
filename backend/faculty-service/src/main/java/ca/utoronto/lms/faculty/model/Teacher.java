@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.HashSet;
@@ -20,9 +19,6 @@ import java.util.Set;
 @Setter
 public class Teacher extends BaseEntity<Long> {
     @OneToOne private User user;
-
-    @ManyToOne(optional = false)
-    private TeacherTitle teacherTitle;
 
     @OneToMany(mappedBy = "dean")
     private Set<Faculty> faculties = new HashSet<>();

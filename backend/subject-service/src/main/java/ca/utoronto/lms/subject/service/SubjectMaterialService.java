@@ -36,4 +36,12 @@ public class SubjectMaterialService
 
         return subjectMaterials;
     }
+
+    public List<SubjectMaterialDTO> findBySubjectId(Long id) {
+        List<SubjectMaterialDTO> subjectMaterials =
+                mapper.toDTO(repository.findBySubjectIdOrderByPublicationDate(id));
+        return subjectMaterials.isEmpty()
+                ? subjectMaterials
+                : this.mapMissingValues(subjectMaterials);
+    }
 }

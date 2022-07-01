@@ -1,11 +1,11 @@
-import { Base } from '@models/base.model';
-import { Page } from '@models/page.model';
-import { PageRequest } from '@models/page-request.model';
-import { RestService } from '@services/rest.service';
-import { DialogFormComponent } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogDeleteComponent } from '@components/dialog-delete/dialog-delete.component';
-import { EntityAttribute } from '@models/entity-attribute.model';
+import { Base } from '@core/models/base.model';
+import { Page } from '@core/models/page.model';
+import { EntityAttribute } from '@core/models/entity-attribute.model';
+import { PageRequest } from '@core/models/page-request.model';
+import { RestService } from '@core/services/rest.service';
+import { DialogFormComponent } from './components/dialog-form/dialog-form.component';
+import { DialogDeleteComponent } from './components/dialog-delete/dialog-delete.component';
 
 export abstract class BaseComponent<T extends Base> {
   abstract title: string;

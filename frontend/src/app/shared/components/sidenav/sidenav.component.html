@@ -1,0 +1,15 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened [disableClose]="true" class="p-1">
+    <mat-nav-list>
+      <ng-container *ngFor="let item of items">
+        <a mat-list-item *ngIf="item !== '-'" [routerLink]="item.link">
+          {{ item.text }}
+        </a>
+        <mat-divider *ngIf="item === '-'"></mat-divider>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="min-h-[69vh] p-5">
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

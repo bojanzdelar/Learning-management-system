@@ -43,4 +43,10 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
 
         return subjects;
     }
+
+    public List<SubjectDTO> findByStudyProgramId(Long id) {
+        List<SubjectDTO> subjects =
+                mapper.toDTO(repository.findByStudyProgramIdOrderBySemester(id));
+        return subjects.isEmpty() ? subjects : this.mapMissingValues(subjects);
+    }
 }
