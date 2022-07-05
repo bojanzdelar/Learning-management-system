@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TeacherRepository extends BaseRepository<Teacher, Long> {
     @Override
-    @Query(
-            "select x from #{#entityName} x where cast(x.id as string) like :search "
-                    + "or x.user.firstName like :search or x.user.lastName like :search")
+    @Query("select x from #{#entityName} x where cast(x.id as string) like :search ")
     Page<Teacher> findContaining(Pageable pageable, String search);
 }

@@ -24,3 +24,6 @@ eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka
+
+token:
+  secret: GieJX^>%Pd;Z]#&?kmZY4SRZNlWsjr%JJiH!q9KM~,Zd./[oh*=dus&p_M3Ab#B

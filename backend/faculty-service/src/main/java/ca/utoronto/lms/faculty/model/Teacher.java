@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class Teacher extends BaseEntity<Long> {
-    @OneToOne private User user;
+    private Long userId;
 
     @OneToMany(mappedBy = "dean")
     private Set<Faculty> faculties = new HashSet<>();

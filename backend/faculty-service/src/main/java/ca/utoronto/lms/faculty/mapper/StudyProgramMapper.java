@@ -1,12 +1,10 @@
 package ca.utoronto.lms.faculty.mapper;
 
-import ca.utoronto.lms.shared.mapper.BaseMapper;
 import ca.utoronto.lms.faculty.dto.FacultyDTO;
 import ca.utoronto.lms.faculty.dto.StudyProgramDTO;
-import ca.utoronto.lms.faculty.dto.UserDTO;
 import ca.utoronto.lms.faculty.model.Faculty;
 import ca.utoronto.lms.faculty.model.StudyProgram;
-import ca.utoronto.lms.faculty.model.User;
+import ca.utoronto.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -15,7 +13,4 @@ public interface StudyProgramMapper extends BaseMapper<StudyProgram, StudyProgra
     @Mapping(target = "dean", ignore = true)
     @Mapping(target = "address", ignore = true)
     FacultyDTO toDTO(Faculty faculty);
-
-    @Mapping(target = "role", ignore = true)
-    UserDTO toDTO(User user);
 }

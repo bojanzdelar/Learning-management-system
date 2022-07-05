@@ -1,6 +1,7 @@
 package ca.utoronto.lms.subject.dto;
 
 import ca.utoronto.lms.shared.dto.BaseDTO;
+import ca.utoronto.lms.shared.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

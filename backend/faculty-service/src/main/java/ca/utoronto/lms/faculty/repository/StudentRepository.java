@@ -12,7 +12,6 @@ public interface StudentRepository extends BaseRepository<Student, Long> {
     @Override
     @Query(
             "select x from #{#entityName} x where cast(x.id as string) like :search "
-                    + "or x.user.firstName like :search or x.user.lastName like :search "
                     + "or x.index like :search or cast(x.yearOfEnrollment as string) like :search")
     Page<Student> findContaining(Pageable pageable, String search);
 }

@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 @Getter
 @Setter
 public class Student extends BaseEntity<Long> {
-    @OneToOne private User user;
+    private Long userId;
 
     @Column(name = "s_index", length = 45, nullable = false)
     private String index;

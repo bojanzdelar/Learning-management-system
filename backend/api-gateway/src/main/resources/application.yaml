@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
   application:
@@ -19,6 +19,10 @@ spring:
               - PUT
               - DELETE
       routes:
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth-service/**
         - id: faculty-service
           uri: lb://FACULTY-SERVICE
           predicates:
