@@ -1,10 +1,12 @@
 import { Base } from './base.model';
-import { getUserDisplay, User } from './user.model';
+import { User } from './user.model';
 
 export interface Teacher extends Base {
-  user: User;
+  user: User | string;
+  firstName: string;
+  lastName: string;
 }
 
 export function getTeacherDisplay(teacher: Teacher): string {
-  return getUserDisplay(teacher.user);
+  return `${teacher.firstName} ${teacher.lastName}`;
 }

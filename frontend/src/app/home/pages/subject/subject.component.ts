@@ -6,7 +6,7 @@ import { SubjectMaterial } from '@core/models/subject-material.model';
 import { SubjectMaterialService } from '@core/services/subject-material.service';
 import { getStudyProgramDisplay } from '@core/models/study-program.model';
 import { getTeacherDisplay } from '@core/models/teacher.model';
-import { formatDateTime } from '@shared/utility';
+import { formatDateTime } from '@shared/utils/utility';
 
 @Component({
   selector: 'app-subject',

@@ -11,9 +11,12 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface SubjectNotificationMapper
-        extends BaseMapper<SubjectNotification, SubjectNotificationDTO> {
+        extends BaseMapper<SubjectNotification, SubjectNotificationDTO, Long> {
     @Mapping(source = "teacherId", target = "teacher")
     SubjectNotificationDTO toDTO(SubjectNotification subjectNotification);
+
+    @Mapping(source = "teacher.id", target = "teacherId")
+    SubjectNotification toModel(SubjectNotificationDTO subjectNotificationDTO);
 
     TeacherDTO teacherDTOFromId(Long id);
 

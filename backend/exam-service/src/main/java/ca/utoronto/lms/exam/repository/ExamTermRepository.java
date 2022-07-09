@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
 public interface ExamTermRepository extends BaseRepository<ExamTerm, Long> {
     @Override
     @Query(
-            "select x from #{#entityName} x where cast(x.id as string) like :search "
-                    + " or cast(x.startTime as string) like :search or cast(x.endTime as string) like :search")
+            "select x from #{#entityName} x where x.deleted = false "
+                    + "and (cast(x.id as string) like :search "
+                    + "or cast(x.startTime as string) like :search or cast(x.endTime as string) like :search)")
     Page<ExamTerm> findContaining(Pageable pageable, String search);
 }

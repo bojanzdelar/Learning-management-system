@@ -6,4 +6,4 @@ import ca.utoronto.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface ExamTypeMapper extends BaseMapper<ExamType, ExamTypeDTO> {}
+public interface ExamTypeMapper extends BaseMapper<ExamType, ExamTypeDTO, Long> {}

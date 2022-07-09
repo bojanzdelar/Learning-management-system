@@ -65,11 +65,7 @@
         {{ col.name }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{
-          col.options
-            ? col.options[element[col.key]?.id]?.display
-            : element[col.key]
-        }}
+        {{ getCellContent(col, element) }}
       </td>
     </ng-container>
 

@@ -27,7 +27,8 @@ export class TableComponent<T extends Base> implements OnInit {
   @Input()
   set columns(attributes: EntityAttribute[]) {
     attributes = attributes.filter(
-      (attribute: EntityAttribute) => attribute.type !== 'lob'
+      (attribute: EntityAttribute) =>
+        attribute.type !== 'lob' && attribute.type !== 'password'
     );
 
     this.columnProps = attributes;
@@ -90,6 +91,18 @@ export class TableComponent<T extends Base> implements OnInit {
 
   clearSelection() {
     this.selection.clear();
+  }
+
+  getCellContent(column: EntityAttribute, element: T) {
+    if (column.options && column.options[element[column.key].id]) {
+      return column.options[element[column.key].id].display;
+    }
+
+    if (column.display) {
+      return column.display(element[column.key]);
+    }
+
+    return element[column.key];
   }
 
   makeSearch(search: string) {

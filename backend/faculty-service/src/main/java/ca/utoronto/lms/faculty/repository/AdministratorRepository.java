@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdministratorRepository extends BaseRepository<Administrator, Long> {
     @Override
-    @Query("select x from #{#entityName} x where cast(x.id as string) like :search ")
+    @Query(
+            "select x from #{#entityName} x where x.deleted = false "
+                    + "and (cast(x.id as string) like :search "
+                    + "or x.firstName like :search or x.lastName like :search)")
     Page<Administrator> findContaining(Pageable pageable, String search);
 }

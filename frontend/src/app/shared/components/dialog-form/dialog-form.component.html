@@ -44,6 +44,14 @@
             <textarea matInput [formControlName]="attr.key" rows="5"></textarea>
           </mat-form-field>
 
+          <!-- Password field -->
+          <mat-form-field *ngSwitchCase="'password'" appearance="fill">
+            <mat-error *ngIf="form.controls[attr.key].errors">
+              Please enter a password with minimum 6 characters.
+            </mat-error>
+            <input matInput [formControlName]="attr.key" type="password" />
+          </mat-form-field>
+
           <!-- Input field -->
           <mat-form-field *ngSwitchDefault appearance="fill">
             <mat-error *ngIf="form.controls[attr.key].errors">

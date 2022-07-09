@@ -1,22 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AdminComponent } from './pages/admin/admin.component';
-import { AddressComponent } from './components/address/address.component';
-import { CityComponent } from './components/city/city.component';
-import { CountryComponent } from './components/country/country.component';
-import { FacultyComponent } from './components/faculty/faculty.component';
-import { StudentComponent } from './components/student/student.component';
-import { StudyProgramComponent } from './components/study-program/study-program.component';
-import { SubjectComponent } from './components/subject/subject.component';
-import { TeacherComponent } from './components/teacher/teacher.component';
-import { ThesisComponent } from './components/thesis/thesis.component';
-import { UserComponent } from './components/user/user.component';
+import { AdminPanelComponent } from './pages/admin-panel.component';
+import { AdministratorComponent } from './pages/administrator/administrator.component';
+import { AddressComponent } from './pages/address/address.component';
+import { CityComponent } from './pages/city/city.component';
+import { CountryComponent } from './pages/country/country.component';
+import { ExamPeriodComponent } from './pages/exam-period/exam-period.component';
+import { ExamTypeComponent } from './pages/exam-type/exam-type.component';
+import { FacultyComponent } from './pages/faculty/faculty.component';
+import { StudentComponent } from './pages/student/student.component';
+import { StudyProgramComponent } from './pages/study-program/study-program.component';
+import { SubjectComponent } from './pages/subject/subject.component';
+import { TeacherComponent } from './pages/teacher/teacher.component';
+import { ThesisComponent } from './pages/thesis/thesis.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: AdminComponent,
+    component: AdminPanelComponent,
     children: [
       {
         path: '',
@@ -36,10 +38,6 @@ const routes: Routes = [
         component: SubjectComponent,
       },
       {
-        path: 'users',
-        component: UserComponent,
-      },
-      {
         path: 'students',
         component: StudentComponent,
       },
@@ -50,6 +48,18 @@ const routes: Routes = [
       {
         path: 'teachers',
         component: TeacherComponent,
+      },
+      {
+        path: 'administrators',
+        component: AdministratorComponent,
+      },
+      {
+        path: 'exam-periods',
+        component: ExamPeriodComponent,
+      },
+      {
+        path: 'exam-types',
+        component: ExamTypeComponent,
       },
       {
         path: 'countries',

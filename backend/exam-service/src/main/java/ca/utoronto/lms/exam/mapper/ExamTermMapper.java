@@ -11,7 +11,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface ExamTermMapper extends BaseMapper<ExamTerm, ExamTermDTO> {
+public interface ExamTermMapper extends BaseMapper<ExamTerm, ExamTermDTO, Long> {
     @Mapping(target = "subject", ignore = true)
     @Mapping(target = "examType", ignore = true)
     ExamDTO toDTO(Exam exam);

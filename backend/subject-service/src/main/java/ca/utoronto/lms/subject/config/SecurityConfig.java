@@ -1,9 +1,10 @@
 package ca.utoronto.lms.subject.config;
 
 import ca.utoronto.lms.shared.security.AuthenticationTokenFilter;
-import ca.utoronto.lms.shared.security.SecurityConstants;
+import ca.utoronto.lms.shared.security.SecurityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,7 +23,12 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .anyRequest().hasAuthority(SecurityConstants.ROLE_ROOT)
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/api/subject-service/subjects/**",
+                        "/api/subject-service/subject-materials/**").permitAll()
+                .antMatchers("/api/subject-service/subjects/**").hasAuthority(SecurityUtils.ROLE_ADMIN)
+                .anyRequest().hasAuthority(SecurityUtils.ROLE_ROOT)
                 .and()
                 .build();
     }

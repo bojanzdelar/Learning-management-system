@@ -4,7 +4,7 @@ import ca.utoronto.lms.auth.service.RoleService;
 import ca.utoronto.lms.auth.service.UserService;
 import ca.utoronto.lms.shared.dto.RoleDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
-import ca.utoronto.lms.shared.security.SecurityConstants;
+import ca.utoronto.lms.shared.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -22,19 +22,31 @@ public class AppStartupRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        RoleDTO root = RoleDTO.builder().id(1L).authority(SecurityConstants.ROLE_ROOT).build();
-        RoleDTO admin = RoleDTO.builder().id(2L).authority(SecurityConstants.ROLE_ADMIN).build();
+        RoleDTO root =
+                RoleDTO.builder()
+                        .id(SecurityUtils.ROLE_ROOT_ID)
+                        .authority(SecurityUtils.ROLE_ROOT)
+                        .build();
+        RoleDTO admin =
+                RoleDTO.builder()
+                        .id(SecurityUtils.ROLE_ADMIN_ID)
+                        .authority(SecurityUtils.ROLE_ADMIN)
+                        .build();
         RoleDTO teacher =
-                RoleDTO.builder().id(3L).authority(SecurityConstants.ROLE_TEACHER).build();
+                RoleDTO.builder()
+                        .id(SecurityUtils.ROLE_TEACHER_ID)
+                        .authority(SecurityUtils.ROLE_TEACHER)
+                        .build();
         RoleDTO student =
-                RoleDTO.builder().id(4L).authority(SecurityConstants.ROLE_STUDENT).build();
+                RoleDTO.builder()
+                        .id(SecurityUtils.ROLE_STUDENT_ID)
+                        .authority(SecurityUtils.ROLE_STUDENT)
+                        .build();
 
         UserDetailsDTO user =
                 UserDetailsDTO.builder()
                         .id(1337L)
                         .username("admin@utoronto.ca")
-                        .firstName("Bojan")
-                        .lastName("Zdelar")
                         .password(passwordEncoder.encode("password"))
                         .authorities(Set.of(root, admin))
                         .build();

@@ -9,11 +9,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface SubjectMapper extends BaseMapper<Subject, SubjectDTO> {
+public interface SubjectMapper extends BaseMapper<Subject, SubjectDTO, Long> {
     @Mapping(source = "studyProgramId", target = "studyProgram")
     @Mapping(source = "professorId", target = "professor")
     @Mapping(source = "assistantId", target = "assistant")
     SubjectDTO toDTO(Subject subject);
+
+    @Mapping(source = "studyProgram.id", target = "studyProgramId")
+    @Mapping(source = "professor.id", target = "professorId")
+    @Mapping(source = "assistant.id", target = "assistantId")
+    Subject toModel(SubjectDTO subjectDTO);
 
     StudyProgramDTO studyProgramDTOFromId(Long id);
 

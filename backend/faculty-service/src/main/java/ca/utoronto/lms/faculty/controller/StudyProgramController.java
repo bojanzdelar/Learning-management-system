@@ -27,7 +27,7 @@ public class StudyProgramController extends BaseController<StudyProgram, StudyPr
     public ResponseEntity<List<StudyProgramDTO>> getByFacultyId(@PathVariable Long id) {
         List<StudyProgramDTO> studyPrograms = this.service.findByFacultyId(id);
         return studyPrograms.isEmpty()
-                ? new ResponseEntity(HttpStatus.NOT_FOUND)
-                : new ResponseEntity(studyPrograms, HttpStatus.OK);
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(studyPrograms, HttpStatus.OK);
     }
 }

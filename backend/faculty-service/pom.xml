@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.github.bojanzdelar</groupId>
             <artifactId>learning-management-system-shared-library</artifactId>
-            <version>ec750b7e73</version>
+            <version>348a06f9af</version>
         </dependency>
 
         <dependency>
@@ -64,6 +64,22 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf</artifactId>
+            <version>1.3.28</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
         </dependency>
     </dependencies>
 

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface CountryRepository extends BaseRepository<Country, Long> {
     @Override
     @Query(
-            "select x from #{#entityName} x where cast(x.id as string) like :search or x.name like :search")
+            "select x from #{#entityName} x where x.deleted = false "
+                    + "and (cast(x.id as string) like :search or x.name like :search)")
     Page<Country> findContaining(Pageable pageable, String search);
 }

@@ -13,8 +13,9 @@ import java.util.List;
 public interface StudyProgramRepository extends BaseRepository<StudyProgram, Long> {
     @Override
     @Query(
-            "select x from #{#entityName} x where cast(x.id as string) like :search "
-                    + "or x.name like :search or x.description like :search")
+            "select x from #{#entityName} x where x.deleted = false "
+                    + "and (cast(x.id as string) like :search "
+                    + "or x.name like :search or x.description like :search)")
     Page<StudyProgram> findContaining(Pageable pageable, String search);
 
     List<StudyProgram> findByFacultyId(Long id);

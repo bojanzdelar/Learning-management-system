@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface ExamTypeRepository extends BaseRepository<ExamType, Long> {
     @Override
     @Query(
-            "select x from #{#entityName} x where cast(x.id as string) like :search or x.name like :search")
+            "select x from #{#entityName} x where x.deleted = false "
+                    + "and (cast(x.id as string) like :search or x.name like :search)")
     Page<ExamType> findContaining(Pageable pageable, String search);
 }

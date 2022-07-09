@@ -8,10 +8,8 @@
     <div class="m-auto">
       <a mat-button routerLink="/about" class="md:text-lg">About</a>
       <a mat-button routerLink="/faculties" class="md:text-lg">Faculties</a>
-      <a mat-button routerLink="/classroom" class="md:text-lg text-red-700">
-        Classroom
-      </a>
       <a
+        *ngIf="authService.validateRoles(['ROLE_STUDENT'], 'any')"
         mat-button
         routerLink="/student-services"
         class="md:text-lg text-red-700"
@@ -19,15 +17,36 @@
         Student services
       </a>
       <a
+        *ngIf="authService.validateRoles(['ROLE_TEACHER'], 'any')"
         mat-button
         routerLink="/teacher-services"
         class="md:text-lg text-red-700"
       >
         Teacher services
       </a>
-      <a mat-button routerLink="/admin-panel" class="md:text-lg">Admin panel</a>
-      <!-- <a mat-button class="text-lg">Login</a> -->
-      <a mat-button class="md:text-lg text-red-700">Logout</a>
+      <a
+        *ngIf="authService.validateRoles(['ROLE_ADMIN'], 'any')"
+        mat-button
+        routerLink="/admin-panel"
+        class="md:text-lg"
+        >Admin panel</a
+      >
+      <a
+        *ngIf="!authService.loggedIn()"
+        routerLink="/auth/login"
+        mat-button
+        class="md:text-lg"
+      >
+        Login
+      </a>
+      <a
+        *ngIf="authService.loggedIn()"
+        (click)="authService.logout()"
+        mat-button
+        class="md:text-lg"
+      >
+        Logout
+      </a>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>

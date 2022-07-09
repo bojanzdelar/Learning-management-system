@@ -1,16 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Base } from '@core/models/base.model';
 import { DialogData } from '@core/models/dialog-data.model';
 import { EntityAttribute } from '@core/models/entity-attribute.model';
-import { SelectionRequiredValidator } from '@shared/selection-required-validator';
+import { SelectionRequiredValidator } from '@shared/utils/selection-required-validator';
 
 @Component({
   selector: 'app-dialog-form',
   templateUrl: './dialog-form.component.html',
   styleUrls: ['./dialog-form.component.scss'],
 })
-export class DialogFormComponent<T> implements OnInit {
+export class DialogFormComponent<T extends Base> implements OnInit {
   name: string;
   attributes: EntityAttribute[];
 
@@ -18,20 +19,28 @@ export class DialogFormComponent<T> implements OnInit {
     id: new FormControl(null),
   });
 
+  ids: any = {};
+
   constructor(
     @Inject(MAT_DIALOG_DATA) data: DialogData<T>,
     public dialogRef: MatDialogRef<DialogFormComponent<T>>
   ) {
     this.name = data.name;
     this.attributes = data.attributes.filter(
-      (attribute: EntityAttribute) => attribute.type !== 'id'
+      (attribute: EntityAttribute) =>
+        attribute.type !== 'id' &&
+        !(attribute.type === 'password' && data.value)
     );
 
     this.attributes.forEach((attribute) => {
       const formControl: FormControl = new FormControl(null);
+
       attribute.required && formControl.addValidators([Validators.required]);
       attribute.type === 'select' &&
         formControl.addValidators([SelectionRequiredValidator]);
+      attribute.type === 'password' &&
+        formControl.addValidators([Validators.minLength(6)]);
+
       this.form.addControl(attribute.key, formControl);
 
       if (attribute.options) {
@@ -39,7 +48,17 @@ export class DialogFormComponent<T> implements OnInit {
       }
     });
 
-    data.value && this.form.patchValue(data.value);
+    const value: any = data.value;
+    if (value) {
+      this.attributes.forEach((attribute) => {
+        if (attribute.type === 'text' && attribute.display) {
+          this.ids[attribute.key] = value[attribute.key].id;
+          value[attribute.key] = attribute.display(value[attribute.key]);
+        }
+      });
+
+      this.form.patchValue(value);
+    }
   }
 
   ngOnInit(): void {}
@@ -84,6 +103,7 @@ export class DialogFormComponent<T> implements OnInit {
         value[attribute.key] = value[attribute.key].data;
       });
 
+    this.ids && (value.ids = this.ids);
     this.dialogRef.close(value);
   }
 }

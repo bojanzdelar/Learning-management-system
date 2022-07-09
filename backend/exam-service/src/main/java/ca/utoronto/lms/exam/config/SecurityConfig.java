@@ -1,7 +1,7 @@
 package ca.utoronto.lms.exam.config;
 
 import ca.utoronto.lms.shared.security.AuthenticationTokenFilter;
-import ca.utoronto.lms.shared.security.SecurityConstants;
+import ca.utoronto.lms.shared.security.SecurityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +22,10 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .anyRequest().hasAuthority(SecurityConstants.ROLE_ROOT)
+                .antMatchers(
+                        "/api/exam-service/exam-periods/**",
+                        "/api/exam-service/exam-types/**").hasAuthority(SecurityUtils.ROLE_ADMIN)
+                .anyRequest().hasAuthority(SecurityUtils.ROLE_ROOT)
                 .and()
                 .build();
     }

@@ -1,0 +1,40 @@
+<app-container class="text-center">
+  <div class="space-y-10 lg:space-y-20 my-10">
+    <h1 class="text-xl sm:text-2xl">Login to the University of Toronto</h1>
+
+    <form [formGroup]="form" class="space-y-5" novalidate>
+      <div class="space-x-6">
+        <mat-label>Username:</mat-label>
+        <mat-form-field appearance="fill">
+          <mat-error *ngIf="form.controls['username'].errors">
+            Please enter a valid username.
+          </mat-error>
+          <input matInput formControlName="username" type="text" />
+        </mat-form-field>
+      </div>
+      <div class="space-x-6">
+        <mat-label>Password:</mat-label>
+        <mat-form-field appearance="fill">
+          <mat-error *ngIf="form.controls['password'].errors">
+            Please enter a valid password.
+          </mat-error>
+          <input matInput formControlName="password" type="password" />
+        </mat-form-field>
+      </div>
+      <div>
+        <button
+          (click)="login()"
+          mat-flat-button
+          cdkFocusInitial
+          color="primary"
+        >
+          Login
+        </button>
+      </div>
+    </form>
+
+    <div *ngIf="error" class="mx-auto max-w-md bg-red-300 p-6">
+      Wrong username or password! Please try again!
+    </div>
+  </div>
+</app-container>

@@ -11,9 +11,12 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface SubjectEnrollmentMapper
-        extends BaseMapper<SubjectEnrollment, SubjectEnrollmentDTO> {
+        extends BaseMapper<SubjectEnrollment, SubjectEnrollmentDTO, Long> {
     @Mapping(source = "studentId", target = "student")
     SubjectEnrollmentDTO toDTO(SubjectEnrollment subjectEnrollment);
+
+    @Mapping(source = "student.id", target = "studentId")
+    SubjectEnrollment toModel(SubjectEnrollmentDTO subjectEnrollmentDTO);
 
     StudentDTO studentDTOFromId(Long id);
 

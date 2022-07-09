@@ -1,0 +1,13 @@
+<app-table
+  [title]="title"
+  [columns]="attributes"
+  [data]="data"
+  (changeDataEvent)="getPage($event)"
+  (createEvent)="create()"
+  (editEvent)="select($event)"
+  (deleteEvent)="delete($event)"
+></app-table>
+<app-export
+  (exportPdfEvent)="exportPdf()"
+  (exportXmlEvent)="exportXml()"
+></app-export>

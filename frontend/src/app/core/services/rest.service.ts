@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Base } from '@core/models/base.model';
 import { Page } from '@core/models/page.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
@@ -7,7 +8,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export abstract class RestService<T> {
+export abstract class RestService<T extends Base> {
   url: string = environment.baseUrl;
 
   constructor(public http: HttpClient) {}

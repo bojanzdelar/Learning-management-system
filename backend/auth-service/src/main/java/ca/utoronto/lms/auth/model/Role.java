@@ -21,7 +21,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 public class Role extends BaseEntity<Long> implements GrantedAuthority {
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String authority;
 
     @ManyToMany(mappedBy = "authorities")

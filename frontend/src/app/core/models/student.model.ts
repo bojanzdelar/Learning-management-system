@@ -1,10 +1,12 @@
 import { Base } from './base.model';
-import { getUserDisplay, User } from './user.model';
+import { User } from './user.model';
 import { Thesis } from './thesis.model';
 import { StudyProgram } from './study-program.model';
 
 export interface Student extends Base {
-  user: User;
+  user: User | string;
+  firstName: string;
+  lastName: string;
   index: string;
   yearOfEnrollment: number;
   thesis: Thesis;
@@ -12,5 +14,5 @@ export interface Student extends Base {
 }
 
 export function getStudentDisplay(student: Student): string {
-  return getUserDisplay(student.user);
+  return `${student.firstName} ${student.lastName}`;
 }

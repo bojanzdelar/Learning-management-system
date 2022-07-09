@@ -2,31 +2,37 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { AdminRoutingModule } from './admin-routing.module';
 
-import { AdminComponent } from './pages/admin/admin.component';
-import { AddressComponent } from './components/address/address.component';
-import { CityComponent } from './components/city/city.component';
-import { CountryComponent } from './components/country/country.component';
-import { FacultyComponent } from './components/faculty/faculty.component';
-import { StudentComponent } from './components/student/student.component';
-import { StudyProgramComponent } from './components/study-program/study-program.component';
-import { TeacherComponent } from './components/teacher/teacher.component';
-import { ThesisComponent } from './components/thesis/thesis.component';
-import { UserComponent } from './components/user/user.component';
-import { SubjectComponent } from './components/subject/subject.component';
+import { AdminPanelComponent } from './pages/admin-panel.component';
+import { AdministratorComponent } from './pages/administrator/administrator.component';
+import { AddressComponent } from './pages/address/address.component';
+import { CityComponent } from './pages/city/city.component';
+import { CountryComponent } from './pages/country/country.component';
+import { ExamTypeComponent } from './pages/exam-type/exam-type.component';
+import { ExamPeriodComponent } from './pages/exam-period/exam-period.component';
+import { FacultyComponent } from './pages/faculty/faculty.component';
+import { StudentComponent } from './pages/student/student.component';
+import { StudyProgramComponent } from './pages/study-program/study-program.component';
+import { TeacherComponent } from './pages/teacher/teacher.component';
+import { ThesisComponent } from './pages/thesis/thesis.component';
+import { SubjectComponent } from './pages/subject/subject.component';
+import { ExportComponent } from './components/export/export.component';
 
 @NgModule({
   declarations: [
-    AdminComponent,
+    AdminPanelComponent,
+    AdministratorComponent,
     AddressComponent,
     CityComponent,
     CountryComponent,
+    ExamTypeComponent,
+    ExamPeriodComponent,
     FacultyComponent,
     StudentComponent,
     StudyProgramComponent,
     TeacherComponent,
     ThesisComponent,
-    UserComponent,
     SubjectComponent,
+    ExportComponent,
   ],
   imports: [SharedModule, AdminRoutingModule],
 })

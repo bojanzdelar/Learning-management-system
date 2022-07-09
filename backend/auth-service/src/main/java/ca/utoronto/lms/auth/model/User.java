@@ -24,12 +24,6 @@ public class User extends BaseEntity<Long> implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
-
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean accountNonExpired = true;
 
@@ -42,7 +36,7 @@ public class User extends BaseEntity<Long> implements UserDetails {
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean enabled = true;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),

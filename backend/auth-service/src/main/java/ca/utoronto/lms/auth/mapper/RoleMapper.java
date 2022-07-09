@@ -6,4 +6,4 @@ import ca.utoronto.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface RoleMapper extends BaseMapper<Role, RoleDTO> {}
+public interface RoleMapper extends BaseMapper<Role, RoleDTO, Long> {}

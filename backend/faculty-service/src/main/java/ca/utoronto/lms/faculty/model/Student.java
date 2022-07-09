@@ -19,6 +19,12 @@ import javax.persistence.OneToOne;
 public class Student extends BaseEntity<Long> {
     private Long userId;
 
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
     @Column(name = "s_index", length = 45, nullable = false)
     private String index;
 

@@ -10,9 +10,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface SubjectMaterialMapper extends BaseMapper<SubjectMaterial, SubjectMaterialDTO> {
+public interface SubjectMaterialMapper
+        extends BaseMapper<SubjectMaterial, SubjectMaterialDTO, Long> {
     @Mapping(source = "teacherId", target = "teacher")
     SubjectMaterialDTO toDTO(SubjectMaterial subjectMaterial);
+
+    @Mapping(source = "teacher.id", target = "teacherId")
+    SubjectMaterial toModel(SubjectMaterialDTO subjectMaterialDTO);
 
     TeacherDTO teacherDTOFromId(Long id);
 

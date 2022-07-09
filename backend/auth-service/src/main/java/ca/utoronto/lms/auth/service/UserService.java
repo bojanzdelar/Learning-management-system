@@ -5,9 +5,9 @@ import ca.utoronto.lms.auth.mapper.UserMapper;
 import ca.utoronto.lms.auth.model.User;
 import ca.utoronto.lms.auth.repository.UserRepository;
 import ca.utoronto.lms.auth.security.TokenGenerator;
-import ca.utoronto.lms.shared.dto.RoleDTO;
+import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
-import ca.utoronto.lms.shared.security.SecurityConstants;
+import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +19,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService extends BaseService<User, UserDetailsDTO, Long> {
@@ -39,6 +42,7 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
 
     @Override
     public UserDetailsDTO save(UserDetailsDTO userDetailsDTO) {
+        userDetailsDTO.setPassword(passwordEncoder.encode(userDetailsDTO.getPassword()));
         userDetailsDTO.setAccountNonExpired(true);
         userDetailsDTO.setAccountNonLocked(true);
         userDetailsDTO.setCredentialsNonExpired(true);
@@ -46,13 +50,30 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
         return super.save(userDetailsDTO);
     }
 
+    public UserDetailsDTO update(UserDetailsDTO userDetailsDTO) {
+        User existingUser =
+                repository
+                        .findById(userDetailsDTO.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        if (userDetailsDTO.getUsername() != null) {
+            existingUser.setUsername(userDetailsDTO.getUsername());
+        }
+        if (userDetailsDTO.getPassword() != null) {
+            existingUser.setPassword(passwordEncoder.encode(userDetailsDTO.getPassword()));
+        }
+
+        return this.mapper.toDTO(this.repository.save(existingUser));
+    }
+
+    public List<UserDTO> findByIdPublic(Set<Long> id) {
+        return this.mapper.userToUserDTOList((List<User>) this.repository.findAllById(id));
+    }
+
     public UserDetailsDTO findByUsername(String username) throws UsernameNotFoundException {
         UserDetails authenticatedUser =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!authenticatedUser.getUsername().equals(username)
-                && !authenticatedUser
-                        .getAuthorities()
-                        .contains(new RoleDTO(SecurityConstants.ROLE_ROOT))) {
+                && !SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
             return null;
         }
 

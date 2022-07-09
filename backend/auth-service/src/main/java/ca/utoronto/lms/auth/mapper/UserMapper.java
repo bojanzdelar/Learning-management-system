@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper extends BaseMapper<User, UserDetailsDTO> {
+public interface UserMapper extends BaseMapper<User, UserDetailsDTO, Long> {
     UserDTO userToUserDTO(User user);
 
     User userDTOtoUser(UserDTO userDTO);

@@ -13,8 +13,8 @@ import java.util.Optional;
 public interface UserRepository extends BaseRepository<User, Long> {
     @Override
     @Query(
-            "select x from #{#entityName} x where cast(x.id as string) like :search "
-                    + "or x.username like :search or x.firstName like :search or x.lastName like :search")
+            "select x from #{#entityName} x where x.deleted = false "
+                    + "and (cast(x.id as string) like :search or x.username like :search)")
     Page<User> findContaining(Pageable pageable, String search);
 
     Optional<User> findByUsername(String username);

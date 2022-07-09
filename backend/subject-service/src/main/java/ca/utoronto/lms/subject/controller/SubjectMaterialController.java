@@ -28,7 +28,7 @@ public class SubjectMaterialController
     public ResponseEntity<List<SubjectMaterialDTO>> getBySubjectId(@PathVariable Long id) {
         List<SubjectMaterialDTO> subjectMaterials = this.service.findBySubjectId(id);
         return subjectMaterials.isEmpty()
-                ? new ResponseEntity(HttpStatus.NOT_FOUND)
-                : new ResponseEntity(subjectMaterials, HttpStatus.OK);
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(subjectMaterials, HttpStatus.OK);
     }
 }

@@ -1,10 +1,10 @@
 package ca.utoronto.lms.faculty.service;
 
-import ca.utoronto.lms.shared.service.BaseService;
 import ca.utoronto.lms.faculty.dto.CountryDTO;
 import ca.utoronto.lms.faculty.mapper.CountryMapper;
 import ca.utoronto.lms.faculty.model.Country;
 import ca.utoronto.lms.faculty.repository.CountryRepository;
+import ca.utoronto.lms.shared.service.BaseService;
 import org.springframework.stereotype.Service;
 
 @Service

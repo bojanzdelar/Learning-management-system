@@ -1,7 +1,7 @@
 package ca.utoronto.lms.auth.config;
 
 import ca.utoronto.lms.auth.security.AuthTokenFilter;
-import ca.utoronto.lms.shared.security.SecurityConstants;
+import ca.utoronto.lms.shared.security.SecurityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,9 +37,12 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/auth-service/login").permitAll()
+                .antMatchers(
+                        "/api/auth-service/login",
+                        "/api/auth-service/users/*/public").permitAll()
                 .antMatchers("/api/auth-service/users/username/*").authenticated()
-                .anyRequest().hasAuthority(SecurityConstants.ROLE_ROOT)
+                .antMatchers("/api/auth-service/users/**").hasAuthority(SecurityUtils.ROLE_ADMIN)
+                .anyRequest().hasAuthority(SecurityUtils.ROLE_ROOT)
                 .and()
                 .build();
     }

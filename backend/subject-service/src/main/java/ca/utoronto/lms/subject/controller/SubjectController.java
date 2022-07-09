@@ -27,7 +27,7 @@ public class SubjectController extends BaseController<Subject, SubjectDTO, Long>
     public ResponseEntity<List<SubjectDTO>> getByStudyProgramId(@PathVariable Long id) {
         List<SubjectDTO> subjects = this.service.findByStudyProgramId(id);
         return subjects.isEmpty()
-                ? new ResponseEntity(HttpStatus.NOT_FOUND)
-                : new ResponseEntity(subjects, HttpStatus.OK);
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(subjects, HttpStatus.OK);
     }
 }

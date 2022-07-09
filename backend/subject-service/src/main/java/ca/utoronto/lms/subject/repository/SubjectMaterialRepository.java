@@ -13,8 +13,9 @@ import java.util.List;
 public interface SubjectMaterialRepository extends BaseRepository<SubjectMaterial, Long> {
     @Override
     @Query(
-            "select x from #{#entityName} x where cast(x.id as string) like :search "
-                    + "or x.name like :search or x.description like :search or cast(x.publicationDate as string) like :search")
+            "select x from #{#entityName} x where x.deleted = false "
+                    + "and (cast(x.id as string) like :search "
+                    + "or x.name like :search or x.description like :search or cast(x.publicationDate as string) like :search)")
     Page<SubjectMaterial> findContaining(Pageable pageable, String search);
 
     List<SubjectMaterial> findBySubjectIdOrderByPublicationDate(Long id);
