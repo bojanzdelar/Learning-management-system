@@ -14,4 +14,10 @@ public interface ExamRealizationRepository extends BaseRepository<ExamRealizatio
             "select x from #{#entityName} x where x.deleted = false and "
                     + "(cast(x.id as string) like :search or cast(x.score as string) like :search)")
     Page<ExamRealization> findContaining(Pageable pageable, String search);
+
+    @Query(
+            "select x from #{#entityName} x where x.deleted = false and x.examTerm.id = :subjectId and "
+                    + "(cast(x.id as string) like :search or cast(x.score as string) like :search)")
+    Page<ExamRealization> findByExamTermIdContaining(
+            Long subjectId, Pageable pageable, String search);
 }

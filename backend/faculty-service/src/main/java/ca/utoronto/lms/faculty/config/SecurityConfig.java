@@ -28,9 +28,14 @@ public class SecurityConfig {
                         "/api/faculty-service/faculties/**",
                         "/api/faculty-service/study-programs/**",
                         "/api/faculty-service/teachers/**",
+                        "/api/faculty-service/theses/**",
                         "/api/faculty-service/addresses/**",
                         "/api/faculty-service/cities/**",
-                        "/api/faculty-service/countries/**").permitAll()
+                        "/api/faculty-service/countries/**",
+                        "/api/faculty-service/*/user-id/*/id").permitAll()
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/api/faculty-service/students/**").hasAuthority(SecurityUtils.ROLE_TEACHER)
                 .anyRequest().hasAuthority(SecurityUtils.ROLE_ADMIN)
                 .and()
                 .build();

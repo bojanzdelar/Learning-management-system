@@ -80,7 +80,7 @@ export class SubjectComponent extends BaseComponent<Subject> implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
     this.getOptions('studyProgram', this.studyProgramService);
     this.getOptions('professor', this.teacherService);
     this.getOptions('assistant', this.teacherService);

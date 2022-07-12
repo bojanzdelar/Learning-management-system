@@ -8,5 +8,7 @@ export interface Teacher extends Base {
 }
 
 export function getTeacherDisplay(teacher: Teacher): string {
+  if (!teacher) return '';
+
   return `${teacher.firstName} ${teacher.lastName}`;
 }

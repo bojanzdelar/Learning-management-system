@@ -8,5 +8,7 @@ export interface Address extends Base {
 }
 
 export function getAddressDisplay(address: Address): string {
+  if (!address) return '';
+
   return `${address.street} ${address.number}, ${getCityDisplay(address.city)}`;
 }

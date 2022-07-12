@@ -7,5 +7,7 @@ export interface City extends Base {
 }
 
 export function getCityDisplay(city: City): string {
+  if (!city) return '';
+
   return `${city.name}, ${getCountryDisplay(city.country)}`;
 }

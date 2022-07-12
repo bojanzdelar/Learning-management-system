@@ -7,6 +7,7 @@ import { AddressComponent } from './pages/address/address.component';
 import { CityComponent } from './pages/city/city.component';
 import { CountryComponent } from './pages/country/country.component';
 import { ExamPeriodComponent } from './pages/exam-period/exam-period.component';
+import { ExamTermComponent } from './pages/exam-term/exam-term.component';
 import { ExamTypeComponent } from './pages/exam-type/exam-type.component';
 import { FacultyComponent } from './pages/faculty/faculty.component';
 import { StudentComponent } from './pages/student/student.component';
@@ -56,6 +57,10 @@ const routes: Routes = [
       {
         path: 'exam-periods',
         component: ExamPeriodComponent,
+      },
+      {
+        path: 'exam-terms',
+        component: ExamTermComponent,
       },
       {
         path: 'exam-types',

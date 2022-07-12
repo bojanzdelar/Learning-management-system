@@ -14,5 +14,7 @@ export interface Student extends Base {
 }
 
 export function getStudentDisplay(student: Student): string {
+  if (!student) return '';
+
   return `${student.firstName} ${student.lastName}`;
 }

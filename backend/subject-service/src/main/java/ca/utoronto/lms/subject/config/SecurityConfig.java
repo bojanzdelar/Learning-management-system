@@ -26,9 +26,22 @@ public class SecurityConfig {
                 .antMatchers(
                         HttpMethod.GET,
                         "/api/subject-service/subjects/**",
-                        "/api/subject-service/subject-materials/**").permitAll()
-                .antMatchers("/api/subject-service/subjects/**").hasAuthority(SecurityUtils.ROLE_ADMIN)
-                .anyRequest().hasAuthority(SecurityUtils.ROLE_ROOT)
+                        "/api/subject-service/subject-materials/**",
+                        "/api/subject-service/subject-notifications/**",
+                        "/api/subject-service/subject-terms/**").permitAll()
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/api/subject-service/subject-enrollments/*",
+                        "/api/subject-service/subject-enrollments/subject/*",
+                        "/api/subject-service/subject-enrollments/subject/*/student-id/all").hasAuthority(SecurityUtils.ROLE_TEACHER)
+                .antMatchers(
+                        HttpMethod.PATCH,
+                        "/api/subject-service/subjects/*/syllabus").hasAuthority(SecurityUtils.ROLE_TEACHER)
+                .antMatchers(
+                        "/api/subject-service/subject-materials/**",
+                        "/api/subject-service/subject-notifications/**",
+                        "/api/subject-service/subject-terms/**").hasAuthority(SecurityUtils.ROLE_TEACHER)
+                .anyRequest().hasAuthority(SecurityUtils.ROLE_ADMIN)
                 .and()
                 .build();
     }

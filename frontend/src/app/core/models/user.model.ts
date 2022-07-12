@@ -5,5 +5,7 @@ export interface User extends Base {
 }
 
 export function getUserDisplay(user: User): string {
+  if (!user) return '';
+
   return user.username;
 }

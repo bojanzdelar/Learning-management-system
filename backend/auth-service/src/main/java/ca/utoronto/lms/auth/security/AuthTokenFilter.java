@@ -1,6 +1,7 @@
 package ca.utoronto.lms.auth.security;
 
 import ca.utoronto.lms.shared.security.TokenUtils;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,9 +32,10 @@ public class AuthTokenFilter extends UsernamePasswordAuthenticationFilter {
                 && (SecurityContextHolder.getContext().getAuthentication() == null)) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (tokenUtils.validateToken(authToken, userDetails)) {
+                Claims claims = tokenUtils.getClaims(authToken);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities());
+                                userDetails, claims, userDetails.getAuthorities());
                 authentication.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(httpRequest));
                 SecurityContextHolder.getContext().setAuthentication(authentication);

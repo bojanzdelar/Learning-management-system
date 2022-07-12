@@ -85,7 +85,7 @@ export class StudentComponent
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
     this.getOptions('studyProgram', this.studyProgramService);
   }
 

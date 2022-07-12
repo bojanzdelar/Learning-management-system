@@ -14,6 +14,10 @@ import { PageRequest } from '@core/models/page-request.model';
 import { EntityAttribute } from '@core/models/entity-attribute.model';
 import { Page } from '@core/models/page.model';
 import { Base } from '@core/models/base.model';
+import { TableSelect } from '@core/models/table-select.model';
+import { FormControl } from '@angular/forms';
+import { SelectionRequiredValidator } from '@shared/utils/selection-required-validator';
+import { TableData } from '@core/models/table-data.model';
 
 @Component({
   selector: 'app-table',
@@ -25,6 +29,9 @@ export class TableComponent<T extends Base> implements OnInit {
   title: string;
 
   @Input()
+  readOnly: boolean = false;
+
+  @Input()
   set columns(attributes: EntityAttribute[]) {
     attributes = attributes.filter(
       (attribute: EntityAttribute) =>
@@ -32,11 +39,10 @@ export class TableComponent<T extends Base> implements OnInit {
     );
 
     this.columnProps = attributes;
-    this.columnKeys = [
-      'select',
-      ...attributes.map((attribute) => attribute.key),
-      'actions',
-    ];
+    this.columnKeys = [...attributes.map((attribute) => attribute.key)];
+    if (!this.readOnly) {
+      this.columnKeys = ['select', ...this.columnKeys, 'actions'];
+    }
   }
 
   @Input()
@@ -49,10 +55,21 @@ export class TableComponent<T extends Base> implements OnInit {
   }
 
   @Input()
+  set selectData(data: TableSelect) {
+    this.select = data;
+    data.observable.subscribe((options: any[]) => {
+      this.select.options = [...options];
+      this.select.filteredOptions = [...options];
+      options.length && this.selectForm.setValue(options[0]);
+      this.makeRequest();
+    });
+  }
+
+  @Input()
   defaultPageSize: number = 20;
 
   @Output()
-  changeDataEvent: EventEmitter<PageRequest> = new EventEmitter();
+  changeDataEvent: EventEmitter<TableData> = new EventEmitter();
 
   @Output()
   createEvent: EventEmitter<T> = new EventEmitter();
@@ -69,6 +86,9 @@ export class TableComponent<T extends Base> implements OnInit {
 
   columnProps: EntityAttribute[];
   columnKeys: string[];
+
+  select: TableSelect;
+  selectForm: FormControl = new FormControl(null, [SelectionRequiredValidator]);
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -93,6 +113,17 @@ export class TableComponent<T extends Base> implements OnInit {
     this.selection.clear();
   }
 
+  onAutocompleteKeyUp(searchText: string) {
+    if (!this.select.options) return;
+
+    const lowerSearchText = searchText?.toString();
+    const selectOptionsFiltered = this.select.options.filter((option: any) =>
+      this.select.display(option).toLowerCase().includes(lowerSearchText)
+    );
+
+    this.select.filteredOptions = selectOptionsFiltered;
+  }
+
   getCellContent(column: EntityAttribute, element: T) {
     if (column.options && column.options[element[column.key].id]) {
       return column.options[element[column.key].id].display;
@@ -105,8 +136,12 @@ export class TableComponent<T extends Base> implements OnInit {
     return element[column.key];
   }
 
-  makeSearch(search: string) {
-    this.searchTerm = search;
+  makeSelection() {
+    this.searchTerm = '';
+    this.makeRequest();
+  }
+
+  makeSearch() {
     this.paginator.pageIndex = 0;
     this.makeRequest();
   }
@@ -114,14 +149,24 @@ export class TableComponent<T extends Base> implements OnInit {
   makeRequest() {
     const request: PageRequest = {
       search: this.searchTerm,
-      page: this.paginator.pageIndex,
-      size: this.paginator.pageSize,
+      page: this.paginator?.pageIndex ? this.paginator.pageIndex : 0,
+      size: this.paginator?.pageSize
+        ? this.paginator.pageSize
+        : this.defaultPageSize,
     };
-    if (this.sort.direction) {
+    if (this.sort?.direction) {
       request.sort = `${this.sort.active},${this.sort.direction}`;
     }
 
-    this.changeDataEvent.emit(request);
+    const data: TableData = {
+      request,
+    };
+
+    if (this.selectForm.value) {
+      data['select'] = this.selectForm.value.id;
+    }
+
+    this.changeDataEvent.emit(data);
   }
 
   create() {

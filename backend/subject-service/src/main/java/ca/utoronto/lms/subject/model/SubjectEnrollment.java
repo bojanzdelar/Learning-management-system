@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -15,12 +16,12 @@ import javax.persistence.ManyToOne;
 @Getter
 @Setter
 public class SubjectEnrollment extends BaseEntity<Long> {
-    private Integer extraPoints;
-
-    private Integer grade;
-
+    @Column(nullable = false)
     private Long studentId;
 
     @ManyToOne(optional = false)
     private Subject subject;
+
+    private Integer extraPoints;
+    private Integer grade;
 }

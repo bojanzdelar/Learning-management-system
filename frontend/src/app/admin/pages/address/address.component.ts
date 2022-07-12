@@ -51,7 +51,7 @@ export class AddressComponent extends BaseComponent<Address> implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
     this.getOptions('city', this.cityService);
   }
 }

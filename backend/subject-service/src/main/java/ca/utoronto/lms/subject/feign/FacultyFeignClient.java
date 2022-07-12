@@ -18,6 +18,9 @@ public interface FacultyFeignClient {
     @GetMapping("/api/faculty-service/teachers/{id}")
     List<TeacherDTO> getTeacher(@PathVariable Set<Long> id);
 
+    @GetMapping("/api/faculty-service/teachers/username/{username}")
+    TeacherDTO getTeacherByUsername(@PathVariable String username);
+
     @GetMapping("/api/faculty-service/students/{id}")
     List<StudentDTO> getStudent(@PathVariable Set<Long> id);
 }

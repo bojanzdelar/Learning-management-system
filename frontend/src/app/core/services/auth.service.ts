@@ -53,6 +53,10 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
+  getUsername() {
+    return this.user.sub;
+  }
+
   hasTokenExpired() {
     return this.user.exp < Date.now() / 1000;
   }

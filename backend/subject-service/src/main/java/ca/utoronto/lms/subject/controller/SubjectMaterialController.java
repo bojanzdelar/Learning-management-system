@@ -4,12 +4,11 @@ import ca.utoronto.lms.shared.controller.BaseController;
 import ca.utoronto.lms.subject.dto.SubjectMaterialDTO;
 import ca.utoronto.lms.subject.model.SubjectMaterial;
 import ca.utoronto.lms.subject.service.SubjectMaterialService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,9 +23,21 @@ public class SubjectMaterialController
         this.service = service;
     }
 
-    @GetMapping("/subject/{id}")
+    @GetMapping("/subject/{id}/all")
     public ResponseEntity<List<SubjectMaterialDTO>> getBySubjectId(@PathVariable Long id) {
         List<SubjectMaterialDTO> subjectMaterials = this.service.findBySubjectId(id);
+        return subjectMaterials.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(subjectMaterials, HttpStatus.OK);
+    }
+
+    @GetMapping("/subject/{id}")
+    public ResponseEntity<Page<SubjectMaterialDTO>> getBySubjectId(
+            @PathVariable Long id,
+            Pageable pageable,
+            @RequestParam(defaultValue = "") String search) {
+        Page<SubjectMaterialDTO> subjectMaterials =
+                this.service.findBySubjectId(id, pageable, search);
         return subjectMaterials.isEmpty()
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(subjectMaterials, HttpStatus.OK);

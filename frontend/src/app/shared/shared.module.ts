@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -18,6 +19,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
@@ -45,6 +47,7 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
     CommonModule,
     RouterModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatInputModule,
@@ -60,11 +63,13 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
     MatToolbarModule,
     MatListModule,
     MatCardModule,
+    MatTabsModule,
   ],
   exports: [
     CommonModule,
     RouterModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatInputModule,
@@ -80,6 +85,7 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
     MatToolbarModule,
     MatListModule,
     MatCardModule,
+    MatTabsModule,
     NotFoundComponent,
     ToolbarComponent,
     HeaderComponent,

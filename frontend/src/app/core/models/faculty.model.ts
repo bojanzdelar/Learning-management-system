@@ -11,5 +11,7 @@ export interface Faculty extends Base {
 }
 
 export function getFacultyDisplay(faculty: Faculty): string {
+  if (!faculty) return '';
+
   return faculty.name;
 }

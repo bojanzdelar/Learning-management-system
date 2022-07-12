@@ -21,6 +21,6 @@ public class StudyProgramService extends BaseService<StudyProgram, StudyProgramD
     }
 
     public List<StudyProgramDTO> findByFacultyId(Long id) {
-        return mapper.toDTO(repository.findByFacultyId(id));
+        return mapper.toDTO(repository.findByFacultyIdAndDeletedFalse(id));
     }
 }

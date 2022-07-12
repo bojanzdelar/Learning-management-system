@@ -15,7 +15,7 @@ const routes: Routes = [
     canActivate: [LoggedInAuthGuard],
   },
   {
-    path: 'e-student',
+    path: 'student-services',
     loadChildren: () =>
       import('./student/student.module').then((m) => m.StudentModule),
     canActivate: [AuthGuard],
@@ -25,7 +25,7 @@ const routes: Routes = [
     },
   },
   {
-    path: 'e-teacher',
+    path: 'teacher-services',
     loadChildren: () =>
       import('./teacher/teacher.module').then((m) => m.TeacherModule),
     canActivate: [AuthGuard],

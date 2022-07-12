@@ -38,6 +38,6 @@ export class ExamTypeComponent
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
   }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,5 +39,21 @@ public class TeacherController extends BaseController<Teacher, TeacherDTO, Long>
     @GetMapping(value = "/all/xml", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<List<TeacherDTO>> getAllXml() {
         return new ResponseEntity<>(this.service.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/user-id/{id}/id")
+    public ResponseEntity<Long> getByUserId(@PathVariable Long id) {
+        TeacherDTO teacher = this.service.findByUserId(id);
+        return teacher == null
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(teacher.getId(), HttpStatus.OK);
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<TeacherDTO> getByUsername(@PathVariable String username) {
+        TeacherDTO teacher = this.service.findByUsername(username);
+        return teacher == null
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(teacher, HttpStatus.OK);
     }
 }

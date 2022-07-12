@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class StudyProgramDTO extends BaseDTO<Long> {
     private String name;
+    private String acronym;
     private String description;
     private FacultyDTO faculty;
     private TeacherDTO manager;

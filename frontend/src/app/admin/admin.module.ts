@@ -7,8 +7,9 @@ import { AdministratorComponent } from './pages/administrator/administrator.comp
 import { AddressComponent } from './pages/address/address.component';
 import { CityComponent } from './pages/city/city.component';
 import { CountryComponent } from './pages/country/country.component';
-import { ExamTypeComponent } from './pages/exam-type/exam-type.component';
 import { ExamPeriodComponent } from './pages/exam-period/exam-period.component';
+import { ExamTermComponent } from './pages/exam-term/exam-term.component';
+import { ExamTypeComponent } from './pages/exam-type/exam-type.component';
 import { FacultyComponent } from './pages/faculty/faculty.component';
 import { StudentComponent } from './pages/student/student.component';
 import { StudyProgramComponent } from './pages/study-program/study-program.component';
@@ -24,8 +25,9 @@ import { ExportComponent } from './components/export/export.component';
     AddressComponent,
     CityComponent,
     CountryComponent,
-    ExamTypeComponent,
     ExamPeriodComponent,
+    ExamTermComponent,
+    ExamTypeComponent,
     FacultyComponent,
     StudentComponent,
     StudyProgramComponent,

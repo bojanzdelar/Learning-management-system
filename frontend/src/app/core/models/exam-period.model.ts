@@ -11,5 +11,7 @@ export interface ExamPeriod extends Base {
 }
 
 export function getExamPeriodDisplay(examPeriod: ExamPeriod): string {
+  if (!examPeriod) return '';
+
   return examPeriod.name;
 }

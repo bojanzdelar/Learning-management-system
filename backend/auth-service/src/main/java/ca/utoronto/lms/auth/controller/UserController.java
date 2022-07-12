@@ -50,8 +50,8 @@ public class UserController extends BaseController<User, UserDetailsDTO, Long> {
     @GetMapping("/username/{username}/id")
     public ResponseEntity<Long> getUserIdByUsername(@PathVariable String username) {
         try {
-            return new ResponseEntity<>(service.findByUsername(username).getId(), HttpStatus.OK);
-        } catch (UsernameNotFoundException e) {
+            return new ResponseEntity<>(service.findIdByUsername(username), HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

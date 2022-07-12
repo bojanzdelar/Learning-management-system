@@ -6,13 +6,12 @@ import ca.utoronto.lms.faculty.service.StudentService;
 import ca.utoronto.lms.faculty.util.StudentPDFExporter;
 import ca.utoronto.lms.shared.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -40,6 +39,29 @@ public class StudentController extends BaseController<Student, StudentDTO, Long>
     @GetMapping(value = "/all/xml", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<List<StudentDTO>> getAllXml() {
         return new ResponseEntity<>(this.service.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/subject/{id}")
+    public ResponseEntity<Page<StudentDTO>> getBySubjectId(
+            @PathVariable Long id,
+            Pageable pageable,
+            @RequestParam(defaultValue = "") String search) {
+        try {
+            Page<StudentDTO> students = this.service.findBySubjectId(id, pageable, search);
+            return students.isEmpty()
+                    ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                    : new ResponseEntity<>(students, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/user-id/{id}/id")
+    public ResponseEntity<Long> getByUserId(@PathVariable Long id) {
+        StudentDTO student = this.service.findByUserId(id);
+        return student == null
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(student.getId(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/thesis/id")

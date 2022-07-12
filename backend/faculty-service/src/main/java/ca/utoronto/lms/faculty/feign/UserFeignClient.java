@@ -13,6 +13,9 @@ public interface UserFeignClient {
     @GetMapping("/api/auth-service/users/{id}/public")
     List<UserDTO> getUser(@PathVariable Set<Long> id);
 
+    @GetMapping("/api/auth-service/users/username/{username}/id")
+    Long getUserIdByUsername(@PathVariable String username);
+
     @PostMapping("/api/auth-service/users")
     UserDTO createUser(UserDetailsDTO user);
 

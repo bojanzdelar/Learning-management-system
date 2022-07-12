@@ -11,6 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SubjectEnrollmentDTO extends BaseDTO<Long> {
+    private StudentDTO student;
+    private SubjectDTO subject;
     private Integer extraPoints;
     private Integer grade;
 }

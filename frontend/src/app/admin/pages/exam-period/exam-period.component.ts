@@ -72,7 +72,7 @@ export class ExamPeriodComponent
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
     this.getOptions('faculty', this.facultyService);
   }
 }

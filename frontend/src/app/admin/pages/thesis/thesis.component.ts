@@ -82,7 +82,7 @@ export class ThesisComponent extends BaseComponent<Thesis> implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
     this.getOptions('student', this.studentService);
     this.getOptions('mentor', this.teacherService);
   }

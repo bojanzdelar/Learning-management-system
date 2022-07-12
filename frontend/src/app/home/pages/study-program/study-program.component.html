@@ -3,6 +3,10 @@
   <h1 class="text-2xl sm:text-3xl">{{ studyProgram.name }}</h1>
   <p>{{ studyProgram.description }}</p>
   <p>
+    <span class="font-bold">Acronym</span>:
+    {{ studyProgram.acronym }}
+  </p>
+  <p>
     <span class="font-bold">Faculty</span>:
     <a
       routerLink
@@ -18,7 +22,7 @@
   </p>
   <hr />
 
-  <!-- Study programs -->
+  <!-- Subjects -->
   <h2 class="text-xl sm:text-2xl">Subjects</h2>
   <mat-card
     *ngFor="let subject of subjects"

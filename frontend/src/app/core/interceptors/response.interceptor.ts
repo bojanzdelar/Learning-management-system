@@ -18,7 +18,7 @@ export class ResponseInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((err) => {
-        if (err.status === 403 && this.authService.hasTokenExpired()) {
+        if (this.authService.loggedIn() && this.authService.hasTokenExpired()) {
           this.authService.logout();
         }
         return throwError(() => err);

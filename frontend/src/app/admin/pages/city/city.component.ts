@@ -45,7 +45,7 @@ export class CityComponent extends BaseComponent<City> implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
     this.getOptions('country', this.countryService);
   }
 }

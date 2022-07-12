@@ -70,4 +70,8 @@ public class AdministratorService extends ExtendedService<Administrator, Adminis
 
         return administrators;
     }
+
+    public AdministratorDTO findByUserId(Long userId) {
+        return mapper.toDTO(repository.findByUserId(userId));
+    }
 }

@@ -4,6 +4,7 @@ import ca.utoronto.lms.shared.security.AuthenticationTokenFilter;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,9 +24,15 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
+                        HttpMethod.GET,
+                        "/api/exam-service/exams/**",
                         "/api/exam-service/exam-periods/**",
-                        "/api/exam-service/exam-types/**").hasAuthority(SecurityUtils.ROLE_ADMIN)
-                .anyRequest().hasAuthority(SecurityUtils.ROLE_ROOT)
+                        "/api/exam-service/exam-terms/**",
+                        "/api/exam-service/exam-types/**").permitAll()
+                .antMatchers(
+                        HttpMethod.GET,
+                       "/api/exam-service/exam-realizations/exam-term/*").hasAuthority(SecurityUtils.ROLE_TEACHER)
+                .anyRequest().hasAuthority(SecurityUtils.ROLE_ADMIN)
                 .and()
                 .build();
     }

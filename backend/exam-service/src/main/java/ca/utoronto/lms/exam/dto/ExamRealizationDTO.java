@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ExamRealizationDTO extends BaseDTO<Long> {
-    private Integer score;
     private SubjectEnrollmentDTO subjectEnrollment;
     private ExamTermDTO examTerm;
+    private Integer score;
 }

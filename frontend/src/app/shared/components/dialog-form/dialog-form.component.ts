@@ -26,6 +26,8 @@ export class DialogFormComponent<T extends Base> implements OnInit {
     public dialogRef: MatDialogRef<DialogFormComponent<T>>
   ) {
     this.name = data.name;
+
+    // Attributes for FormGroup generation
     this.attributes = data.attributes.filter(
       (attribute: EntityAttribute) =>
         attribute.type !== 'id' &&
@@ -59,9 +61,16 @@ export class DialogFormComponent<T extends Base> implements OnInit {
 
       this.form.patchValue(value);
     }
+
+    // Attributes for HTML generation
+    this.attributes = this.attributes.filter(
+      (attribute: EntityAttribute) => attribute.type !== 'skip'
+    );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dialogRef.updateSize('100vw');
+  }
 
   getDisplay(value: any) {
     return value ? value.display : null;

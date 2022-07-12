@@ -5,5 +5,7 @@ export interface Country extends Base {
 }
 
 export function getCountryDisplay(country: Country): string {
+  if (!country) return '';
+
   return country.name;
 }

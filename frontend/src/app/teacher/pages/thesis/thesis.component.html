@@ -1,0 +1,10 @@
+<app-table
+  [readOnly]="true"
+  [title]="title"
+  [columns]="attributes"
+  [data]="data"
+  (changeDataEvent)="getPage($event)"
+  (createEvent)="create()"
+  (editEvent)="select($event)"
+  (deleteEvent)="delete($event)"
+></app-table>

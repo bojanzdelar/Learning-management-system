@@ -43,6 +43,10 @@ export class AdminPanelComponent implements OnInit {
       link: '/admin-panel/exam-periods',
     },
     {
+      text: 'Exam terms',
+      link: '/admin-panel/exam-terms',
+    },
+    {
       text: 'Exam types',
       link: '/admin-panel/exam-types',
     },

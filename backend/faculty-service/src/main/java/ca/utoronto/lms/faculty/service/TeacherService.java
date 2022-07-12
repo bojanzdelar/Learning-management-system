@@ -10,6 +10,7 @@ import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +43,9 @@ public class TeacherService extends ExtendedService<Teacher, TeacherDTO, Long> {
                                         .authorities(
                                                 Set.of(
                                                         RoleDTO.builder()
-                                                                .id(SecurityUtils.ROLE_ADMIN_ID)
-                                                                .authority(SecurityUtils.ROLE_ADMIN)
+                                                                .id(SecurityUtils.ROLE_TEACHER_ID)
+                                                                .authority(
+                                                                        SecurityUtils.ROLE_TEACHER)
                                                                 .build()))
                                         .build())
                         : userFeignClient.patchUser(userRequest.getId(), userRequest);
@@ -68,5 +70,18 @@ public class TeacherService extends ExtendedService<Teacher, TeacherDTO, Long> {
                 (ID) -> userFeignClient.getUser(ID));
 
         return teachers;
+    }
+
+    public TeacherDTO findByUserId(Long userId) {
+        return mapper.toDTO(repository.findByUserId(userId));
+    }
+
+    public TeacherDTO findByUsername(String username) {
+        try {
+            Long userId = userFeignClient.getUserIdByUsername(username);
+            return mapper.toDTO(repository.findByUserId(userId));
+        } catch (FeignException e) {
+            return null;
+        }
     }
 }

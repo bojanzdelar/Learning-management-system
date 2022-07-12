@@ -5,5 +5,7 @@ export interface ExamType extends Base {
 }
 
 export function getExamTypeDisplay(examType: ExamType): string {
+  if (!examType) return '';
+
   return examType.name;
 }

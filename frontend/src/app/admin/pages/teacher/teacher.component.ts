@@ -63,7 +63,7 @@ export class TeacherComponent
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
   }
 
   exportPdf() {

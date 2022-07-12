@@ -39,6 +39,12 @@ export class StudyProgramComponent
       required: true,
     },
     {
+      key: 'acronym',
+      name: 'Acronym',
+      type: 'text',
+      required: true,
+    },
+    {
       key: 'faculty',
       name: 'Faculty',
       type: 'select',
@@ -64,7 +70,7 @@ export class StudyProgramComponent
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
     this.getOptions('faculty', this.facultyService);
     this.getOptions('manager', this.teacherService);
   }

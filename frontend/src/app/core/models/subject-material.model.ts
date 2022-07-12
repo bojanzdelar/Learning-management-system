@@ -14,5 +14,7 @@ export interface SubjectMaterial extends Base {
 export function getSubjectMaterialDisplay(
   subjectMaterial: SubjectMaterial
 ): string {
+  if (!subjectMaterial) return '';
+
   return subjectMaterial.name;
 }

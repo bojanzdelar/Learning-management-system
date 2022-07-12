@@ -8,5 +8,7 @@ export interface Administrator extends Base {
 }
 
 export function getAdministratorDisplay(administrator: Administrator): string {
+  if (!administrator) return '';
+
   return `${administrator.firstName} ${administrator.lastName}`;
 }

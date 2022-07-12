@@ -16,11 +16,11 @@ import javax.persistence.ManyToOne;
 @Getter
 @Setter
 public class ExamRealization extends BaseEntity<Long> {
-    private Integer score;
-
     @Column(nullable = false)
     private Long subjectEnrollmentId;
 
     @ManyToOne(optional = false)
     private ExamTerm examTerm;
+
+    private Integer score;
 }

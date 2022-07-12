@@ -15,4 +15,6 @@ public interface AdministratorRepository extends BaseRepository<Administrator, L
                     + "and (cast(x.id as string) like :search "
                     + "or x.firstName like :search or x.lastName like :search)")
     Page<Administrator> findContaining(Pageable pageable, String search);
+
+    Administrator findByUserId(Long userId);
 }

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ExamTermRepository extends BaseRepository<ExamTerm, Long> {
     @Override
@@ -15,4 +17,8 @@ public interface ExamTermRepository extends BaseRepository<ExamTerm, Long> {
                     + "and (cast(x.id as string) like :search "
                     + "or cast(x.startTime as string) like :search or cast(x.endTime as string) like :search)")
     Page<ExamTerm> findContaining(Pageable pageable, String search);
+
+    List<ExamTerm> findByExamSubjectIdAndDeletedFalseOrderByStartTimeDesc(Long subjectId);
+
+    List<ExamTerm> findByExamSubjectIdInAndDeletedFalseOrderByStartTimeDesc(List<Long> subjectId);
 }

@@ -14,5 +14,7 @@ export interface Thesis extends Base {
 }
 
 export function getThesisDisplay(thesis: Thesis): string {
+  if (!thesis) return '';
+
   return thesis.name;
 }

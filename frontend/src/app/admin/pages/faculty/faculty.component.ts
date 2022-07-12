@@ -67,7 +67,7 @@ export class FacultyComponent extends BaseComponent<Faculty> implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
     this.getOptions('dean', this.teacherService);
     this.getOptions('address', this.addressService);
   }

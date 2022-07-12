@@ -19,6 +19,9 @@ public class StudyProgram extends BaseEntity<Long> {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String acronym;
+
     @Lob
     @Column(nullable = false)
     private String description;

@@ -19,5 +19,8 @@ public interface SubjectRepository extends BaseRepository<Subject, Long> {
                     + "or cast(x.ects as string) like :search)")
     Page<Subject> findContaining(Pageable pageable, String search);
 
-    List<Subject> findByStudyProgramIdOrderBySemester(Long id);
+    List<Subject> findByStudyProgramIdAndDeletedFalseOrderBySemesterAscNameAsc(Long id);
+
+    List<Subject> findByProfessorIdOrAssistantIdAndDeletedFalseOrderBySemesterAscNameAsc(
+            Long professorId, Long assistantId);
 }

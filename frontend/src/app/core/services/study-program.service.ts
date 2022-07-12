@@ -10,6 +10,6 @@ export class StudyProgramService extends RestService<StudyProgram> {
   override url: string = `${this.url}/faculty-service/study-programs`;
 
   getByFacultyId(id: number): Observable<StudyProgram[]> {
-    return this.http.get<StudyProgram[]>(`${this.url}/faculty/${id}`);
+    return this.http.get<StudyProgram[]>(`${this.url}/faculty/${id}/all`);
   }
 }

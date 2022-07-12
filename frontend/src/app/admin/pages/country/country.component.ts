@@ -35,6 +35,6 @@ export class CountryComponent extends BaseComponent<Country> implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPage(this.pageRequest);
+    this.getPage(this.tableData);
   }
 }

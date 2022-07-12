@@ -18,5 +18,5 @@ public interface StudyProgramRepository extends BaseRepository<StudyProgram, Lon
                     + "or x.name like :search or x.description like :search)")
     Page<StudyProgram> findContaining(Pageable pageable, String search);
 
-    List<StudyProgram> findByFacultyId(Long id);
+    List<StudyProgram> findByFacultyIdAndDeletedFalse(Long id);
 }

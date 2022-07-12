@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -70,14 +69,17 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
     }
 
     public UserDetailsDTO findByUsername(String username) throws UsernameNotFoundException {
-        UserDetails authenticatedUser =
-                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!authenticatedUser.getUsername().equals(username)
+        if (!SecurityUtils.getUsername().equals(username)
                 && !SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
-            return null;
+            // TODO: implement forbidden exception
+            throw new RuntimeException("You are not authorized to access this resource");
         }
 
         return (UserDetailsDTO) userDetailsService.loadUserByUsername(username);
+    }
+
+    public Long findIdByUsername(String username) {
+        return this.repository.findByUsername(username).orElseThrow().getId();
     }
 
     public TokenDTO login(UserDetailsDTO userDetailsDTO) {
@@ -91,7 +93,7 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
                     userDetailsService.loadUserByUsername(userDetailsDTO.getUsername());
             String jwt = tokenGenerator.generateToken(userDetails);
             return new TokenDTO(jwt);
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             return null;
         }
     }

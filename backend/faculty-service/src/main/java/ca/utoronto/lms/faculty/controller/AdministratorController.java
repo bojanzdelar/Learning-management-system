@@ -4,6 +4,10 @@ import ca.utoronto.lms.faculty.dto.AdministratorDTO;
 import ca.utoronto.lms.faculty.model.Administrator;
 import ca.utoronto.lms.faculty.service.AdministratorService;
 import ca.utoronto.lms.shared.controller.BaseController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,5 +19,13 @@ public class AdministratorController extends BaseController<Administrator, Admin
     public AdministratorController(AdministratorService service) {
         super(service);
         this.service = service;
+    }
+
+    @GetMapping("/user-id/{id}/id")
+    public ResponseEntity<Long> getByUserId(@PathVariable Long id) {
+        AdministratorDTO administrator = this.service.findByUserId(id);
+        return administrator == null
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(administrator.getId(), HttpStatus.OK);
     }
 }

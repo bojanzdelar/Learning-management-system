@@ -3,11 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { Base } from '@core/models/base.model';
 import { Page } from '@core/models/page.model';
 import { EntityAttribute } from '@core/models/entity-attribute.model';
-import { PageRequest } from '@core/models/page-request.model';
 import { RestService } from '@core/services/rest.service';
 import { DialogFormComponent } from '@shared/components/dialog-form/dialog-form.component';
 import { DialogDeleteComponent } from '@shared/components/dialog-delete/dialog-delete.component';
 import { TableComponent } from '@shared/components/table/table.component';
+import { TableData } from '@core/models/table-data.model';
 
 @Directive()
 export abstract class BaseComponent<T extends Base> {
@@ -20,7 +20,7 @@ export abstract class BaseComponent<T extends Base> {
 
   data: Page<T>;
   selected: T;
-  pageRequest: PageRequest;
+  tableData: TableData;
 
   @ViewChild(TableComponent) table: TableComponent<T>;
 
@@ -28,12 +28,10 @@ export abstract class BaseComponent<T extends Base> {
     return this.attributes.find((attribute) => attribute.key === key);
   }
 
-  getPage(request?: PageRequest) {
-    request !== undefined
-      ? (this.pageRequest = request)
-      : (request = this.pageRequest);
+  getPage(data?: TableData) {
+    data !== undefined ? (this.tableData = data) : (data = this.tableData);
 
-    this.service.getPage(request).subscribe((data) => {
+    this.service.getPage(data?.request).subscribe((data) => {
       this.data = data;
     });
   }
