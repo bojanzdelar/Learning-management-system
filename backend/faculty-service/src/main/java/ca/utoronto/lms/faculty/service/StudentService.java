@@ -37,6 +37,16 @@ public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
     }
 
     @Override
+    public List<StudentDTO> findById(Set<Long> id) {
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
+                && (id.size() > 1 || !id.contains(SecurityUtils.getStudentId()))) {
+            throw new RuntimeException("Forbidden");
+        }
+
+        return super.findById(id);
+    }
+
+    @Override
     public StudentDTO save(StudentDTO student) {
         UserDTO userRequest = student.getUser();
         UserDTO userResponse =
@@ -79,6 +89,12 @@ public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
 
     public StudentDTO findByUserId(Long userId) {
         return mapper.toDTO(repository.findByUserId(userId));
+    }
+
+    public List<StudentDTO> findBySubjectId(Long id) {
+        Set<Long> studentIds = new HashSet<>(subjectFeignClient.getStudentIdsBySubjectId(id));
+        List<StudentDTO> students = mapper.toDTO(repository.findByIdInAndDeletedFalse(studentIds));
+        return students.isEmpty() ? students : mapMissingValues(students);
     }
 
     public Page<StudentDTO> findBySubjectId(Long id, Pageable pageable, String search) {

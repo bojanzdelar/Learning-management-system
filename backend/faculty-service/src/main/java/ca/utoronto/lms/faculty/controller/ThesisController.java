@@ -1,9 +1,13 @@
 package ca.utoronto.lms.faculty.controller;
 
-import ca.utoronto.lms.shared.controller.BaseController;
 import ca.utoronto.lms.faculty.dto.ThesisDTO;
 import ca.utoronto.lms.faculty.model.Thesis;
 import ca.utoronto.lms.faculty.service.ThesisService;
+import ca.utoronto.lms.shared.controller.BaseController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,5 +19,14 @@ public class ThesisController extends BaseController<Thesis, ThesisDTO, Long> {
     public ThesisController(ThesisService service) {
         super(service);
         this.service = service;
+    }
+
+    @GetMapping("/student/{id}")
+    public ResponseEntity<ThesisDTO> getByStudentId(@PathVariable Long id) {
+        ThesisDTO thesis = this.service.findByStudentId(id);
+        if (thesis == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(thesis, HttpStatus.OK);
     }
 }

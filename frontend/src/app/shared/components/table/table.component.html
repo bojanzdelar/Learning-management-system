@@ -61,15 +61,22 @@
         Search
       </button>
     </div>
-    <div
-      *ngIf="!readOnly"
-      class="md:h-full md:float-right flex items-center space-x-2"
-    >
-      <button mat-flat-button color="primary" (click)="create()">
+    <div class="md:h-full md:float-right flex items-center space-x-2">
+      <button
+        *ngIf="!disabledCreate"
+        mat-flat-button
+        color="primary"
+        (click)="emitCreate()"
+      >
         Create new
       </button>
-      <button mat-flat-button color="warn" (click)="delete()">
-        Delete selected
+      <button
+        *ngIf="!disabledSelect"
+        mat-flat-button
+        [color]="selectButtonColor"
+        (click)="emitSelect()"
+      >
+        {{ selectButtonText }}
       </button>
     </div>
   </div>
@@ -83,7 +90,7 @@
       class="w-full"
     >
       <!-- Checkbox Column -->
-      <ng-container *ngIf="!readOnly" matColumnDef="select">
+      <ng-container *ngIf="!disabledSelect" matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
           <mat-checkbox
             *ngIf="selection.hasValue()"
@@ -123,10 +130,10 @@
       </ng-container>
 
       <!-- Actions Column -->
-      <ng-container *ngIf="!readOnly" matColumnDef="actions">
+      <ng-container *ngIf="!_disabledEdit" matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef="">Actions</th>
         <td mat-cell *matCellDef="let row">
-          <mat-icon (click)="edit(row)">edit</mat-icon>
+          <mat-icon (click)="emitEdit(row)">edit</mat-icon>
         </td>
       </ng-container>
 

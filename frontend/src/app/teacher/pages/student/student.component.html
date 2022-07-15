@@ -1,11 +1,15 @@
 <app-table
-  [readOnly]="true"
   [title]="title"
+  [disabledCreate]="true"
+  [disabledSelect]="true"
+  [disabledEdit]="true"
   [columns]="attributes"
   [data]="data"
   [selectData]="tableSelect"
   (changeDataEvent)="getPage($event)"
-  (createEvent)="create()"
-  (editEvent)="select($event)"
-  (deleteEvent)="delete($event)"
 ></app-table>
+<app-import-export
+  [disabledImport]="true"
+  (exportPdfEvent)="exportPdf()"
+  (exportXmlEvent)="exportXml()"
+></app-import-export>

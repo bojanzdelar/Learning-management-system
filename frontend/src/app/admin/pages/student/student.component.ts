@@ -8,9 +8,9 @@ import { StudentService } from '@core/services/student.service';
 import { StudyProgramService } from '@core/services/study-program.service';
 import { BaseUserComponent } from '../../directives/base-user-component';
 import { UserService } from '@core/services/user.service';
-
 import format from 'xml-formatter';
 import { saveAs } from 'file-saver';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-student',
@@ -41,6 +41,8 @@ export class StudentComponent
       name: 'Password',
       type: 'password',
       required: true,
+      validators: [Validators.minLength(8)],
+      errorMessage: 'Password must be at least 8 characters long',
     },
     {
       key: 'firstName',
@@ -65,6 +67,13 @@ export class StudentComponent
       name: 'Year of enrollment',
       type: 'number',
       required: true,
+      validators: [
+        Validators.min(new Date().getFullYear() - 10),
+        Validators.max(new Date().getFullYear()),
+      ],
+      errorMessage: `Year of enrollment must be between ${
+        new Date().getFullYear() - 10
+      } and ${new Date().getFullYear()}`,
     },
     {
       key: 'studyProgram',
@@ -72,6 +81,18 @@ export class StudentComponent
       type: 'select',
       required: true,
       display: getStudyProgramDisplay,
+    },
+    {
+      key: 'averageGrade',
+      name: 'Average grade',
+      type: 'skip',
+      sortable: false,
+    },
+    {
+      key: 'totalECTS',
+      name: 'Total ECTS',
+      type: 'skip',
+      sortable: false,
     },
   ];
 

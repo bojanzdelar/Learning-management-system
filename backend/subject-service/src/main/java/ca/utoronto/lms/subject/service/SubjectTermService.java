@@ -34,9 +34,9 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
 
     @Override
     public SubjectTermDTO save(SubjectTermDTO subjectTermDTO) {
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             TeacherDTO teacher =
-                    facultyFeignClient.getTeacherByUsername(SecurityUtils.getUsername());
+                    facultyFeignClient.getTeacher(Set.of(SecurityUtils.getTeacherId())).get(0);
             SubjectDTO subject = subjectTermDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacher.getId())
                     && !subject.getAssistant().getId().equals(teacher.getId())) {
@@ -53,7 +53,7 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
 
     @Override
     public void delete(Set<Long> id) {
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             Long teacherId = SecurityUtils.getTeacherId();
             List<SubjectTerm> subjectTerms = (List<SubjectTerm>) repository.findAllById(id);
             boolean forbidden =
@@ -65,8 +65,7 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
                                                 && !subject.getAssistantId().equals(teacherId);
                                     });
             if (forbidden) {
-                throw new RuntimeException(
-                        "You are not authorized to delete this term"); // TODO: forbidden
+                throw new RuntimeException("Forbidden");
             }
         }
 

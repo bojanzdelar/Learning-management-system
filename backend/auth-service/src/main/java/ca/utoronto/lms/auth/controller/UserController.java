@@ -27,10 +27,7 @@ public class UserController extends BaseController<User, UserDetailsDTO, Long> {
 
     @GetMapping("/{id}/public")
     public ResponseEntity<List<UserDTO>> getPublic(@PathVariable Set<Long> id) {
-        List<UserDTO> users = this.service.findByIdPublic(id);
-        return users.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(service.findByIdPublic(id), HttpStatus.OK);
     }
 
     @GetMapping("/username/{username}")
@@ -52,6 +49,7 @@ public class UserController extends BaseController<User, UserDetailsDTO, Long> {
         try {
             return new ResponseEntity<>(service.findIdByUsername(username), HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -67,6 +65,7 @@ public class UserController extends BaseController<User, UserDetailsDTO, Long> {
         try {
             return new ResponseEntity<>(this.service.update(DTO), HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

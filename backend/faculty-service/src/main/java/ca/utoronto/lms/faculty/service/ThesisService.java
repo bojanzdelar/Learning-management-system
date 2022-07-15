@@ -60,4 +60,8 @@ public class ThesisService extends BaseService<Thesis, ThesisDTO, Long> {
                 });
         repository.softDeleteByIds(ids);
     }
+
+    public ThesisDTO findByStudentId(Long id) {
+        return mapper.toDTO(repository.findByStudentId(id));
+    }
 }

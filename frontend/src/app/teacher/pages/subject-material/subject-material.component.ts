@@ -51,6 +51,7 @@ export class SubjectMaterialComponent
       key: 'publicationDate',
       name: 'Publication date',
       type: 'datetime-local',
+      required: true,
       display: formatDateTime,
     },
     {
@@ -62,8 +63,8 @@ export class SubjectMaterialComponent
   ];
 
   tableSelect: TableSelect = {
-    observable: this.subjectService.getByTeacherUsername(
-      this.authService.getUsername()
+    observable: this.subjectService.getByTeacherId(
+      this.authService.getTeacherId()
     ),
     display: getSubjectWithStudyProgramDisplay,
   };

@@ -17,4 +17,6 @@ public interface ThesisRepository extends BaseRepository<Thesis, Long> {
                     + "or cast(x.applicationDate as string) like :search or cast (x.defenseDate as string) like :search "
                     + "or cast(x.grade as string) like :search)")
     Page<Thesis> findContaining(Pageable pageable, String search);
+
+    Thesis findByStudentId(Long id);
 }

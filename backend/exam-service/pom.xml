@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.github.bojanzdelar</groupId>
             <artifactId>learning-management-system-shared-library</artifactId>
-            <version>b81ebb61dc</version>
+            <version>7073b68177</version>
         </dependency>
 
         <dependency>
@@ -54,15 +54,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
         </dependency>
     </dependencies>
 

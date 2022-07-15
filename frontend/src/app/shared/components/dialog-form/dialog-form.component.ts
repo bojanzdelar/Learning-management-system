@@ -1,5 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  ControlContainer,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Base } from '@core/models/base.model';
 import { DialogData } from '@core/models/dialog-data.model';
@@ -42,6 +47,7 @@ export class DialogFormComponent<T extends Base> implements OnInit {
         formControl.addValidators([SelectionRequiredValidator]);
       attribute.type === 'password' &&
         formControl.addValidators([Validators.minLength(6)]);
+      attribute.validators && formControl.addValidators(attribute.validators);
 
       this.form.addControl(attribute.key, formControl);
 
@@ -95,13 +101,21 @@ export class DialogFormComponent<T extends Base> implements OnInit {
 
   confirm() {
     if (this.form.invalid) {
+      let invalid = false;
       for (let key in this.form.controls) {
-        const control = this.form.get(key);
-        if (control && control.invalid) {
+        const control = this.form.controls[key];
+
+        if (control.invalid) {
+          if (!control.hasValidator(Validators.required) && !control.value) {
+            continue;
+          }
+
+          invalid = true;
           control.markAsTouched();
         }
       }
-      return;
+
+      if (invalid) return;
     }
 
     const value = this.form.value;

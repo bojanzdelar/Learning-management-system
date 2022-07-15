@@ -4,10 +4,11 @@
   [data]="data"
   (changeDataEvent)="getPage($event)"
   (createEvent)="create()"
-  (editEvent)="select($event)"
-  (deleteEvent)="delete($event)"
+  (editEvent)="edit($event)"
+  (selectEvent)="delete($event)"
 ></app-table>
-<app-export
+<app-import-export
+  [disabledImport]="true"
   (exportPdfEvent)="exportPdf()"
   (exportXmlEvent)="exportXml()"
-></app-export>
+></app-import-export>

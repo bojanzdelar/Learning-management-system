@@ -42,18 +42,10 @@ public class TeacherController extends BaseController<Teacher, TeacherDTO, Long>
     }
 
     @GetMapping("/user-id/{id}/id")
-    public ResponseEntity<Long> getByUserId(@PathVariable Long id) {
+    public ResponseEntity<Long> getIdByUserId(@PathVariable Long id) {
         TeacherDTO teacher = this.service.findByUserId(id);
         return teacher == null
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(teacher.getId(), HttpStatus.OK);
-    }
-
-    @GetMapping("/username/{username}")
-    public ResponseEntity<TeacherDTO> getByUsername(@PathVariable String username) {
-        TeacherDTO teacher = this.service.findByUsername(username);
-        return teacher == null
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(teacher, HttpStatus.OK);
     }
 }

@@ -10,6 +10,8 @@ import { AuthService } from '@core/services/auth.service';
 import { BaseComponent } from '@shared/directives/base-component';
 import { TableSelect } from '@core/models/table-select.model';
 import { TableData } from '@core/models/table-data.model';
+import format from 'xml-formatter';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-student',
@@ -51,11 +53,23 @@ export class StudentComponent extends BaseComponent<Student> implements OnInit {
       name: 'Year of enrollment',
       type: 'skip',
     },
+    {
+      key: 'averageGrade',
+      name: 'Average grade',
+      type: 'skip',
+      sortable: false,
+    },
+    {
+      key: 'totalECTS',
+      name: 'Total ECTS',
+      type: 'skip',
+      sortable: false,
+    },
   ];
 
   tableSelect: TableSelect = {
-    observable: this.subjectService.getByTeacherUsername(
-      this.authService.getUsername()
+    observable: this.subjectService.getByTeacherId(
+      this.authService.getTeacherId()
     ),
     display: getSubjectWithStudyProgramDisplay,
   };
@@ -81,6 +95,26 @@ export class StudentComponent extends BaseComponent<Student> implements OnInit {
       .getBySubjectId(data.select, data?.request)
       .subscribe((data) => {
         this.data = data;
+      });
+  }
+
+  exportPdf() {
+    if (!this.tableData.select) return;
+
+    this.service
+      .getBySubjectIdAllPdf(this.tableData.select)
+      .subscribe((data) => {
+        saveAs(data, 'students-on-subject.pdf');
+      });
+  }
+
+  exportXml() {
+    if (!this.tableData.select) return;
+
+    this.service
+      .getBySubjectIdAllXml(this.tableData.select)
+      .subscribe((data) => {
+        saveAs(new Blob([format(data)]), 'students-on-subject.xml');
       });
   }
 }

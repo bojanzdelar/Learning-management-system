@@ -25,10 +25,7 @@ public class SubjectMaterialController
 
     @GetMapping("/subject/{id}/all")
     public ResponseEntity<List<SubjectMaterialDTO>> getBySubjectId(@PathVariable Long id) {
-        List<SubjectMaterialDTO> subjectMaterials = this.service.findBySubjectId(id);
-        return subjectMaterials.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(subjectMaterials, HttpStatus.OK);
+        return new ResponseEntity<>(this.service.findBySubjectId(id), HttpStatus.OK);
     }
 
     @GetMapping("/subject/{id}")
@@ -36,10 +33,7 @@ public class SubjectMaterialController
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        Page<SubjectMaterialDTO> subjectMaterials =
-                this.service.findBySubjectId(id, pageable, search);
-        return subjectMaterials.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(subjectMaterials, HttpStatus.OK);
+        return new ResponseEntity<>(
+                this.service.findBySubjectId(id, pageable, search), HttpStatus.OK);
     }
 }

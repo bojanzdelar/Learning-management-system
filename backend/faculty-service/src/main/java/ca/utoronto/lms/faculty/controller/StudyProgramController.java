@@ -25,9 +25,6 @@ public class StudyProgramController extends BaseController<StudyProgram, StudyPr
 
     @GetMapping("/faculty/{id}/all")
     public ResponseEntity<List<StudyProgramDTO>> getByFacultyId(@PathVariable Long id) {
-        List<StudyProgramDTO> studyPrograms = this.service.findByFacultyId(id);
-        return studyPrograms.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(studyPrograms, HttpStatus.OK);
+        return new ResponseEntity<>(service.findByFacultyId(id), HttpStatus.OK);
     }
 }

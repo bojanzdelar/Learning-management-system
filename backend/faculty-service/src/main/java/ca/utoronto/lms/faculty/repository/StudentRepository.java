@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -25,6 +26,8 @@ public interface StudentRepository extends BaseRepository<Student, Long> {
                     + "or x.firstName like :search or x.lastName like :search "
                     + "or x.index like :search or cast(x.yearOfEnrollment as string) like :search)")
     Page<Student> findByIdContaining(Set<Long> ids, Pageable pageable, String search);
+
+    List<Student> findByIdInAndDeletedFalse(Set<Long> ids);
 
     Student findByUserId(Long userId);
 

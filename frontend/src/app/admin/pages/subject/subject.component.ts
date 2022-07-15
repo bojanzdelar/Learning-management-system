@@ -8,6 +8,7 @@ import { getTeacherDisplay } from '@core/models/teacher.model';
 import { StudyProgramService } from '@core/services/study-program.service';
 import { TeacherService } from '@core/services/teacher.service';
 import { SubjectService } from '@core/services/subject.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-subject',
@@ -40,12 +41,16 @@ export class SubjectComponent extends BaseComponent<Subject> implements OnInit {
       name: 'Semester',
       type: 'number',
       required: true,
+      validators: [Validators.min(1), Validators.max(8)],
+      errorMessage: 'Please enter semester between 1 and 8',
     },
     {
       key: 'ects',
       name: 'ECTS',
       type: 'number',
       required: true,
+      validators: [Validators.min(1), Validators.max(10)],
+      errorMessage: 'Please enter ECTS between 1 and 10',
     },
     {
       key: 'studyProgram',

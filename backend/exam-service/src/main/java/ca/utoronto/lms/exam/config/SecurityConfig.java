@@ -25,13 +25,27 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(
                         HttpMethod.GET,
+                       "/api/exam-service/exam-terms/student/{id}").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_ADMIN)
+                .antMatchers(
+                        HttpMethod.GET,
                         "/api/exam-service/exams/**",
                         "/api/exam-service/exam-periods/**",
                         "/api/exam-service/exam-terms/**",
                         "/api/exam-service/exam-types/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
-                       "/api/exam-service/exam-realizations/exam-term/*").hasAuthority(SecurityUtils.ROLE_TEACHER)
+                        "/api/exam-service/exam-realizations/student/*").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_ADMIN)
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/api/exam-service/exam-realizations/exam-term/*",
+                        "/api/exam-service/exam-realizations/exam-term/*/all/pdf").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
+                .antMatchers(
+                        HttpMethod.POST,
+                        "/api/exam-service/exam-realizations/exam-term/*").hasAuthority(SecurityUtils.ROLE_STUDENT)
+                .antMatchers(
+                        HttpMethod.PATCH,
+                        "/api/exam-service/exam-realizations/*/score",
+                        "/api/exam-service/exam-realizations/exam-term/*/score").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
                 .anyRequest().hasAuthority(SecurityUtils.ROLE_ADMIN)
                 .and()
                 .build();

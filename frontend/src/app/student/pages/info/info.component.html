@@ -1,0 +1,28 @@
+<div class="space-y-4">
+  <h1 class="text-2xl mb-2">My info</h1>
+
+  <mat-divider></mat-divider>
+
+  <div *ngIf="student" class="space-y-4">
+    <p>
+      <span class="font-medium">Username</span>: {{ authService.getUsername() }}
+    </p>
+    <p><span class="font-medium">First name</span>: {{ student.firstName }}</p>
+    <p><span class="font-medium">Last name</span>: {{ student.lastName }}</p>
+    <p><span class="font-medium">Index</span>: {{ student.index }}</p>
+    <p>
+      <span class="font-medium">Year of enrollment</span>:
+      {{ student.yearOfEnrollment }}
+    </p>
+    <p>
+      <span class="font-medium">Study program</span>:
+      {{ getStudyProgramDisplay(student.studyProgram) }}
+    </p>
+    <p>
+      <span class="font-medium">Average grade</span>: {{ student.averageGrade }}
+    </p>
+    <p><span class="font-medium">Total ECTS</span>: {{ student.totalECTS }}</p>
+  </div>
+
+  <p *ngIf="!student">No student info has been found!</p>
+</div>

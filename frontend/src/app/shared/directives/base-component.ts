@@ -60,7 +60,7 @@ export abstract class BaseComponent<T extends Base> {
     this.openForm();
   }
 
-  select(value: T) {
+  edit(value: T) {
     const newValue = { ...value };
     this.format(newValue);
     this.selected = newValue;
@@ -101,12 +101,23 @@ export abstract class BaseComponent<T extends Base> {
   }
 
   process(value: T) {
+    delete value['ids'];
     value.id
-      ? this.service.update(value.id, value).subscribe(() => {
-          this.getPage();
+      ? this.service.update(value.id, value).subscribe({
+          next: () => {
+            this.getPage();
+          },
+          error: () => {
+            window.alert('Something went wrong! Please try again');
+          },
         })
-      : this.service.create(value).subscribe(() => {
-          this.getPage();
+      : this.service.create(value).subscribe({
+          next: () => {
+            this.getPage();
+          },
+          error: () => {
+            window.alert('Something went wrong! Please try again');
+          },
         });
   }
 

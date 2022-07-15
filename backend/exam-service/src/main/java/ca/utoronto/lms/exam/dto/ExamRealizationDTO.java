@@ -14,4 +14,5 @@ public class ExamRealizationDTO extends BaseDTO<Long> {
     private SubjectEnrollmentDTO subjectEnrollment;
     private ExamTermDTO examTerm;
     private Integer score;
+    private Boolean passed;
 }

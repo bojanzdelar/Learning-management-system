@@ -24,10 +24,7 @@ public class ExamController extends BaseController<Exam, ExamDTO, Long> {
 
     @GetMapping("/subject/{id}/all")
     public ResponseEntity<List<ExamDTO>> getBySubjectId(@PathVariable Long id) {
-        List<ExamDTO> exams = this.service.findBySubjectId(id);
-        return exams.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(exams, HttpStatus.OK);
+        return new ResponseEntity<>(service.findBySubjectId(id), HttpStatus.OK);
     }
 
     @GetMapping("/subject/{id}")
@@ -35,9 +32,6 @@ public class ExamController extends BaseController<Exam, ExamDTO, Long> {
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        Page<ExamDTO> exams = this.service.findBySubjectId(id, pageable, search);
-        return exams.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(exams, HttpStatus.OK);
+        return new ResponseEntity<>(service.findBySubjectId(id, pageable, search), HttpStatus.OK);
     }
 }

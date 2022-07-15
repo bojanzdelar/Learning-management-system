@@ -23,4 +23,6 @@ public interface SubjectRepository extends BaseRepository<Subject, Long> {
 
     List<Subject> findByProfessorIdOrAssistantIdAndDeletedFalseOrderBySemesterAscNameAsc(
             Long professorId, Long assistantId);
+
+    List<Subject> findBySubjectEnrollmentsStudentIdAndDeletedFalse(Long studentId);
 }

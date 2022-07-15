@@ -24,10 +24,7 @@ public class SubjectTermController extends BaseController<SubjectTerm, SubjectTe
 
     @GetMapping("/subject/{id}/all")
     public ResponseEntity<List<SubjectTermDTO>> getBySubjectId(@PathVariable Long id) {
-        List<SubjectTermDTO> subjectTerms = this.service.findBySubjectId(id);
-        return subjectTerms.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(subjectTerms, HttpStatus.OK);
+        return new ResponseEntity<>(this.service.findBySubjectId(id), HttpStatus.OK);
     }
 
     @GetMapping("/subject/{id}")
@@ -35,9 +32,7 @@ public class SubjectTermController extends BaseController<SubjectTerm, SubjectTe
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        Page<SubjectTermDTO> subjectTerms = this.service.findBySubjectId(id, pageable, search);
-        return subjectTerms.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(subjectTerms, HttpStatus.OK);
+        return new ResponseEntity<>(
+                this.service.findBySubjectId(id, pageable, search), HttpStatus.OK);
     }
 }

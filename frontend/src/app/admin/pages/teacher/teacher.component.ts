@@ -6,9 +6,9 @@ import { getUserDisplay } from '@core/models/user.model';
 import { TeacherService } from '@core/services/teacher.service';
 import { UserService } from '@core/services/user.service';
 import { BaseUserComponent } from '../../directives/base-user-component';
-
 import format from 'xml-formatter';
 import { saveAs } from 'file-saver';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-teacher',
@@ -39,6 +39,8 @@ export class TeacherComponent
       name: 'Password',
       type: 'password',
       required: true,
+      validators: [Validators.minLength(8)],
+      errorMessage: 'Password must be at least 8 characters long',
     },
     {
       key: 'firstName',

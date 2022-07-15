@@ -13,23 +13,19 @@ export class LoginComponent implements OnInit {
     password: new FormControl(null, Validators.required),
   });
 
-  error: boolean = false;
-
   constructor(public authService: AuthService) {}
 
   ngOnInit(): void {}
 
   login() {
     if (!this.form.valid) {
-      this.error = true;
       return;
     }
 
-    const request = this.authService.login(this.form.value);
-    request.subscribe({
+    this.authService.login(this.form.value).subscribe({
       next: () => {},
       error: () => {
-        this.error = true;
+        window.alert('Wrong username or password! Please try again!');
       },
     });
   }

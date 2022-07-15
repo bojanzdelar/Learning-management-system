@@ -4,6 +4,7 @@ import ca.utoronto.lms.faculty.dto.StudentDTO;
 import ca.utoronto.lms.faculty.model.Student;
 import ca.utoronto.lms.faculty.service.StudentService;
 import ca.utoronto.lms.faculty.util.StudentPDFExporter;
+import ca.utoronto.lms.faculty.util.StudentsOnSubjectPDFExporter;
 import ca.utoronto.lms.shared.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,8 @@ import java.util.Set;
 public class StudentController extends BaseController<Student, StudentDTO, Long> {
     private final StudentService service;
 
-    @Autowired private StudentPDFExporter pdfExporter;
+    @Autowired private StudentPDFExporter studentPDFExporter;
+    @Autowired private StudentsOnSubjectPDFExporter studentsOnSubjectPDFExporter;
 
     public StudentController(StudentService service) {
         super(service);
@@ -33,12 +35,25 @@ public class StudentController extends BaseController<Student, StudentDTO, Long>
     public void getAllPdf(HttpServletResponse response) throws Exception {
         response.setHeader("Content-Disposition", "attachment; filename=students.pdf");
         List<StudentDTO> students = service.findAll();
-        pdfExporter.export(students, response);
+        studentPDFExporter.export(students, response);
     }
 
     @GetMapping(value = "/all/xml", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<List<StudentDTO>> getAllXml() {
         return new ResponseEntity<>(this.service.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/subject/{id}/all/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public void getAllBySubjectIdPdf(@PathVariable Long id, HttpServletResponse response)
+            throws Exception {
+        response.setHeader("Content-Disposition", "attachment; filename=students-on-subject.pdf");
+        List<StudentDTO> students = service.findBySubjectId(id);
+        studentsOnSubjectPDFExporter.export(students, response);
+    }
+
+    @GetMapping(value = "/subject/{id}/all/xml", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<List<StudentDTO>> getAllBySubjectIdXml(@PathVariable Long id) {
+        return new ResponseEntity<>(this.service.findBySubjectId(id), HttpStatus.OK);
     }
 
     @GetMapping("/subject/{id}")
@@ -47,17 +62,16 @@ public class StudentController extends BaseController<Student, StudentDTO, Long>
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
         try {
-            Page<StudentDTO> students = this.service.findBySubjectId(id, pageable, search);
-            return students.isEmpty()
-                    ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                    : new ResponseEntity<>(students, HttpStatus.OK);
+            return new ResponseEntity<>(
+                    this.service.findBySubjectId(id, pageable, search), HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/user-id/{id}/id")
-    public ResponseEntity<Long> getByUserId(@PathVariable Long id) {
+    public ResponseEntity<Long> getIdByUserId(@PathVariable Long id) {
         StudentDTO student = this.service.findByUserId(id);
         return student == null
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)

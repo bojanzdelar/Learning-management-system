@@ -35,7 +35,10 @@ public class SecurityConfig {
                         "/api/faculty-service/*/user-id/*/id").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/faculty-service/students/**").hasAuthority(SecurityUtils.ROLE_TEACHER)
+                        "/api/faculty-service/students/*").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/api/faculty-service/students/**").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
                 .anyRequest().hasAuthority(SecurityUtils.ROLE_ADMIN)
                 .and()
                 .build();

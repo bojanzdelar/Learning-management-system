@@ -36,14 +36,13 @@ public class SubjectMaterialService
 
     @Override
     public SubjectMaterialDTO save(SubjectMaterialDTO subjectMaterialDTO) {
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             TeacherDTO teacher =
-                    facultyFeignClient.getTeacherByUsername(SecurityUtils.getUsername());
+                    facultyFeignClient.getTeacher(Set.of(SecurityUtils.getTeacherId())).get(0);
             SubjectDTO subject = subjectMaterialDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacher.getId())
                     && !subject.getAssistant().getId().equals(teacher.getId())) {
-                throw new RuntimeException(
-                        "You are not authorized to add materials to this subject");
+                throw new RuntimeException("Forbidden");
             }
 
             if (subjectMaterialDTO.getTeacher() == null) {
@@ -56,7 +55,7 @@ public class SubjectMaterialService
 
     @Override
     public void delete(Set<Long> id) {
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             Long teacherId = SecurityUtils.getTeacherId();
             List<SubjectMaterial> subjectMaterials =
                     (List<SubjectMaterial>) repository.findAllById(id);
@@ -69,8 +68,7 @@ public class SubjectMaterialService
                                                 && !subject.getAssistantId().equals(teacherId);
                                     });
             if (forbidden) {
-                throw new RuntimeException(
-                        "You are not authorized to delete this material"); // TODO: forbidden
+                throw new RuntimeException("Forbidden");
             }
         }
 

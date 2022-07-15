@@ -25,6 +25,9 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(
                         HttpMethod.GET,
+                        "/api/subject-service/subjects/student/*/all").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_ADMIN)
+                .antMatchers(
+                        HttpMethod.GET,
                         "/api/subject-service/subjects/**",
                         "/api/subject-service/subject-materials/**",
                         "/api/subject-service/subject-notifications/**",
@@ -32,15 +35,23 @@ public class SecurityConfig {
                 .antMatchers(
                         HttpMethod.GET,
                         "/api/subject-service/subject-enrollments/*",
+                        "/api/subject-service/subject-enrollments/student/*/average-grade",
+                        "/api/subject-service/subject-enrollments/student/*/total-ects").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/api/subject-service/subject-enrollments/student/**").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_ADMIN)
+                .antMatchers(
+                        HttpMethod.GET,
                         "/api/subject-service/subject-enrollments/subject/*",
-                        "/api/subject-service/subject-enrollments/subject/*/student-id/all").hasAuthority(SecurityUtils.ROLE_TEACHER)
+                        "/api/subject-service/subject-enrollments/subject/*/student-id/all").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
                 .antMatchers(
                         HttpMethod.PATCH,
-                        "/api/subject-service/subjects/*/syllabus").hasAuthority(SecurityUtils.ROLE_TEACHER)
+                        "/api/subject-service/subjects/*/syllabus",
+                        "/api/subject-service/subject-enrollments/*/grade").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
                 .antMatchers(
                         "/api/subject-service/subject-materials/**",
                         "/api/subject-service/subject-notifications/**",
-                        "/api/subject-service/subject-terms/**").hasAuthority(SecurityUtils.ROLE_TEACHER)
+                        "/api/subject-service/subject-terms/**").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
                 .anyRequest().hasAuthority(SecurityUtils.ROLE_ADMIN)
                 .and()
                 .build();

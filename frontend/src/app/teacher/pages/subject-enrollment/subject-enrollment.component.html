@@ -1,11 +1,10 @@
 <app-table
-  [readOnly]="true"
   [title]="title"
+  [disabledCreate]="true"
+  [disabledSelect]="true"
   [columns]="attributes"
   [data]="data"
   [selectData]="tableSelect"
   (changeDataEvent)="getPage($event)"
-  (createEvent)="create()"
-  (editEvent)="select($event)"
-  (deleteEvent)="delete($event)"
+  (editEvent)="edit($event)"
 ></app-table>

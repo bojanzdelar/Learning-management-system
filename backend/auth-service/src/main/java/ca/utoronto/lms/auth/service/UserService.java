@@ -71,8 +71,7 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
     public UserDetailsDTO findByUsername(String username) throws UsernameNotFoundException {
         if (!SecurityUtils.getUsername().equals(username)
                 && !SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
-            // TODO: implement forbidden exception
-            throw new RuntimeException("You are not authorized to access this resource");
+            throw new RuntimeException("Forbidden");
         }
 
         return (UserDetailsDTO) userDetailsService.loadUserByUsername(username);
@@ -86,15 +85,11 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(
                         userDetailsDTO.getUsername(), userDetailsDTO.getPassword());
-        try {
-            Authentication authentication = authenticationManager.authenticate(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            UserDetails userDetails =
-                    userDetailsService.loadUserByUsername(userDetailsDTO.getUsername());
-            String jwt = tokenGenerator.generateToken(userDetails);
-            return new TokenDTO(jwt);
-        } catch (Exception e) {
-            return null;
-        }
+        Authentication authentication = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetails userDetails =
+                userDetailsService.loadUserByUsername(userDetailsDTO.getUsername());
+        String jwt = tokenGenerator.generateToken(userDetails);
+        return new TokenDTO(jwt);
     }
 }

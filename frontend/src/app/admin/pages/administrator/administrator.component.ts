@@ -6,6 +6,7 @@ import { getUserDisplay } from '@core/models/user.model';
 import { AdministratorService } from '@core/services/administrator.service';
 import { UserService } from '@core/services/user.service';
 import { BaseUserComponent } from '../../directives/base-user-component';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-administrator',
@@ -36,6 +37,8 @@ export class AdministratorComponent
       name: 'Password',
       type: 'password',
       required: true,
+      validators: [Validators.minLength(8)],
+      errorMessage: 'Password must be at least 8 characters long',
     },
     {
       key: 'firstName',

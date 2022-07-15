@@ -1,0 +1,27 @@
+<div class="space-y-4">
+  <h1 class="text-2xl mb-2">My thesis</h1>
+
+  <mat-divider></mat-divider>
+
+  <div *ngIf="thesis" class="space-y-4">
+    <p><span class="font-medium">Name</span>: {{ thesis.name }}</p>
+    <p>
+      <span class="font-medium">Description</span>: {{ thesis.description }}
+    </p>
+    <p><span class="font-medium">URL</span>: {{ thesis.url }}</p>
+    <p>
+      <span class="font-medium">Application date</span>:
+      {{ thesis.applicationDate }}
+    </p>
+    <p>
+      <span class="font-medium">Defense date</span>: {{ thesis.defenseDate }}
+    </p>
+    <p><span class="font-medium">Grade</span>: {{ thesis.grade }}</p>
+    <p>
+      <span class="font-medium">Mentor</span>:
+      {{ getTeacherDisplay(thesis.mentor) }}
+    </p>
+  </div>
+
+  <p *ngIf="!thesis">You don't have thesis yet!</p>
+</div>

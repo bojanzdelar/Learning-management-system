@@ -29,7 +29,23 @@ export class TableComponent<T extends Base> implements OnInit {
   title: string;
 
   @Input()
-  readOnly: boolean = false;
+  disabledCreate: boolean = false;
+
+  @Input()
+  disabledSelect: boolean = false;
+
+  @Input()
+  set disabledEdit(value: boolean) {
+    this._disabledEdit = value;
+    this.setColumns(this.columnProps);
+  }
+  _disabledEdit: boolean = false;
+
+  @Input()
+  selectButtonText: string = 'Delete selected';
+
+  @Input()
+  selectButtonColor: string = 'warn';
 
   @Input()
   set columns(attributes: EntityAttribute[]) {
@@ -37,12 +53,8 @@ export class TableComponent<T extends Base> implements OnInit {
       (attribute: EntityAttribute) =>
         attribute.type !== 'lob' && attribute.type !== 'password'
     );
-
     this.columnProps = attributes;
-    this.columnKeys = [...attributes.map((attribute) => attribute.key)];
-    if (!this.readOnly) {
-      this.columnKeys = ['select', ...this.columnKeys, 'actions'];
-    }
+    this.setColumns(this.columnProps);
   }
 
   @Input()
@@ -78,7 +90,7 @@ export class TableComponent<T extends Base> implements OnInit {
   editEvent: EventEmitter<T> = new EventEmitter();
 
   @Output()
-  deleteEvent: EventEmitter<number[]> = new EventEmitter();
+  selectEvent: EventEmitter<number[]> = new EventEmitter();
 
   dataSource = new MatTableDataSource<T>();
   selection = new SelectionModel<T>(true, []);
@@ -99,8 +111,20 @@ export class TableComponent<T extends Base> implements OnInit {
     this.selection.isSelected = this.isChecked.bind(this);
   }
 
+  setColumns(attributes: EntityAttribute[]) {
+    if (!attributes) return;
+
+    this.columnKeys = [...attributes.map((attribute) => attribute.key)];
+    if (!this.disabledSelect) {
+      this.columnKeys = ['select', ...this.columnKeys];
+    }
+    if (!this._disabledEdit) {
+      this.columnKeys = [...this.columnKeys, 'actions'];
+    }
+  }
+
   isComplexType(attribute: EntityAttribute): boolean {
-    return attribute.display !== undefined;
+    return attribute.display !== undefined || attribute.sortable === false;
   }
 
   isChecked(row: any): boolean {
@@ -169,19 +193,19 @@ export class TableComponent<T extends Base> implements OnInit {
     this.changeDataEvent.emit(data);
   }
 
-  create() {
+  emitCreate() {
     this.createEvent.emit();
   }
 
-  edit(row: T) {
+  emitEdit(row: T) {
     this.editEvent.emit(row);
   }
 
-  delete() {
+  emitSelect() {
     const ids: number[] = [];
     this.selection.selected.forEach(
       (el: T) => el.id !== undefined && ids.push(el.id)
     );
-    this.deleteEvent.emit(ids);
+    this.selectEvent.emit(ids);
   }
 }

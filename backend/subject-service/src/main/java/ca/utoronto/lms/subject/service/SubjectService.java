@@ -53,13 +53,23 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
         return subjects.isEmpty() ? subjects : this.mapMissingValues(subjects);
     }
 
-    public List<SubjectDTO> findByTeacherUsername(String username) {
-        Long teacherId = facultyFeignClient.getTeacherByUsername(username).getId();
+    public List<SubjectDTO> findByTeacherId(Long id) {
         List<SubjectDTO> subjects =
                 mapper.toDTO(
                         repository
                                 .findByProfessorIdOrAssistantIdAndDeletedFalseOrderBySemesterAscNameAsc(
-                                        teacherId, teacherId));
+                                        id, id));
+        return subjects.isEmpty() ? subjects : this.mapMissingValues(subjects);
+    }
+
+    public List<SubjectDTO> findByStudentId(Long id) {
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
+                && !id.equals(SecurityUtils.getStudentId())) {
+            throw new RuntimeException("Forbidden");
+        }
+
+        List<SubjectDTO> subjects =
+                mapper.toDTO(repository.findBySubjectEnrollmentsStudentIdAndDeletedFalse(id));
         return subjects.isEmpty() ? subjects : this.mapMissingValues(subjects);
     }
 
@@ -69,14 +79,10 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
             return null;
         }
 
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
-            Long teacherId = SecurityUtils.getTeacherId();
-            if (!teacherId.equals(subject.getProfessorId())
-                    && !teacherId.equals(subject.getAssistantId())) {
-                // TODO: implement proper exception
-                throw new RuntimeException(
-                        "You are not authorized to update this subject's syllabus.");
-            }
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)
+                && !subject.getProfessorId().equals(SecurityUtils.getTeacherId())
+                && !subject.getAssistantId().equals(SecurityUtils.getTeacherId())) {
+            throw new RuntimeException("Forbidden");
         }
 
         subject.setSyllabus(syllabus);

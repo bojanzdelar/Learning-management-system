@@ -32,5 +32,7 @@
     </mat-card-content>
   </mat-card>
 
-  <p *ngIf="!subjects">You aren't assigned to any subject yet!</p>
+  <p *ngIf="!subjects || !subjects.length">
+    You aren't assigned to any subject yet!
+  </p>
 </div>

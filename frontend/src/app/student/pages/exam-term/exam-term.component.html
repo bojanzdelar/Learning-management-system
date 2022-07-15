@@ -1,0 +1,11 @@
+<app-table
+  [title]="title"
+  [disabledCreate]="true"
+  [disabledEdit]="true"
+  [selectButtonText]="'Register selected'"
+  [selectButtonColor]="'primary'"
+  [columns]="attributes"
+  [data]="data"
+  (changeDataEvent)="getPage($event)"
+  (selectEvent)="register($event)"
+></app-table>

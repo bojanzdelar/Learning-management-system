@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ExamTerm } from '@core/models/exam-term.model';
+import { Page } from '@core/models/page.model';
 import { Observable } from 'rxjs';
 import { RestService } from './rest.service';
 
@@ -13,7 +14,13 @@ export class ExamTermService extends RestService<ExamTerm> {
     return this.http.get<ExamTerm[]>(`${this.url}/subject/${id}/all`);
   }
 
-  getByTeacherUsernameAll(username: string): Observable<ExamTerm[]> {
-    return this.http.get<ExamTerm[]>(`${this.url}/teacher/${username}/all`);
+  getByTeacherIdAll(id: number): Observable<ExamTerm[]> {
+    return this.http.get<ExamTerm[]>(`${this.url}/teacher/${id}/all`);
+  }
+
+  getByStudentId(id: number, params?: any): Observable<Page<ExamTerm>> {
+    return this.http.get<Page<ExamTerm>>(`${this.url}/student/${id}`, {
+      params,
+    });
   }
 }

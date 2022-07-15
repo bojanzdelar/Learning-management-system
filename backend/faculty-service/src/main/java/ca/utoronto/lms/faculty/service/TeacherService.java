@@ -10,7 +10,6 @@ import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
-import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,14 +73,5 @@ public class TeacherService extends ExtendedService<Teacher, TeacherDTO, Long> {
 
     public TeacherDTO findByUserId(Long userId) {
         return mapper.toDTO(repository.findByUserId(userId));
-    }
-
-    public TeacherDTO findByUsername(String username) {
-        try {
-            Long userId = userFeignClient.getUserIdByUsername(username);
-            return mapper.toDTO(repository.findByUserId(userId));
-        } catch (FeignException e) {
-            return null;
-        }
     }
 }

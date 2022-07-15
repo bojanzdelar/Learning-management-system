@@ -9,6 +9,7 @@ export interface ExamRealization extends Base {
   subjectEnrollment: SubjectEnrollment;
   examTerm: ExamTerm;
   score: number;
+  passed: boolean;
 }
 
 export function getExamRealizationDisplay(
@@ -19,4 +20,12 @@ export function getExamRealizationDisplay(
   return `${getSubjectEnrollmentDisplay(
     examRealization.subjectEnrollment
   )} - ${getExamTermDisplay(examRealization.examTerm)}`;
+}
+
+export function getStatusDisplay(passed: boolean) {
+  if (passed === undefined) {
+    return '';
+  }
+
+  return passed ? 'passed' : 'failed';
 }

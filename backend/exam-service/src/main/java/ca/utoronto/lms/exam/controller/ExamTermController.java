@@ -4,12 +4,11 @@ import ca.utoronto.lms.exam.dto.ExamTermDTO;
 import ca.utoronto.lms.exam.model.ExamTerm;
 import ca.utoronto.lms.exam.service.ExamTermService;
 import ca.utoronto.lms.shared.controller.BaseController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,17 +24,25 @@ public class ExamTermController extends BaseController<ExamTerm, ExamTermDTO, Lo
 
     @GetMapping("/subject/{id}/all")
     public ResponseEntity<List<ExamTermDTO>> getBySubjectId(@PathVariable Long id) {
-        List<ExamTermDTO> examTerms = this.service.findBySubjectId(id);
-        return examTerms.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(examTerms, HttpStatus.OK);
+        return new ResponseEntity<>(service.findBySubjectId(id), HttpStatus.OK);
     }
 
-    @GetMapping("/teacher/{username}/all")
-    public ResponseEntity<List<ExamTermDTO>> getByTeacherUsername(@PathVariable String username) {
-        List<ExamTermDTO> examTerms = this.service.findByTeacherUsername(username);
-        return examTerms.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(examTerms, HttpStatus.OK);
+    @GetMapping("/teacher/{id}/all")
+    public ResponseEntity<List<ExamTermDTO>> getByTeacherId(@PathVariable Long id) {
+        return new ResponseEntity<>(service.findByTeacherId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/student/{id}")
+    public ResponseEntity<Page<ExamTermDTO>> getByStudentId(
+            @PathVariable Long id,
+            Pageable pageable,
+            @RequestParam(defaultValue = "") String search) {
+        try {
+            return new ResponseEntity<>(
+                    service.findByStudentId(id, pageable, search), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

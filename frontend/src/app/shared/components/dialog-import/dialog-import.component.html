@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Import {{ name }}</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-error *ngIf="form.errors">Please enter a valid XML.</mat-error>
+    <textarea matInput [formControl]="form" rows="16"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button mat-dialog-close>Cancel</button>
+  <button (click)="confirm()" mat-flat-button cdkFocusInitial color="primary">
+    Confirm
+  </button>
+</mat-dialog-actions>

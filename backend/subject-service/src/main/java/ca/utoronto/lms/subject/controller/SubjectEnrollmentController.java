@@ -8,10 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,29 +23,86 @@ public class SubjectEnrollmentController
         this.service = service;
     }
 
+    @GetMapping("/student/{id}/all")
+    public ResponseEntity<List<SubjectEnrollmentDTO>> getByStudentId(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(service.findByStudentId(id), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/subject/{id}")
     public ResponseEntity<Page<SubjectEnrollmentDTO>> getBySubjectId(
-            @PathVariable Long id, Pageable pageable, String search) {
+            @PathVariable Long id,
+            Pageable pageable,
+            @RequestParam(defaultValue = "") String search) {
         try {
-            Page<SubjectEnrollmentDTO> subjectEnrollments =
-                    this.service.findBySubjectId(id, pageable, search);
-            return subjectEnrollments.isEmpty()
-                    ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                    : new ResponseEntity<>(subjectEnrollments, HttpStatus.OK);
+            return new ResponseEntity<>(
+                    this.service.findBySubjectId(id, pageable, search), HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/student/{id}")
+    public ResponseEntity<Page<SubjectEnrollmentDTO>> getByStudentId(
+            @PathVariable Long id,
+            Pageable pageable,
+            @RequestParam(defaultValue = "") String search) {
+        try {
+            return new ResponseEntity<>(
+                    this.service.findByStudentId(id, pageable, search), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/subject/{id}/student-id/all")
     public ResponseEntity<List<Long>> getStudentIdsBySubjectId(
-            @PathVariable Long id, Pageable pageable, String search) {
+            @PathVariable Long id,
+            Pageable pageable,
+            @RequestParam(defaultValue = "") String search) {
         try {
-            List<Long> studentsIds = this.service.findStudentsIdsBySubjectId(id);
-            return studentsIds.isEmpty()
-                    ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                    : new ResponseEntity<>(studentsIds, HttpStatus.OK);
+            return new ResponseEntity<>(this.service.findStudentsIdsBySubjectId(id), HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/student/{id}/average-grade")
+    public ResponseEntity<List<Double>> getAverageGradeByStudentId(@PathVariable List<Long> id) {
+        try {
+            return new ResponseEntity<>(
+                    this.service.findAverageGradeByStudentId(id), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/student/{id}/total-ects")
+    public ResponseEntity<List<Integer>> getTotalECTSByStudentId(@PathVariable List<Long> id) {
+        try {
+            return new ResponseEntity<>(this.service.findTotalECTSByStudentId(id), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PatchMapping("/{id}/grade")
+    public ResponseEntity<SubjectEnrollmentDTO> updateGrade(
+            @PathVariable Long id, @RequestBody SubjectEnrollmentDTO subjectEnrollment) {
+        try {
+            return new ResponseEntity<>(
+                    this.service.updateGrade(id, subjectEnrollment), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

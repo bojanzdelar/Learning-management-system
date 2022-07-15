@@ -14,9 +14,15 @@ public interface SubjectFeignClient {
     @GetMapping("/api/subject-service/subjects/{id}")
     List<SubjectDTO> getSubject(@PathVariable Set<Long> id);
 
-    @GetMapping("/api/subject-service/subjects/teacher/{username}/all")
-    List<SubjectDTO> getSubjectByTeacherUsername(@PathVariable String username);
+    @GetMapping("/api/subject-service/subjects/teacher/{id}/all")
+    List<SubjectDTO> getSubjectByTeacherId(@PathVariable Long id);
+
+    @GetMapping("/api/subject-service/subjects/student/{id}/all")
+    List<SubjectDTO> getSubjectByStudentId(@PathVariable Long id);
 
     @GetMapping("/api/subject-service/subject-enrollments/{id}")
     List<SubjectEnrollmentDTO> getSubjectEnrollment(@PathVariable Set<Long> id);
+
+    @GetMapping("/api/subject-service/subject-enrollments/student/{id}/all")
+    List<SubjectEnrollmentDTO> getSubjectEnrollmentByStudentId(@PathVariable Long id);
 }

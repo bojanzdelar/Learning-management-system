@@ -6,7 +6,7 @@
 <mat-dialog-content class="mat-typography">
   <form [formGroup]="form" novalidate class="mx-8">
     <ng-container *ngFor="let attr of attributes">
-      <div class="mb-2">
+      <div class="mb-3">
         <mat-label>{{ attr.name }}</mat-label>
         <ng-container [ngSwitch]="attr.type">
           <!-- Autocomplete field -->
@@ -52,22 +52,14 @@
             <textarea matInput [formControlName]="attr.key" rows="8"></textarea>
           </mat-form-field>
 
-          <!-- Password field -->
-          <mat-form-field
-            *ngSwitchCase="'password'"
-            appearance="fill"
-            class="w-full"
-          >
-            <mat-error *ngIf="form.controls[attr.key].errors">
-              Please enter a password with minimum 6 characters.
-            </mat-error>
-            <input matInput [formControlName]="attr.key" type="password" />
-          </mat-form-field>
-
           <!-- Input field -->
           <mat-form-field *ngSwitchDefault appearance="fill" class="w-full">
             <mat-error *ngIf="form.controls[attr.key].errors">
-              Please enter a valid text.
+              {{
+                attr.errorMessage
+                  ? attr.errorMessage
+                  : "Please enter a valid text"
+              }}
             </mat-error>
             <input
               matInput

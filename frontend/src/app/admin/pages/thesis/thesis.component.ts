@@ -8,6 +8,7 @@ import { getTeacherDisplay } from '@core/models/teacher.model';
 import { ThesisService } from '@core/services/thesis.service';
 import { StudentService } from '@core/services/student.service';
 import { TeacherService } from '@core/services/teacher.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-thesis',
@@ -55,6 +56,8 @@ export class ThesisComponent extends BaseComponent<Thesis> implements OnInit {
       key: 'grade',
       name: 'Grade',
       type: 'number',
+      validators: [Validators.min(6), Validators.max(10)],
+      errorMessage: 'Grade must be between 6 and 10',
     },
     {
       key: 'student',

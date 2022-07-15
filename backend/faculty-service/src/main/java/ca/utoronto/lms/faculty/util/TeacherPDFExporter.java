@@ -1,6 +1,7 @@
 package ca.utoronto.lms.faculty.util;
 
 import ca.utoronto.lms.faculty.dto.TeacherDTO;
+import ca.utoronto.lms.shared.util.PDFExporter;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

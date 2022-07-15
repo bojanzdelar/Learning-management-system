@@ -11,6 +11,8 @@ export interface Student extends Base {
   yearOfEnrollment: number;
   thesis: Thesis;
   studyProgram: StudyProgram;
+  averageGrade?: number;
+  totalECTS?: number;
 }
 
 export function getStudentDisplay(student: Student): string {

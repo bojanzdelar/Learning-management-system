@@ -10,6 +10,7 @@ import { AuthService } from '@core/services/auth.service';
 import { BaseComponent } from '@shared/directives/base-component';
 import { TableSelect } from '@core/models/table-select.model';
 import { TableData } from '@core/models/table-data.model';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-subject-enrollment',
@@ -38,17 +39,21 @@ export class SubjectEnrollmentComponent
       key: 'extraPoints',
       name: 'Extra points',
       type: 'number',
+      validators: [Validators.min(0), Validators.max(10)],
+      errorMessage: 'Extra points must be between 0 and 10',
     },
     {
       key: 'grade',
       name: 'Grade',
       type: 'number',
+      validators: [Validators.min(6), Validators.max(10)],
+      errorMessage: 'Grade must be between 6 and 10',
     },
   ];
 
   tableSelect: TableSelect = {
-    observable: this.subjectService.getByTeacherUsername(
-      this.authService.getUsername()
+    observable: this.subjectService.getByTeacherId(
+      this.authService.getTeacherId()
     ),
     display: getSubjectWithStudyProgramDisplay,
   };
@@ -75,5 +80,19 @@ export class SubjectEnrollmentComponent
       .subscribe((data) => {
         this.data = data;
       });
+  }
+
+  override process(value: SubjectEnrollment): void {
+    if (!value.id) return;
+    delete value['ids'];
+
+    this.service.updateGrade(value.id, value).subscribe({
+      next: () => {
+        this.getPage();
+      },
+      error: () => {
+        window.alert('Something went wrong! Please try again');
+      },
+    });
   }
 }

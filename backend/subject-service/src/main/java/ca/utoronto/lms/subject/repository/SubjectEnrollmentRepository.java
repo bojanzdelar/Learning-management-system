@@ -25,5 +25,14 @@ public interface SubjectEnrollmentRepository extends BaseRepository<SubjectEnrol
     Page<SubjectEnrollment> findBySubjectIdContaining(
             Long subjectId, Pageable pageable, String search);
 
-    List<SubjectEnrollment> findBySubjectId(Long subjectId);
+    List<SubjectEnrollment> findBySubjectIdAndDeletedFalse(Long subjectId);
+
+    List<SubjectEnrollment> findByStudentIdAndDeletedFalse(Long studentId);
+
+    @Query(
+            "select x from #{#entityName} x where x.deleted = false and x.studentId = :studentId "
+                    + "and (cast(x.id as string) like :search "
+                    + "or cast(x.extraPoints as string) like :search or cast(x.grade as string) like :search)")
+    Page<SubjectEnrollment> findByStudentIdContaining(
+            Long studentId, Pageable pageable, String search);
 }

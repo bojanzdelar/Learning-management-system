@@ -11,6 +11,7 @@ import { Exam } from '@core/models/exam.model';
 import { getExamTypeDisplay } from '@core/models/exam-type.model';
 import { ExamTypeService } from '@core/services/exam-type.service';
 import { ExamService } from '@core/services/exam.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-exam',
@@ -43,12 +44,16 @@ export class ExamComponent extends BaseComponent<Exam> implements OnInit {
       name: 'Minimum score',
       type: 'number',
       required: true,
+      validators: [Validators.min(0), Validators.max(90)],
+      errorMessage: 'Minimum score must be between 0 and 90',
     },
     {
       key: 'maximumScore',
       name: 'Maximum score',
       type: 'number',
       required: true,
+      validators: [Validators.min(1), Validators.max(90)],
+      errorMessage: 'Maximum score must be between 1 and 90',
     },
     {
       key: 'examType',
@@ -60,8 +65,8 @@ export class ExamComponent extends BaseComponent<Exam> implements OnInit {
   ];
 
   tableSelect: TableSelect = {
-    observable: this.subjectService.getByTeacherUsername(
-      this.authService.getUsername()
+    observable: this.subjectService.getByTeacherId(
+      this.authService.getTeacherId()
     ),
     display: getSubjectWithStudyProgramDisplay,
   };

@@ -36,14 +36,13 @@ public class SubjectNotificationService
 
     @Override
     public SubjectNotificationDTO save(SubjectNotificationDTO subjectNotificationDTO) {
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             TeacherDTO teacher =
-                    facultyFeignClient.getTeacherByUsername(SecurityUtils.getUsername());
+                    facultyFeignClient.getTeacher(Set.of(SecurityUtils.getTeacherId())).get(0);
             SubjectDTO subject = subjectNotificationDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacher.getId())
                     && !subject.getAssistant().getId().equals(teacher.getId())) {
-                throw new RuntimeException(
-                        "You are not authorized to add notifications to this subject");
+                throw new RuntimeException("Forbidden");
             }
 
             if (subjectNotificationDTO.getTeacher() == null) {
@@ -56,7 +55,7 @@ public class SubjectNotificationService
 
     @Override
     public void delete(Set<Long> id) {
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             Long teacherId = SecurityUtils.getTeacherId();
             List<SubjectNotification> subjectNotifications =
                     (List<SubjectNotification>) repository.findAllById(id);
@@ -69,8 +68,7 @@ public class SubjectNotificationService
                                                 && !subject.getAssistantId().equals(teacherId);
                                     });
             if (forbidden) {
-                throw new RuntimeException(
-                        "You are not authorized to delete this notification"); // TODO: forbidden
+                throw new RuntimeException("Forbidden");
             }
         }
 

@@ -16,3 +16,9 @@ export function getExamDisplay(exam: Exam): string {
 
   return `${exam.subject.name} - ${exam.name}`;
 }
+
+export function getExamNameDisplay(exam: Exam): string {
+  if (!exam) return '';
+
+  return `${exam.name}`;
+}

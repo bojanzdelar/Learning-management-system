@@ -16,7 +16,6 @@ import { StudyProgramComponent } from './pages/study-program/study-program.compo
 import { TeacherComponent } from './pages/teacher/teacher.component';
 import { ThesisComponent } from './pages/thesis/thesis.component';
 import { SubjectComponent } from './pages/subject/subject.component';
-import { ExportComponent } from './components/export/export.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +33,6 @@ import { ExportComponent } from './components/export/export.component';
     TeacherComponent,
     ThesisComponent,
     SubjectComponent,
-    ExportComponent,
   ],
   imports: [SharedModule, AdminRoutingModule],
 })

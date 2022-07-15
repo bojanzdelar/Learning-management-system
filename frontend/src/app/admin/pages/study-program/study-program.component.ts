@@ -8,6 +8,7 @@ import { getTeacherDisplay } from '@core/models/teacher.model';
 import { StudyProgramService } from '@core/services/study-program.service';
 import { FacultyService } from '@core/services/faculty.service';
 import { TeacherService } from '@core/services/teacher.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-study-program',
@@ -43,6 +44,8 @@ export class StudyProgramComponent
       name: 'Acronym',
       type: 'text',
       required: true,
+      validators: [Validators.maxLength(5)],
+      errorMessage: 'Please enter acronym less than 5 characters',
     },
     {
       key: 'faculty',

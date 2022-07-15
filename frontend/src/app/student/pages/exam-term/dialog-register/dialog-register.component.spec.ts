@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExportComponent } from './export.component';
+import { DialogRegisterComponent } from './dialog-register.component';
 
-describe('ExportComponent', () => {
-  let component: ExportComponent;
-  let fixture: ComponentFixture<ExportComponent>;
+describe('DialogRegisterComponent', () => {
+  let component: DialogRegisterComponent;
+  let fixture: ComponentFixture<DialogRegisterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExportComponent ]
+      declarations: [ DialogRegisterComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExportComponent);
+    fixture = TestBed.createComponent(DialogRegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -4,6 +4,7 @@ import ca.utoronto.lms.shared.mapper.BaseMapper;
 import ca.utoronto.lms.subject.dto.StudentDTO;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
 import ca.utoronto.lms.subject.dto.SubjectEnrollmentDTO;
+import ca.utoronto.lms.subject.dto.TeacherDTO;
 import ca.utoronto.lms.subject.model.Subject;
 import ca.utoronto.lms.subject.model.SubjectEnrollment;
 import org.mapstruct.Mapper;
@@ -21,7 +22,9 @@ public interface SubjectEnrollmentMapper
     StudentDTO studentDTOFromId(Long id);
 
     @Mapping(target = "studyProgram", ignore = true)
-    @Mapping(target = "professor", ignore = true)
-    @Mapping(target = "assistant", ignore = true)
+    @Mapping(source = "professorId", target = "professor")
+    @Mapping(source = "assistantId", target = "assistant")
     SubjectDTO toDTO(Subject subject);
+
+    TeacherDTO teacherDTOFromId(Long id);
 }

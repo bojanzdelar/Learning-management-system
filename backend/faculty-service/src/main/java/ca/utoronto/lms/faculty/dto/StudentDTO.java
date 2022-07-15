@@ -19,4 +19,6 @@ public class StudentDTO extends BaseDTO<Long> {
     private Integer yearOfEnrollment;
     private ThesisDTO thesis;
     private StudyProgramDTO studyProgram;
+    private Double averageGrade;
+    private Integer totalECTS;
 }

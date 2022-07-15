@@ -45,12 +45,14 @@ export class SubjectTermComponent
       key: 'startTime',
       name: 'Start time',
       type: 'datetime-local',
+      required: true,
       display: formatDateTime,
     },
     {
       key: 'endTime',
       name: 'End time',
       type: 'datetime-local',
+      required: true,
       display: formatDateTime,
     },
     {
@@ -62,8 +64,8 @@ export class SubjectTermComponent
   ];
 
   tableSelect: TableSelect = {
-    observable: this.subjectService.getByTeacherUsername(
-      this.authService.getUsername()
+    observable: this.subjectService.getByTeacherId(
+      this.authService.getTeacherId()
     ),
     display: getSubjectWithStudyProgramDisplay,
   };

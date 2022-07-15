@@ -23,23 +23,29 @@ public class SubjectController extends BaseController<Subject, SubjectDTO, Long>
     @GetMapping("/study-program/{id}/all")
     public ResponseEntity<List<SubjectDTO>> getByStudyProgramId(@PathVariable Long id) {
         try {
-            List<SubjectDTO> subjects = this.service.findByStudyProgramId(id);
-            return subjects.isEmpty()
-                    ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                    : new ResponseEntity<>(subjects, HttpStatus.OK);
+            return new ResponseEntity<>(this.service.findByStudyProgramId(id), HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping("/teacher/{username}/all")
-    public ResponseEntity<List<SubjectDTO>> getByTeacherUsername(@PathVariable String username) {
+    @GetMapping("/teacher/{id}/all")
+    public ResponseEntity<List<SubjectDTO>> getByTeacherId(@PathVariable Long id) {
         try {
-            List<SubjectDTO> subjects = this.service.findByTeacherUsername(username);
-            return subjects.isEmpty()
-                    ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                    : new ResponseEntity<>(subjects, HttpStatus.OK);
+            return new ResponseEntity<>(this.service.findByTeacherId(id), HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/student/{id}/all")
+    public ResponseEntity<List<SubjectDTO>> getByStudentId(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(this.service.findByStudentId(id), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -53,6 +59,7 @@ public class SubjectController extends BaseController<Subject, SubjectDTO, Long>
                     ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                     : new ResponseEntity<>(subject, HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }

@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { EntityAttribute } from '@core/models/entity-attribute.model';
 import { getStudyProgramDisplay } from '@core/models/study-program.model';
 import { Subject } from '@core/models/subject.model';
-import { getTeacherDisplay } from '@core/models/teacher.model';
 import { AuthService } from '@core/services/auth.service';
 import { SubjectService } from '@core/services/subject.service';
 import { DialogFormComponent } from '@shared/components/dialog-form/dialog-form.component';
@@ -26,7 +25,6 @@ export class SubjectComponent implements OnInit {
   subjects: Subject[];
 
   getStudyProgramDisplay = getStudyProgramDisplay;
-  getTeacherDisplay = getTeacherDisplay;
 
   constructor(
     public dialog: MatDialog,
@@ -40,7 +38,7 @@ export class SubjectComponent implements OnInit {
 
   getSubjects() {
     this.service
-      .getByTeacherUsername(this.authService.getUsername())
+      .getByTeacherId(this.authService.getTeacherId())
       .subscribe((subjects: Subject[]) => {
         this.subjects = subjects;
       });

@@ -25,10 +25,7 @@ public class SubjectNotificationController
 
     @GetMapping("/subject/{id}/all")
     public ResponseEntity<List<SubjectNotificationDTO>> getBySubjectId(@PathVariable Long id) {
-        List<SubjectNotificationDTO> subjectNotifications = this.service.findBySubjectId(id);
-        return subjectNotifications.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(subjectNotifications, HttpStatus.OK);
+        return new ResponseEntity<>(this.service.findBySubjectId(id), HttpStatus.OK);
     }
 
     @GetMapping("/subject/{id}")
@@ -36,10 +33,7 @@ public class SubjectNotificationController
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        Page<SubjectNotificationDTO> subjectNotifications =
-                this.service.findBySubjectId(id, pageable, search);
-        return subjectNotifications.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(subjectNotifications, HttpStatus.OK);
+        return new ResponseEntity<>(
+                this.service.findBySubjectId(id, pageable, search), HttpStatus.OK);
     }
 }

@@ -24,6 +24,30 @@ export class AuthService {
     }
   }
 
+  getUsername(): string {
+    return this.user.sub;
+  }
+
+  getUserId(): number {
+    return this.user.userId;
+  }
+
+  getStudentId(): number {
+    return this.user.studentId;
+  }
+
+  getTeacherId(): number {
+    return this.user.teacherId;
+  }
+
+  getAdminId(): number {
+    return this.user.adminId;
+  }
+
+  hasTokenExpired(): boolean {
+    return this.user.exp < Date.now() / 1000;
+  }
+
   loggedIn(): boolean {
     return this.user;
   }
@@ -31,16 +55,19 @@ export class AuthService {
   login(user: User): Observable<Token> {
     const request = this.http.post<Token>(this.url, user);
 
-    request.subscribe((token: Token) => {
-      this.token = token.token;
-      this.user = JSON.parse(atob(this.token.split('.')[1]));
-      localStorage.setItem('token', token.token);
-      if (this.redirectUrl) {
-        this.router.navigate([this.redirectUrl]);
-        this.redirectUrl = undefined;
-      } else {
-        this.router.navigate(['/']);
-      }
+    request.subscribe({
+      next: (token: Token) => {
+        this.token = token.token;
+        this.user = JSON.parse(atob(this.token.split('.')[1]));
+        localStorage.setItem('token', token.token);
+        if (this.redirectUrl) {
+          this.router.navigate([this.redirectUrl]);
+          this.redirectUrl = undefined;
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
+      error: () => {},
     });
 
     return request;
@@ -51,14 +78,6 @@ export class AuthService {
     this.user = null;
     localStorage.removeItem('token');
     this.router.navigate(['/']);
-  }
-
-  getUsername() {
-    return this.user.sub;
-  }
-
-  hasTokenExpired() {
-    return this.user.exp < Date.now() / 1000;
   }
 
   validateRoles(roles: any, method = 'any') {

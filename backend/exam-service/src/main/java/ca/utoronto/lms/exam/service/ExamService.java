@@ -33,7 +33,7 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
 
     @Override
     public ExamDTO save(ExamDTO examDTO) {
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             Long teacherId = SecurityUtils.getTeacherId();
             SubjectDTO subject = examDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacherId)
@@ -48,7 +48,7 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
 
     @Override
     public void delete(Set<Long> id) {
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
+        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             Long teacherId = SecurityUtils.getTeacherId();
             List<Exam> exams = (List<Exam>) repository.findAllById(id);
             List<SubjectDTO> subjects =
@@ -64,8 +64,7 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
                                                             .getId()
                                                             .equals(teacherId));
             if (forbidden) {
-                throw new RuntimeException(
-                        "You are not authorized to delete this material"); // TODO: forbidden
+                throw new RuntimeException("Forbidden");
             }
         }
 

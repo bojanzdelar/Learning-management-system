@@ -26,3 +26,11 @@ export function getSubjectEnrollmentStudentDisplay(
 
   return getStudentDisplay(subjectEnrollment.student);
 }
+
+export function getSubjectEnrollmentSubjectDisplay(
+  subjectEnrollment: SubjectEnrollment
+): string {
+  if (!subjectEnrollment) return '';
+
+  return getSubjectDisplay(subjectEnrollment.subject);
+}

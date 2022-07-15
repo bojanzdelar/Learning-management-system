@@ -30,6 +30,9 @@ import { DialogFormComponent } from './components/dialog-form/dialog-form.compon
 import { DialogDeleteComponent } from './components/dialog-delete/dialog-delete.component';
 import { ContainerComponent } from './components/container/container.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { ImportExportComponent } from './components/import-export/import-export-component';
+import { DialogImportComponent } from './components/dialog-import/dialog-import.component';
+import { DialogUploadComponent } from './components/dialog-upload/dialog-upload.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +45,9 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
     DialogDeleteComponent,
     ContainerComponent,
     SidenavComponent,
+    ImportExportComponent,
+    DialogImportComponent,
+    DialogUploadComponent,
   ],
   imports: [
     CommonModule,
@@ -95,6 +101,9 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
     DialogDeleteComponent,
     ContainerComponent,
     SidenavComponent,
+    ImportExportComponent,
+    DialogImportComponent,
+    DialogUploadComponent,
   ],
 })
 export class SharedModule {}

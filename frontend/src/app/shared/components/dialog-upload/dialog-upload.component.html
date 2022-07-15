@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Upload {{ name }}</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="p-2 space-y-3">
+    <input type="file" accept=".xml" class="w-full" #fileInput />
+    <p *ngIf="error" class="text-red-700">Please select a XML file.</p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button mat-dialog-close>Cancel</button>
+  <button (click)="confirm()" mat-flat-button cdkFocusInitial color="primary">
+    Confirm
+  </button>
+</mat-dialog-actions>

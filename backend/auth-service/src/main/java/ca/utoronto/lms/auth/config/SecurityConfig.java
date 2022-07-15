@@ -4,6 +4,7 @@ import ca.utoronto.lms.auth.security.AuthTokenFilter;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,10 +39,15 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
-                        "/api/auth-service/login",
+                        HttpMethod.POST,
+                        "/api/auth-service/login").permitAll()
+                .antMatchers(
+                        HttpMethod.GET,
                         "/api/auth-service/users/username/*/id",
                         "/api/auth-service/users/**/public").permitAll()
-                .antMatchers("/api/auth-service/users/username/*").authenticated()
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/api/auth-service/users/username/*").authenticated()
                 .antMatchers("/api/auth-service/users/**").hasAuthority(SecurityUtils.ROLE_ADMIN)
                 .anyRequest().hasAuthority(SecurityUtils.ROLE_ROOT)
                 .and()

@@ -18,6 +18,18 @@ export class StudentService extends RestService<Student> {
     return this.http.get(`${this.url}/all/pdf`, { responseType: 'blob' });
   }
 
+  getBySubjectIdAllXml(id: number): Observable<string> {
+    return this.http.get(`${this.url}/subject/${id}/all/xml`, {
+      responseType: 'text',
+    });
+  }
+
+  getBySubjectIdAllPdf(id: number): Observable<Blob> {
+    return this.http.get(`${this.url}/subject/${id}/all/pdf`, {
+      responseType: 'blob',
+    });
+  }
+
   getBySubjectId(id: number, params?: any): Observable<Page<Student>> {
     return this.http.get<Page<Student>>(`${this.url}/subject/${id}`, {
       params,

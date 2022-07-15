@@ -9,7 +9,9 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -28,4 +30,7 @@ public class ExamTerm extends BaseEntity<Long> {
 
     @ManyToOne(optional = false)
     private ExamPeriod examPeriod;
+
+    @OneToMany(mappedBy = "examTerm")
+    private List<ExamRealization> examRealizations;
 }

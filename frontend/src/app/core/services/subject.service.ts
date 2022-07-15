@@ -13,8 +13,12 @@ export class SubjectService extends RestService<Subject> {
     return this.http.get<Subject[]>(`${this.url}/study-program/${id}/all`);
   }
 
-  getByTeacherUsername(username: string): Observable<Subject[]> {
-    return this.http.get<Subject[]>(`${this.url}/teacher/${username}/all`);
+  getByTeacherId(id: number): Observable<Subject[]> {
+    return this.http.get<Subject[]>(`${this.url}/teacher/${id}/all`);
+  }
+
+  getByStudentId(id: number): Observable<Subject[]> {
+    return this.http.get<Subject[]>(`${this.url}/student/${id}/all`);
   }
 
   updateSyllabus(id: number, syllabus: string): Observable<Subject> {
