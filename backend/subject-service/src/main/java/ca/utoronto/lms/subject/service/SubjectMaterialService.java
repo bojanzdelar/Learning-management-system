@@ -1,5 +1,7 @@
 package ca.utoronto.lms.subject.service;
 
+import ca.utoronto.lms.shared.exception.ForbiddenException;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
@@ -10,7 +12,7 @@ import ca.utoronto.lms.subject.mapper.SubjectMaterialMapper;
 import ca.utoronto.lms.subject.model.Subject;
 import ca.utoronto.lms.subject.model.SubjectMaterial;
 import ca.utoronto.lms.subject.repository.SubjectMaterialRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import ca.utoronto.lms.subject.repository.SubjectRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +26,19 @@ public class SubjectMaterialService
         extends ExtendedService<SubjectMaterial, SubjectMaterialDTO, Long> {
     private final SubjectMaterialRepository repository;
     private final SubjectMaterialMapper mapper;
-
-    @Autowired private FacultyFeignClient facultyFeignClient;
+    private final SubjectRepository subjectRepository;
+    private final FacultyFeignClient facultyFeignClient;
 
     public SubjectMaterialService(
-            SubjectMaterialRepository repository, SubjectMaterialMapper mapper) {
+            SubjectMaterialRepository repository,
+            SubjectMaterialMapper mapper,
+            SubjectRepository subjectRepository,
+            FacultyFeignClient facultyFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.subjectRepository = subjectRepository;
+        this.facultyFeignClient = facultyFeignClient;
     }
 
     @Override
@@ -42,7 +49,8 @@ public class SubjectMaterialService
             SubjectDTO subject = subjectMaterialDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacher.getId())
                     && !subject.getAssistant().getId().equals(teacher.getId())) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException(
+                        "You are not allowed to manager this subject material");
             }
 
             if (subjectMaterialDTO.getTeacher() == null) {
@@ -68,7 +76,8 @@ public class SubjectMaterialService
                                                 && !subject.getAssistantId().equals(teacherId);
                                     });
             if (forbidden) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException(
+                        "You are not allowed to delete these subject materials");
             }
         }
 
@@ -81,12 +90,16 @@ public class SubjectMaterialService
                 subjectMaterials,
                 SubjectMaterialDTO::getTeacher,
                 SubjectMaterialDTO::setTeacher,
-                (ID) -> facultyFeignClient.getTeacher(ID));
+                facultyFeignClient::getTeacher);
 
         return subjectMaterials;
     }
 
     public List<SubjectMaterialDTO> findBySubjectId(Long id) {
+        if (!subjectRepository.existsById(id)) {
+            throw new NotFoundException("Subject not found");
+        }
+
         List<SubjectMaterialDTO> subjectMaterials =
                 mapper.toDTO(
                         repository.findBySubjectIdAndDeletedFalseOrderByPublicationDateDesc(id));
@@ -96,6 +109,10 @@ public class SubjectMaterialService
     }
 
     public Page<SubjectMaterialDTO> findBySubjectId(Long id, Pageable pageable, String search) {
+        if (!subjectRepository.existsById(id)) {
+            throw new NotFoundException("Subject not found");
+        }
+
         Page<SubjectMaterialDTO> subjectMaterials =
                 repository
                         .findBySubjectIdContaining(id, pageable, "%" + search + "%")

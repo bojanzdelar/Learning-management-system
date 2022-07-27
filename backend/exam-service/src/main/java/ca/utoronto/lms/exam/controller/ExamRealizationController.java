@@ -5,7 +5,6 @@ import ca.utoronto.lms.exam.model.ExamRealization;
 import ca.utoronto.lms.exam.service.ExamRealizationService;
 import ca.utoronto.lms.exam.util.ExamRealizationPDFExporter;
 import ca.utoronto.lms.shared.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,12 +21,13 @@ import java.util.Set;
 public class ExamRealizationController
         extends BaseController<ExamRealization, ExamRealizationDTO, Long> {
     private final ExamRealizationService service;
+    private final ExamRealizationPDFExporter pdfExporter;
 
-    @Autowired private ExamRealizationPDFExporter pdfExporter;
-
-    public ExamRealizationController(ExamRealizationService service) {
+    public ExamRealizationController(
+            ExamRealizationService service, ExamRealizationPDFExporter pdfExporter) {
         super(service);
         this.service = service;
+        this.pdfExporter = pdfExporter;
     }
 
     @GetMapping("/exam-term/{id}")
@@ -35,13 +35,7 @@ public class ExamRealizationController
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        try {
-            return new ResponseEntity<>(
-                    service.findByExamTermId(id, pageable, search), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(service.findByExamTermId(id, pageable, search), HttpStatus.OK);
     }
 
     @GetMapping("/exam-term/{id}/all/pdf")
@@ -57,46 +51,26 @@ public class ExamRealizationController
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        try {
-            return new ResponseEntity<>(
-                    service.findByStudentId(id, pageable, search), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(service.findByStudentId(id, pageable, search), HttpStatus.OK);
     }
 
     @PostMapping("/exam-term/{id}")
-    public ResponseEntity<List<ExamRealizationDTO>> createByExamTermId(@PathVariable Set<Long> id) {
-        try {
-            return new ResponseEntity<>(service.createByExamTermId(id), HttpStatus.CREATED);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<List<ExamRealizationDTO>> createByExamTermId(
+            @PathVariable Set<Long> examTermIds) {
+        return new ResponseEntity<>(service.createByExamTermId(examTermIds), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}/score")
     public ResponseEntity<ExamRealizationDTO> updateScore(
             @PathVariable Long id, @RequestBody ExamRealizationDTO examRealizationDTO) {
-        try {
-            return new ResponseEntity<>(
-                    this.service.updateScore(id, examRealizationDTO), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(
+                this.service.updateScore(id, examRealizationDTO), HttpStatus.OK);
     }
 
     @PatchMapping("/exam-term/{id}/score")
     public ResponseEntity<List<ExamRealizationDTO>> updateScoresByExamTermId(
             @PathVariable Long id, @RequestBody List<ExamRealizationDTO> examRealizations) {
-        try {
-            return new ResponseEntity<>(
-                    service.updateScoresByExamTermId(id, examRealizations), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(
+                service.updateScoresByExamTermId(id, examRealizations), HttpStatus.OK);
     }
 }

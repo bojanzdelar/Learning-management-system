@@ -1,5 +1,7 @@
 package ca.utoronto.lms.subject.service;
 
+import ca.utoronto.lms.shared.exception.ForbiddenException;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
@@ -10,7 +12,6 @@ import ca.utoronto.lms.subject.model.Subject;
 import ca.utoronto.lms.subject.model.SubjectEnrollment;
 import ca.utoronto.lms.subject.repository.SubjectEnrollmentRepository;
 import ca.utoronto.lms.subject.util.Utility;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,16 +26,19 @@ public class SubjectEnrollmentService
         extends ExtendedService<SubjectEnrollment, SubjectEnrollmentDTO, Long> {
     private final SubjectEnrollmentRepository repository;
     private final SubjectEnrollmentMapper mapper;
-
-    @Autowired private SubjectService subjectService;
-
-    @Autowired private FacultyFeignClient facultyFeignClient;
+    private final SubjectService subjectService;
+    private final FacultyFeignClient facultyFeignClient;
 
     public SubjectEnrollmentService(
-            SubjectEnrollmentRepository repository, SubjectEnrollmentMapper mapper) {
+            SubjectEnrollmentRepository repository,
+            SubjectEnrollmentMapper mapper,
+            SubjectService subjectService,
+            FacultyFeignClient facultyFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.subjectService = subjectService;
+        this.facultyFeignClient = facultyFeignClient;
     }
 
     @Override
@@ -50,7 +54,8 @@ public class SubjectEnrollmentService
                                     subjectEnrollment ->
                                             !subjectEnrollment.getStudentId().equals(studentId));
             if (forbidden) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException(
+                        "You are not allowed to view these subject enrollments");
             }
         }
 
@@ -66,7 +71,8 @@ public class SubjectEnrollmentService
                                             !subject.getProfessorId().equals(teacherId)
                                                     && !subject.getAssistantId().equals(teacherId));
             if (forbidden) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException(
+                        "You are not allowed to view these subject enrollments");
             }
         }
 
@@ -83,19 +89,19 @@ public class SubjectEnrollmentService
                 subjectEnrollments,
                 SubjectEnrollmentDTO::getStudent,
                 SubjectEnrollmentDTO::setStudent,
-                (ID) -> facultyFeignClient.getStudent(ID));
+                facultyFeignClient::getStudent);
         map(
                 subjectEnrollments,
                 (subjectEnrollment) -> subjectEnrollment.getSubject().getProfessor(),
                 (subjectEnrollment, professor) ->
                         subjectEnrollment.getSubject().setProfessor(professor),
-                (ID) -> facultyFeignClient.getTeacher(ID));
+                facultyFeignClient::getTeacher);
         map(
                 subjectEnrollments,
                 (subjectEnrollment) -> subjectEnrollment.getSubject().getAssistant(),
                 (subjectEnrollment, assistant) ->
                         subjectEnrollment.getSubject().setAssistant(assistant),
-                (ID) -> facultyFeignClient.getTeacher(ID));
+                facultyFeignClient::getTeacher);
 
         return subjectEnrollments;
     }
@@ -103,7 +109,7 @@ public class SubjectEnrollmentService
     public List<SubjectEnrollmentDTO> findByStudentId(Long id) {
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
                 && !id.equals(SecurityUtils.getStudentId())) {
-            throw new RuntimeException("Forbidden");
+            throw new ForbiddenException("You are not allowed to view these subject enrollments");
         }
 
         List<SubjectEnrollmentDTO> subjectEnrollments =
@@ -117,14 +123,15 @@ public class SubjectEnrollmentService
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             List<SubjectDTO> subjects = subjectService.findById(Set.of(id));
             if (subjects.isEmpty()) {
-                throw new RuntimeException("Not found");
+                throw new NotFoundException("Subject not found");
             }
 
             SubjectDTO subject = subjects.get(0);
             Long teacherId = SecurityUtils.getTeacherId();
             if (!subject.getProfessor().getId().equals(teacherId)
                     && !subject.getAssistant().getId().equals(teacherId)) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException(
+                        "You are not allowed to view these subject enrollments");
             }
         }
 
@@ -144,7 +151,7 @@ public class SubjectEnrollmentService
     public Page<SubjectEnrollmentDTO> findByStudentId(Long id, Pageable pageable, String search) {
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
                 && !id.equals(SecurityUtils.getStudentId())) {
-            throw new RuntimeException("Forbidden");
+            throw new ForbiddenException("You are not allowed to view this subject enrollments");
         }
 
         Page<SubjectEnrollmentDTO> subjectEnrollments =
@@ -164,14 +171,14 @@ public class SubjectEnrollmentService
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             List<SubjectDTO> subjects = subjectService.findById(Set.of(id));
             if (subjects.isEmpty()) {
-                throw new RuntimeException("Subject not found");
+                throw new NotFoundException("Subject not found");
             }
 
             SubjectDTO subject = subjects.get(0);
             Long teacherId = SecurityUtils.getTeacherId();
             if (!subject.getProfessor().getId().equals(teacherId)
                     && !subject.getAssistant().getId().equals(teacherId)) {
-                throw new RuntimeException("You are not authorized to access this resource");
+                throw new ForbiddenException("You are not allowed to view these student ids");
             }
         }
 
@@ -183,7 +190,8 @@ public class SubjectEnrollmentService
     public List<Double> findAverageGradeByStudentId(List<Long> ids) {
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
                 && (ids.size() > 1 || !ids.contains(SecurityUtils.getStudentId()))) {
-            throw new RuntimeException("Forbidden");
+            throw new ForbiddenException(
+                    "You are not allowed to view average grade for this student");
         }
 
         List<Double> averageGrades = new ArrayList<>(ids.size());
@@ -214,7 +222,7 @@ public class SubjectEnrollmentService
     public List<Integer> findTotalECTSByStudentId(List<Long> ids) {
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
                 && (ids.size() > 1 || !ids.contains(SecurityUtils.getStudentId()))) {
-            throw new RuntimeException("Forbidden");
+            throw new ForbiddenException("You are not allowed to view total ECTS for this student");
         }
 
         List<Integer> totalECTS = new ArrayList<>(ids.size());
@@ -237,14 +245,18 @@ public class SubjectEnrollmentService
     }
 
     public SubjectEnrollmentDTO updateGrade(Long id, SubjectEnrollmentDTO subjectEnrollmentDTO) {
-        SubjectEnrollment subjectEnrollment = repository.findById(id).orElseThrow();
+        SubjectEnrollment subjectEnrollment =
+                repository
+                        .findById(id)
+                        .orElseThrow(() -> new NotFoundException("Subject enrollment not found"));
 
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             Subject subject = subjectEnrollment.getSubject();
             Long teacherId = SecurityUtils.getTeacherId();
             if (!subject.getProfessorId().equals(teacherId)
                     && !subject.getAssistantId().equals(teacherId)) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException(
+                        "You are not allowed to update grade for this subject enrollment");
             }
         }
 

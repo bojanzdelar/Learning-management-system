@@ -18,7 +18,12 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public abstract class StudentMapper implements BaseMapper<Student, StudentDTO, Long> {
-    @Autowired private SubjectFeignClient subjectFeignClient;
+    private SubjectFeignClient subjectFeignClient;
+
+    @Autowired
+    public void setSubjectFeignClient(SubjectFeignClient subjectFeignClient) {
+        this.subjectFeignClient = subjectFeignClient;
+    }
 
     @Mapping(source = "userId", target = "user")
     @Mapping(source = "id", target = "averageGrade", qualifiedByName = "getAverageGrade")
@@ -55,19 +60,11 @@ public abstract class StudentMapper implements BaseMapper<Student, StudentDTO, L
 
     @Named("getAverageGrade")
     public Double getAverageGrade(Long studentId) {
-        try {
-            return subjectFeignClient.getAverageGradesByStudentId(List.of(studentId)).get(0);
-        } catch (Exception e) {
-            return null;
-        }
+        return subjectFeignClient.getAverageGradesByStudentId(List.of(studentId)).get(0);
     }
 
     @Named("getTotalECTS")
     public Integer getTotalECTS(Long studentId) {
-        try {
-            return subjectFeignClient.getTotalECTSByStudentId(List.of(studentId)).get(0);
-        } catch (Exception e) {
-            return null;
-        }
+        return subjectFeignClient.getTotalECTSByStudentId(List.of(studentId)).get(0);
     }
 }

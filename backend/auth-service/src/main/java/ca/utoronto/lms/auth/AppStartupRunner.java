@@ -5,7 +5,7 @@ import ca.utoronto.lms.auth.service.UserService;
 import ca.utoronto.lms.shared.dto.RoleDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
 import ca.utoronto.lms.shared.security.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
+@RequiredArgsConstructor
 public class AppStartupRunner implements ApplicationRunner {
-    @Autowired private RoleService roleService;
-    @Autowired private UserService userService;
-
-    @Autowired private PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(ApplicationArguments args) {

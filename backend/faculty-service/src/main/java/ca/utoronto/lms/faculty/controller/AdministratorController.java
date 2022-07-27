@@ -23,9 +23,6 @@ public class AdministratorController extends BaseController<Administrator, Admin
 
     @GetMapping("/user-id/{id}/id")
     public ResponseEntity<Long> getIdByUserId(@PathVariable Long id) {
-        AdministratorDTO administrator = this.service.findByUserId(id);
-        return administrator == null
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(administrator.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(this.service.findByUserId(id).getId(), HttpStatus.OK);
     }
 }

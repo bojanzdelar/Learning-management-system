@@ -1,0 +1,21 @@
+<div class="px-2 py-5 space-y-4">
+  <mat-card
+    *ngFor="let subjectNotification of subjectNotifications"
+    class="mat-elevation-z8"
+  >
+    <mat-card-header>
+      <mat-card-title>
+        {{ subjectNotification.name }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Published on
+        {{ formatDateTime(subjectNotification.publicationDate) }} by
+        {{ getTeacherDisplay(subjectNotification.teacher) }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="mb-1">{{ subjectNotification.description }}</p>
+    </mat-card-content>
+  </mat-card>
+  <p *ngIf="!subjectNotifications">No subject notifications are found!</p>
+</div>

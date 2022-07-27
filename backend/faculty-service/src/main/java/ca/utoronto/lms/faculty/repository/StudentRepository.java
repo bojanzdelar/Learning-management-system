@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -29,7 +30,7 @@ public interface StudentRepository extends BaseRepository<Student, Long> {
 
     List<Student> findByIdInAndDeletedFalse(Set<Long> ids);
 
-    Student findByUserId(Long userId);
+    Optional<Student> findByUserId(Long userId);
 
-    Student findByThesisId(Long thesisId);
+    Optional<Student> findByThesisId(Long thesisId);
 }

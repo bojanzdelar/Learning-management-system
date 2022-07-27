@@ -11,9 +11,11 @@ import ca.utoronto.lms.exam.model.ExamRealization;
 import ca.utoronto.lms.exam.model.ExamTerm;
 import ca.utoronto.lms.exam.repository.ExamRealizationRepository;
 import ca.utoronto.lms.exam.repository.ExamTermRepository;
+import ca.utoronto.lms.shared.exception.BadRequestException;
+import ca.utoronto.lms.shared.exception.ForbiddenException;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -28,17 +30,22 @@ public class ExamRealizationService
         extends ExtendedService<ExamRealization, ExamRealizationDTO, Long> {
     private final ExamRealizationRepository repository;
     private final ExamRealizationMapper mapper;
-
-    @Autowired private ExamTermService examTermService;
-    @Autowired private ExamTermRepository examTermRepository;
-
-    @Autowired private SubjectFeignClient subjectFeignClient;
+    private final ExamTermService examTermService;
+    private final ExamTermRepository examTermRepository;
+    private final SubjectFeignClient subjectFeignClient;
 
     public ExamRealizationService(
-            ExamRealizationRepository repository, ExamRealizationMapper mapper) {
+            ExamRealizationRepository repository,
+            ExamRealizationMapper mapper,
+            ExamTermService examTermService,
+            ExamTermRepository examTermRepository,
+            SubjectFeignClient subjectFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.examTermService = examTermService;
+        this.examTermRepository = examTermRepository;
+        this.subjectFeignClient = subjectFeignClient;
     }
 
     @Override
@@ -47,12 +54,16 @@ public class ExamRealizationService
                 examRealizations,
                 ExamRealizationDTO::getSubjectEnrollment,
                 ExamRealizationDTO::setSubjectEnrollment,
-                (ID) -> subjectFeignClient.getSubjectEnrollment(ID));
+                subjectFeignClient::getSubjectEnrollment);
 
         return examRealizations;
     }
 
     public List<ExamRealizationDTO> findByExamTermId(Long id) {
+        if (!examTermRepository.existsById(id)) {
+            throw new NotFoundException("Exam term id not found");
+        }
+
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             ExamTermDTO examTerm = examTermService.findById(Set.of(id)).get(0);
             SubjectDTO subject = examTerm.getExam().getSubject();
@@ -60,7 +71,7 @@ public class ExamRealizationService
             Long teacherId = SecurityUtils.getTeacherId();
             if (!teacherId.equals(subject.getProfessor().getId())
                     && !teacherId.equals(subject.getAssistant().getId())) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException("You are not allowed to view this exam realization");
             }
         }
 
@@ -70,6 +81,10 @@ public class ExamRealizationService
     }
 
     public Page<ExamRealizationDTO> findByExamTermId(Long id, Pageable pageable, String search) {
+        if (!examTermRepository.existsById(id)) {
+            throw new NotFoundException("Exam term id not found");
+        }
+
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
             ExamTermDTO examTerm = examTermService.findById(Set.of(id)).get(0);
             SubjectDTO subject = examTerm.getExam().getSubject();
@@ -77,7 +92,7 @@ public class ExamRealizationService
             Long teacherId = SecurityUtils.getTeacherId();
             if (!teacherId.equals(subject.getProfessor().getId())
                     && !teacherId.equals(subject.getAssistant().getId())) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException("You are not allowed to view this exam realizations");
             }
         }
 
@@ -96,7 +111,7 @@ public class ExamRealizationService
     public Page<ExamRealizationDTO> findByStudentId(Long id, Pageable pageable, String search) {
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
                 && !id.equals(SecurityUtils.getStudentId())) {
-            throw new RuntimeException("You are not authorized to view these exam realizations.");
+            throw new ForbiddenException("You are not allowed to view these exam realizations.");
         }
 
         List<Long> subjectEnrollmentIds =
@@ -118,12 +133,20 @@ public class ExamRealizationService
                         examRealizations.getTotalElements());
     }
 
-    public List<ExamRealizationDTO> createByExamTermId(Set<Long> id) {
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)) {
-            throw new RuntimeException("Forbidden");
+    public List<ExamRealizationDTO> createByExamTermId(Set<Long> examTermIds) {
+        boolean notExists =
+                examTermIds.stream()
+                        .anyMatch(examTermId -> !examTermRepository.existsById(examTermId));
+        if (notExists) {
+            throw new BadRequestException("Exam term id does not exist");
         }
 
-        List<ExamTerm> examTerms = (List<ExamTerm>) examTermRepository.findAllById(id);
+        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)) {
+            throw new ForbiddenException(
+                    "You are not allowed to create exam realizations for this exam term");
+        }
+
+        List<ExamTerm> examTerms = (List<ExamTerm>) examTermRepository.findAllById(examTermIds);
         List<Long> subjectIds =
                 examTerms.stream().map(ExamTerm::getExam).map(Exam::getSubjectId).toList();
         List<SubjectEnrollmentDTO> subjectEnrollments =
@@ -153,7 +176,8 @@ public class ExamRealizationService
             Long teacherId = SecurityUtils.getTeacherId();
             if (!subject.getProfessor().getId().equals(teacherId)
                     && !subject.getAssistant().getId().equals(teacherId)) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException(
+                        "You are not allowed to update score for this exam realization");
             }
         }
 
@@ -172,7 +196,8 @@ public class ExamRealizationService
             Long teacherId = SecurityUtils.getTeacherId();
             if (!subject.getProfessor().getId().equals(teacherId)
                     && !subject.getAssistant().getId().equals(teacherId)) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException(
+                        "You are not allowed to update scores for this exam term");
             }
         }
 
@@ -184,7 +209,7 @@ public class ExamRealizationService
                                         .toList());
 
         if (examRealizations.stream().anyMatch(er -> !er.getExamTerm().getId().equals(id))) {
-            throw new RuntimeException("Bad request");
+            throw new BadRequestException("Some of exam realizations are not in this exam term");
         }
 
         for (int i = 0; i < examRealizations.size(); i++) {

@@ -25,12 +25,7 @@ public class SubjectEnrollmentController
 
     @GetMapping("/student/{id}/all")
     public ResponseEntity<List<SubjectEnrollmentDTO>> getByStudentId(@PathVariable Long id) {
-        try {
-            return new ResponseEntity<>(service.findByStudentId(id), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(service.findByStudentId(id), HttpStatus.OK);
     }
 
     @GetMapping("/subject/{id}")
@@ -38,13 +33,8 @@ public class SubjectEnrollmentController
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        try {
-            return new ResponseEntity<>(
-                    this.service.findBySubjectId(id, pageable, search), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(
+                this.service.findBySubjectId(id, pageable, search), HttpStatus.OK);
     }
 
     @GetMapping("/student/{id}")
@@ -52,13 +42,8 @@ public class SubjectEnrollmentController
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        try {
-            return new ResponseEntity<>(
-                    this.service.findByStudentId(id, pageable, search), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(
+                this.service.findByStudentId(id, pageable, search), HttpStatus.OK);
     }
 
     @GetMapping("/subject/{id}/student-id/all")
@@ -66,44 +51,22 @@ public class SubjectEnrollmentController
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        try {
-            return new ResponseEntity<>(this.service.findStudentsIdsBySubjectId(id), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.service.findStudentsIdsBySubjectId(id), HttpStatus.OK);
     }
 
     @GetMapping("/student/{id}/average-grade")
     public ResponseEntity<List<Double>> getAverageGradeByStudentId(@PathVariable List<Long> id) {
-        try {
-            return new ResponseEntity<>(
-                    this.service.findAverageGradeByStudentId(id), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.service.findAverageGradeByStudentId(id), HttpStatus.OK);
     }
 
     @GetMapping("/student/{id}/total-ects")
     public ResponseEntity<List<Integer>> getTotalECTSByStudentId(@PathVariable List<Long> id) {
-        try {
-            return new ResponseEntity<>(this.service.findTotalECTSByStudentId(id), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.service.findTotalECTSByStudentId(id), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/grade")
     public ResponseEntity<SubjectEnrollmentDTO> updateGrade(
             @PathVariable Long id, @RequestBody SubjectEnrollmentDTO subjectEnrollment) {
-        try {
-            return new ResponseEntity<>(
-                    this.service.updateGrade(id, subjectEnrollment), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.service.updateGrade(id, subjectEnrollment), HttpStatus.OK);
     }
 }

@@ -7,14 +7,16 @@ import ca.utoronto.lms.auth.repository.UserRepository;
 import ca.utoronto.lms.auth.security.TokenGenerator;
 import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
+import ca.utoronto.lms.shared.exception.ForbiddenException;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.BaseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,17 +28,25 @@ import java.util.Set;
 public class UserService extends BaseService<User, UserDetailsDTO, Long> {
     private final UserRepository repository;
     private final UserMapper mapper;
+    private final UserDetailsService userDetailsService;
+    private final TokenGenerator tokenGenerator;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired private UserDetailsServiceImpl userDetailsService;
-    @Autowired private TokenGenerator tokenGenerator;
-
-    @Autowired private AuthenticationManager authenticationManager;
-    @Autowired private PasswordEncoder passwordEncoder;
-
-    public UserService(UserRepository repository, UserMapper mapper) {
+    public UserService(
+            UserRepository repository,
+            UserMapper mapper,
+            UserDetailsService userDetailsService,
+            TokenGenerator tokenGenerator,
+            AuthenticationManager authenticationManager,
+            PasswordEncoder passwordEncoder) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.userDetailsService = userDetailsService;
+        this.tokenGenerator = tokenGenerator;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -53,7 +63,7 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
         User existingUser =
                 repository
                         .findById(userDetailsDTO.getId())
-                        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                        .orElseThrow(() -> new NotFoundException("User not found"));
         if (userDetailsDTO.getUsername() != null) {
             existingUser.setUsername(userDetailsDTO.getUsername());
         }
@@ -65,20 +75,27 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
     }
 
     public List<UserDTO> findByIdPublic(Set<Long> id) {
-        return this.mapper.userToUserDTOList((List<User>) this.repository.findAllById(id));
+        List<User> users = (List<User>) this.repository.findAllById(id);
+        if (users.isEmpty()) {
+            throw new NotFoundException("User id not found");
+        }
+        return this.mapper.userToUserDTOList(users);
     }
 
     public UserDetailsDTO findByUsername(String username) throws UsernameNotFoundException {
         if (!SecurityUtils.getUsername().equals(username)
                 && !SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
-            throw new RuntimeException("Forbidden");
+            throw new ForbiddenException("You are not allowed to view this user's details");
         }
 
         return (UserDetailsDTO) userDetailsService.loadUserByUsername(username);
     }
 
     public Long findIdByUsername(String username) {
-        return this.repository.findByUsername(username).orElseThrow().getId();
+        return this.repository
+                .findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("Username not found"))
+                .getId();
     }
 
     public TokenDTO login(UserDetailsDTO userDetailsDTO) {

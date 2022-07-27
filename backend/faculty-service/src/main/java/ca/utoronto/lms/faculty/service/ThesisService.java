@@ -6,8 +6,8 @@ import ca.utoronto.lms.faculty.model.Student;
 import ca.utoronto.lms.faculty.model.Thesis;
 import ca.utoronto.lms.faculty.repository.StudentRepository;
 import ca.utoronto.lms.faculty.repository.ThesisRepository;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.service.BaseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,13 +17,14 @@ import java.util.Set;
 public class ThesisService extends BaseService<Thesis, ThesisDTO, Long> {
     private final ThesisRepository repository;
     private final ThesisMapper mapper;
+    private final StudentRepository studentRepository;
 
-    @Autowired private StudentRepository studentRepository;
-
-    public ThesisService(ThesisRepository repository, ThesisMapper mapper) {
+    public ThesisService(
+            ThesisRepository repository, ThesisMapper mapper, StudentRepository studentRepository) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -31,10 +32,16 @@ public class ThesisService extends BaseService<Thesis, ThesisDTO, Long> {
         ThesisDTO savedThesisDTO = super.save(thesisDTO);
 
         Student newStudent =
-                studentRepository.findById(thesisDTO.getStudent().getId()).orElseThrow();
+                studentRepository
+                        .findById(thesisDTO.getStudent().getId())
+                        .orElseThrow(() -> new NotFoundException("Student not found"));
 
         if (thesisDTO.getId() != null) {
-            Student oldStudent = studentRepository.findByThesisId(thesisDTO.getId());
+            Student oldStudent =
+                    studentRepository
+                            .findByThesisId(thesisDTO.getId())
+                            .orElseThrow(() -> new NotFoundException("Student not found"));
+
             if (!oldStudent.getId().equals(newStudent.getId())) {
                 oldStudent.setThesis(null);
                 studentRepository.save(oldStudent);
@@ -62,6 +69,10 @@ public class ThesisService extends BaseService<Thesis, ThesisDTO, Long> {
     }
 
     public ThesisDTO findByStudentId(Long id) {
-        return mapper.toDTO(repository.findByStudentId(id));
+        Thesis thesis =
+                repository
+                        .findByStudentId(id)
+                        .orElseThrow(() -> new NotFoundException("Thesis not found"));
+        return mapper.toDTO(thesis);
     }
 }

@@ -6,7 +6,6 @@ import ca.utoronto.lms.exam.mapper.ExamPeriodMapper;
 import ca.utoronto.lms.exam.model.ExamPeriod;
 import ca.utoronto.lms.exam.repository.ExamPeriodRepository;
 import ca.utoronto.lms.shared.service.ExtendedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,13 +14,16 @@ import java.util.List;
 public class ExamPeriodService extends ExtendedService<ExamPeriod, ExamPeriodDTO, Long> {
     private final ExamPeriodRepository repository;
     private final ExamPeriodMapper mapper;
+    private final FacultyFeignClient facultyFeignClient;
 
-    @Autowired private FacultyFeignClient facultyFeignClient;
-
-    public ExamPeriodService(ExamPeriodRepository repository, ExamPeriodMapper mapper) {
+    public ExamPeriodService(
+            ExamPeriodRepository repository,
+            ExamPeriodMapper mapper,
+            FacultyFeignClient facultyFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.facultyFeignClient = facultyFeignClient;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class ExamPeriodService extends ExtendedService<ExamPeriod, ExamPeriodDTO
                 examPeriods,
                 ExamPeriodDTO::getFaculty,
                 ExamPeriodDTO::setFaculty,
-                (ID) -> facultyFeignClient.getFaculty(ID));
+                facultyFeignClient::getFaculty);
 
         return examPeriods;
     }

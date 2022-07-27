@@ -8,9 +8,9 @@ import ca.utoronto.lms.faculty.repository.TeacherRepository;
 import ca.utoronto.lms.shared.dto.RoleDTO;
 import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +21,14 @@ import java.util.stream.Collectors;
 public class TeacherService extends ExtendedService<Teacher, TeacherDTO, Long> {
     private final TeacherRepository repository;
     private final TeacherMapper mapper;
+    private final UserFeignClient userFeignClient;
 
-    @Autowired private UserFeignClient userFeignClient;
-
-    public TeacherService(TeacherRepository repository, TeacherMapper mapper) {
+    public TeacherService(
+            TeacherRepository repository, TeacherMapper mapper, UserFeignClient userFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.userFeignClient = userFeignClient;
     }
 
     @Override
@@ -62,16 +63,15 @@ public class TeacherService extends ExtendedService<Teacher, TeacherDTO, Long> {
 
     @Override
     protected List<TeacherDTO> mapMissingValues(List<TeacherDTO> teachers) {
-        map(
-                teachers,
-                TeacherDTO::getUser,
-                TeacherDTO::setUser,
-                (ID) -> userFeignClient.getUser(ID));
-
+        map(teachers, TeacherDTO::getUser, TeacherDTO::setUser, userFeignClient::getUser);
         return teachers;
     }
 
     public TeacherDTO findByUserId(Long userId) {
-        return mapper.toDTO(repository.findByUserId(userId));
+        Teacher teacher =
+                repository
+                        .findByUserId(userId)
+                        .orElseThrow(() -> new NotFoundException("User id not found"));
+        return mapper.toDTO(teacher);
     }
 }

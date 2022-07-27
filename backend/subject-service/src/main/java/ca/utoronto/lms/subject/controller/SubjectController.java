@@ -22,45 +22,22 @@ public class SubjectController extends BaseController<Subject, SubjectDTO, Long>
 
     @GetMapping("/study-program/{id}/all")
     public ResponseEntity<List<SubjectDTO>> getByStudyProgramId(@PathVariable Long id) {
-        try {
-            return new ResponseEntity<>(this.service.findByStudyProgramId(id), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.service.findByStudyProgramId(id), HttpStatus.OK);
     }
 
     @GetMapping("/teacher/{id}/all")
     public ResponseEntity<List<SubjectDTO>> getByTeacherId(@PathVariable Long id) {
-        try {
-            return new ResponseEntity<>(this.service.findByTeacherId(id), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.service.findByTeacherId(id), HttpStatus.OK);
     }
 
     @GetMapping("/student/{id}/all")
     public ResponseEntity<List<SubjectDTO>> getByStudentId(@PathVariable Long id) {
-        try {
-            return new ResponseEntity<>(this.service.findByStudentId(id), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.service.findByStudentId(id), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/syllabus")
     public ResponseEntity<SubjectDTO> patchSyllabus(
             @PathVariable Long id, @RequestBody String syllabus) {
-        try {
-            SubjectDTO subject = this.service.updateSyllabus(id, syllabus);
-            return subject == null
-                    ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                    : new ResponseEntity<>(subject, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        return new ResponseEntity<>(this.service.updateSyllabus(id, syllabus), HttpStatus.OK);
     }
 }

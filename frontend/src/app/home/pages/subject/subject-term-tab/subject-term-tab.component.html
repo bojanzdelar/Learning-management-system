@@ -1,0 +1,18 @@
+<div class="px-2 py-5 space-y-4">
+  <mat-card *ngFor="let subjectTerm of subjectTerms" class="mat-elevation-z8">
+    <mat-card-header>
+      <mat-card-title>
+        {{ subjectTerm.name }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Held by {{ getTeacherDisplay(subjectTerm.teacher) }} from
+        {{ formatDateTime(subjectTerm.startTime) }} to
+        {{ formatDateTime(subjectTerm.endTime) }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="mb-1">{{ subjectTerm.description }}</p>
+    </mat-card-content>
+  </mat-card>
+  <p *ngIf="!subjectTerms">No subject terms are found!</p>
+</div>

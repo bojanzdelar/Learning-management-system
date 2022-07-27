@@ -3,11 +3,13 @@ package ca.utoronto.lms.auth.security;
 import ca.utoronto.lms.auth.feign.FacultyFeignClient;
 import ca.utoronto.lms.auth.model.User;
 import ca.utoronto.lms.auth.repository.UserRepository;
+import ca.utoronto.lms.shared.exception.BadRequestException;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +21,10 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class TokenGenerator {
-    @Autowired private UserRepository userRepository;
-    @Autowired private FacultyFeignClient facultyFeignClient;
+    private final UserRepository userRepository;
+    private final FacultyFeignClient facultyFeignClient;
 
     @Value("${token.secret}")
     private String secret;
@@ -34,9 +37,12 @@ public class TokenGenerator {
         claims.put(Claims.SUBJECT, userDetails.getUsername());
         claims.put(Claims.ISSUED_AT, new Date(System.currentTimeMillis()));
 
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+        User user =
+                userRepository
+                        .findByUsername(userDetails.getUsername())
+                        .orElseThrow(() -> new NotFoundException("User not found"));
         if (user.isDeleted()) {
-            throw new IllegalArgumentException("User is deleted");
+            throw new BadRequestException("User is deleted");
         }
 
         Long userId = user.getId();

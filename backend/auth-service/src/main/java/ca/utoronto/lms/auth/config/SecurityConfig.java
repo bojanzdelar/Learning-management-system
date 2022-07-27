@@ -2,6 +2,7 @@ package ca.utoronto.lms.auth.config;
 
 import ca.utoronto.lms.auth.security.AuthTokenFilter;
 import ca.utoronto.lms.shared.security.SecurityUtils;
+import ca.utoronto.lms.shared.security.TokenUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,8 +25,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthTokenFilter authTokenFilter(AuthenticationManager manager) {
-        AuthTokenFilter authTokenFilter = new AuthTokenFilter();
+    public AuthTokenFilter authTokenFilter(UserDetailsService service, TokenUtils token, AuthenticationManager manager) {
+        AuthTokenFilter authTokenFilter = new AuthTokenFilter(service, token);
         authTokenFilter.setAuthenticationManager(manager);
         return authTokenFilter;
     }

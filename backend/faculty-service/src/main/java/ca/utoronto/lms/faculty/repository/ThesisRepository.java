@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ThesisRepository extends BaseRepository<Thesis, Long> {
     @Override
@@ -18,5 +20,5 @@ public interface ThesisRepository extends BaseRepository<Thesis, Long> {
                     + "or cast(x.grade as string) like :search)")
     Page<Thesis> findContaining(Pageable pageable, String search);
 
-    Thesis findByStudentId(Long id);
+    Optional<Thesis> findByStudentId(Long id);
 }

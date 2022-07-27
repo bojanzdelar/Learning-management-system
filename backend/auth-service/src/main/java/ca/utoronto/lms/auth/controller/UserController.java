@@ -8,10 +8,8 @@ import ca.utoronto.lms.shared.dto.UserDetailsDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,41 +30,18 @@ public class UserController extends BaseController<User, UserDetailsDTO, Long> {
 
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDetails> getUserByUsername(@PathVariable String username) {
-        UserDetails userDetails;
-        try {
-            userDetails = service.findByUsername(username);
-        } catch (UsernameNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        if (userDetails == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        return new ResponseEntity<>(userDetails, HttpStatus.OK);
+        return new ResponseEntity<>(service.findByUsername(username), HttpStatus.OK);
     }
 
     @GetMapping("/username/{username}/id")
     public ResponseEntity<Long> getUserIdByUsername(@PathVariable String username) {
-        try {
-            return new ResponseEntity<>(service.findIdByUsername(username), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(service.findIdByUsername(username), HttpStatus.OK);
     }
 
     @PatchMapping({"/{id}"})
     public ResponseEntity<UserDetailsDTO> patch(
             @PathVariable Long id, @RequestBody UserDetailsDTO DTO) {
         DTO.setId(id);
-        Set<Long> ids = new HashSet<>(List.of(id));
-        if (this.service.findById(ids).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        try {
-            return new ResponseEntity<>(this.service.update(DTO), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.service.update(DTO), HttpStatus.OK);
     }
 }

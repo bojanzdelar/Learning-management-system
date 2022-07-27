@@ -9,9 +9,9 @@ import ca.utoronto.lms.exam.model.ExamRealization;
 import ca.utoronto.lms.exam.model.ExamTerm;
 import ca.utoronto.lms.exam.repository.ExamRealizationRepository;
 import ca.utoronto.lms.exam.repository.ExamTermRepository;
+import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,15 +24,19 @@ import java.util.List;
 public class ExamTermService extends ExtendedService<ExamTerm, ExamTermDTO, Long> {
     private final ExamTermRepository repository;
     private final ExamTermMapper mapper;
+    private final ExamRealizationRepository examRealizationRepository;
+    private final SubjectFeignClient subjectFeignClient;
 
-    @Autowired private ExamRealizationRepository examRealizationRepository;
-
-    @Autowired private SubjectFeignClient subjectFeignClient;
-
-    public ExamTermService(ExamTermRepository repository, ExamTermMapper mapper) {
+    public ExamTermService(
+            ExamTermRepository repository,
+            ExamTermMapper mapper,
+            ExamRealizationRepository examRealizationRepository,
+            SubjectFeignClient subjectFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.examRealizationRepository = examRealizationRepository;
+        this.subjectFeignClient = subjectFeignClient;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class ExamTermService extends ExtendedService<ExamTerm, ExamTermDTO, Long
                 examTerms,
                 examTerm -> examTerm.getExam().getSubject(),
                 (examTerm, subject) -> examTerm.getExam().setSubject(subject),
-                (ID) -> subjectFeignClient.getSubject(ID));
+                subjectFeignClient::getSubject);
 
         return examTerms;
     }
@@ -68,7 +72,7 @@ public class ExamTermService extends ExtendedService<ExamTerm, ExamTermDTO, Long
     public Page<ExamTermDTO> findByStudentId(Long id, Pageable pageable, String search) {
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
                 && !id.equals(SecurityUtils.getStudentId())) {
-            throw new RuntimeException("Forbidden");
+            throw new ForbiddenException("You are not allowed to view these exam terms");
         }
 
         List<Long> subjectIds =

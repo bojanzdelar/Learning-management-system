@@ -9,9 +9,10 @@ import ca.utoronto.lms.faculty.repository.StudentRepository;
 import ca.utoronto.lms.shared.dto.RoleDTO;
 import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
+import ca.utoronto.lms.shared.exception.ForbiddenException;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,21 +27,29 @@ import java.util.stream.Collectors;
 public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
     private final StudentRepository repository;
     private final StudentMapper mapper;
+    private final ThesisService thesisService;
+    private final UserFeignClient userFeignClient;
+    private final SubjectFeignClient subjectFeignClient;
 
-    @Autowired private UserFeignClient userFeignClient;
-    @Autowired private SubjectFeignClient subjectFeignClient;
-
-    public StudentService(StudentRepository repository, StudentMapper mapper) {
+    public StudentService(
+            StudentRepository repository,
+            StudentMapper mapper,
+            ThesisService thesisService,
+            UserFeignClient userFeignClient,
+            SubjectFeignClient subjectFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.thesisService = thesisService;
+        this.userFeignClient = userFeignClient;
+        this.subjectFeignClient = subjectFeignClient;
     }
 
     @Override
     public List<StudentDTO> findById(Set<Long> id) {
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
                 && (id.size() > 1 || !id.contains(SecurityUtils.getStudentId()))) {
-            throw new RuntimeException("Forbidden");
+            throw new ForbiddenException("You are not allowed to view these students");
         }
 
         return super.findById(id);
@@ -78,17 +87,16 @@ public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
 
     @Override
     protected List<StudentDTO> mapMissingValues(List<StudentDTO> students) {
-        map(
-                students,
-                StudentDTO::getUser,
-                StudentDTO::setUser,
-                (ID) -> userFeignClient.getUser(ID));
-
+        map(students, StudentDTO::getUser, StudentDTO::setUser, userFeignClient::getUser);
         return students;
     }
 
     public StudentDTO findByUserId(Long userId) {
-        return mapper.toDTO(repository.findByUserId(userId));
+        Student student =
+                repository
+                        .findByUserId(userId)
+                        .orElseThrow(() -> new NotFoundException("User id not found"));
+        return mapper.toDTO(student);
     }
 
     public List<StudentDTO> findBySubjectId(Long id) {
@@ -109,5 +117,9 @@ public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
                         this.mapMissingValues(students.getContent()),
                         pageable,
                         students.getTotalElements());
+    }
+
+    public Long findThesisId(Long id) {
+        return this.thesisService.findByStudentId(id).getId();
     }
 }

@@ -2,7 +2,7 @@ package ca.utoronto.lms.faculty;
 
 import ca.utoronto.lms.faculty.model.Administrator;
 import ca.utoronto.lms.faculty.repository.AdministratorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class AppStartupRunner implements ApplicationRunner {
-    @Autowired private AdministratorRepository administratorRepository;
+    private final AdministratorRepository administratorRepository;
 
     @Override
     public void run(ApplicationArguments args) {

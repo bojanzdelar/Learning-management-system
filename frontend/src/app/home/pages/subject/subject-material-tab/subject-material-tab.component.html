@@ -1,0 +1,27 @@
+<div class="px-2 py-5 space-y-4">
+  <mat-card
+    *ngFor="let subjectMaterial of subjectMaterials"
+    class="mat-elevation-z8"
+  >
+    <mat-card-header>
+      <mat-card-title>
+        {{ subjectMaterial.name }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Published on
+        {{ formatDateTime(subjectMaterial.publicationDate) }} by
+        {{ getTeacherDisplay(subjectMaterial.teacher) }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="mb-1">{{ subjectMaterial.description }}</p>
+      <a
+        [attr.href]="subjectMaterial.resourceUrl"
+        class="text-blue-500 hover:text-blue-700"
+      >
+        Click here to open resources
+      </a>
+    </mat-card-content>
+  </mat-card>
+  <p *ngIf="!subjectMaterials">No subject materials are found!</p>
+</div>

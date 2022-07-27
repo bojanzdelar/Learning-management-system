@@ -1,0 +1,17 @@
+<div class="px-2 py-5 space-y-4">
+  <mat-card *ngFor="let examTerm of examTerms" class="mat-elevation-z8">
+    <mat-card-header>
+      <mat-card-title>
+        {{ examTerm.exam.name }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ getExamPeriodDisplay(examTerm.examPeriod) }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Start time: {{ formatDateTime(examTerm.startTime) }}</p>
+      <p class="mb-1">End time: {{ formatDateTime(examTerm.endTime) }}</p>
+    </mat-card-content>
+  </mat-card>
+  <p *ngIf="!examTerms">No exam terms are found!</p>
+</div>

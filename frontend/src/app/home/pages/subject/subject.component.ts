@@ -5,6 +5,7 @@ import { SubjectMaterial } from '@core/models/subject-material.model';
 import { SubjectNotification } from '@core/models/subject-notification.model';
 import { SubjectTerm } from '@core/models/subject-term.model';
 import { Exam, getExamDisplay } from '@core/models/exam.model';
+import { ExamTerm } from '@core/models/exam-term.model';
 import { getStudyProgramDisplay } from '@core/models/study-program.model';
 import { getTeacherDisplay } from '@core/models/teacher.model';
 import { getExamTypeDisplay } from '@core/models/exam-type.model';
@@ -14,9 +15,6 @@ import { SubjectNotificationService } from '@core/services/subject-notification.
 import { SubjectTermService } from '@core/services/subject-term.service';
 import { ExamService } from '@core/services/exam.service';
 import { ExamTermService } from '@core/services/exam-term.service';
-import { formatDateTime } from '@shared/utils/utility';
-import { ExamTerm } from '@core/models/exam-term.model';
-import { getExamPeriodDisplay } from '@core/models/exam-period.model';
 
 @Component({
   selector: 'app-subject',
@@ -33,10 +31,6 @@ export class SubjectComponent implements OnInit {
 
   getStudyProgramDisplay = getStudyProgramDisplay;
   getTeacherDisplay = getTeacherDisplay;
-  getExamTypeDisplay = getExamTypeDisplay;
-  getExamDisplay = getExamDisplay;
-  getExamPeriodDisplay = getExamPeriodDisplay;
-  formatDateTime = formatDateTime;
 
   constructor(
     public subjectService: SubjectService,

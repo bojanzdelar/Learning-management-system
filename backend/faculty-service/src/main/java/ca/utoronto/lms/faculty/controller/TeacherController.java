@@ -5,7 +5,6 @@ import ca.utoronto.lms.faculty.model.Teacher;
 import ca.utoronto.lms.faculty.service.TeacherService;
 import ca.utoronto.lms.faculty.util.TeacherPDFExporter;
 import ca.utoronto.lms.shared.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +20,12 @@ import java.util.List;
 @RequestMapping("/api/faculty-service/teachers")
 public class TeacherController extends BaseController<Teacher, TeacherDTO, Long> {
     private final TeacherService service;
+    private final TeacherPDFExporter pdfExporter;
 
-    @Autowired private TeacherPDFExporter pdfExporter;
-
-    public TeacherController(TeacherService service) {
+    public TeacherController(TeacherService service, TeacherPDFExporter pdfExporter) {
         super(service);
         this.service = service;
+        this.pdfExporter = pdfExporter;
     }
 
     @GetMapping(value = "/all/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
@@ -43,9 +42,6 @@ public class TeacherController extends BaseController<Teacher, TeacherDTO, Long>
 
     @GetMapping("/user-id/{id}/id")
     public ResponseEntity<Long> getIdByUserId(@PathVariable Long id) {
-        TeacherDTO teacher = this.service.findByUserId(id);
-        return teacher == null
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(teacher.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(this.service.findByUserId(id).getId(), HttpStatus.OK);
     }
 }

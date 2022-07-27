@@ -1,5 +1,7 @@
 package ca.utoronto.lms.subject.service;
 
+import ca.utoronto.lms.shared.exception.ForbiddenException;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
@@ -7,7 +9,6 @@ import ca.utoronto.lms.subject.feign.FacultyFeignClient;
 import ca.utoronto.lms.subject.mapper.SubjectMapper;
 import ca.utoronto.lms.subject.model.Subject;
 import ca.utoronto.lms.subject.repository.SubjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +17,16 @@ import java.util.List;
 public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
     private final SubjectRepository repository;
     private final SubjectMapper mapper;
+    private final FacultyFeignClient facultyFeignClient;
 
-    @Autowired private FacultyFeignClient facultyFeignClient;
-
-    public SubjectService(SubjectRepository repository, SubjectMapper mapper) {
+    public SubjectService(
+            SubjectRepository repository,
+            SubjectMapper mapper,
+            FacultyFeignClient facultyFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.facultyFeignClient = facultyFeignClient;
     }
 
     protected List<SubjectDTO> mapMissingValues(List<SubjectDTO> subjects) {
@@ -30,17 +34,17 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
                 subjects,
                 SubjectDTO::getStudyProgram,
                 SubjectDTO::setStudyProgram,
-                (ID) -> facultyFeignClient.getStudyProgram(ID));
+                facultyFeignClient::getStudyProgram);
         map(
                 subjects,
                 SubjectDTO::getProfessor,
                 SubjectDTO::setProfessor,
-                (ID) -> facultyFeignClient.getTeacher(ID));
+                facultyFeignClient::getTeacher);
         map(
                 subjects,
                 SubjectDTO::getAssistant,
                 SubjectDTO::setAssistant,
-                (ID) -> facultyFeignClient.getTeacher(ID));
+                facultyFeignClient::getTeacher);
 
         return subjects;
     }
@@ -65,7 +69,7 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
     public List<SubjectDTO> findByStudentId(Long id) {
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
                 && !id.equals(SecurityUtils.getStudentId())) {
-            throw new RuntimeException("Forbidden");
+            throw new ForbiddenException("You are not allowed to view this student");
         }
 
         List<SubjectDTO> subjects =
@@ -74,15 +78,15 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
     }
 
     public SubjectDTO updateSyllabus(Long id, String syllabus) {
-        Subject subject = repository.findById(id).orElse(null);
-        if (subject == null) {
-            return null;
-        }
+        Subject subject =
+                repository
+                        .findById(id)
+                        .orElseThrow(() -> new NotFoundException("Subject not found"));
 
         if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)
                 && !subject.getProfessorId().equals(SecurityUtils.getTeacherId())
                 && !subject.getAssistantId().equals(SecurityUtils.getTeacherId())) {
-            throw new RuntimeException("Forbidden");
+            throw new ForbiddenException("You are not allowed to update this subject syllabus");
         }
 
         subject.setSyllabus(syllabus);

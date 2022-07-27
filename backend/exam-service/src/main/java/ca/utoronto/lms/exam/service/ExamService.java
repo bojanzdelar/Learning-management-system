@@ -6,9 +6,9 @@ import ca.utoronto.lms.exam.feign.SubjectFeignClient;
 import ca.utoronto.lms.exam.mapper.ExamMapper;
 import ca.utoronto.lms.exam.model.Exam;
 import ca.utoronto.lms.exam.repository.ExamRepository;
+import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,13 +22,14 @@ import java.util.stream.Collectors;
 public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
     private final ExamRepository repository;
     private final ExamMapper mapper;
+    private final SubjectFeignClient subjectFeignClient;
 
-    @Autowired private SubjectFeignClient subjectFeignClient;
-
-    public ExamService(ExamRepository repository, ExamMapper mapper) {
+    public ExamService(
+            ExamRepository repository, ExamMapper mapper, SubjectFeignClient subjectFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.subjectFeignClient = subjectFeignClient;
     }
 
     @Override
@@ -38,8 +39,8 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
             SubjectDTO subject = examDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacherId)
                     && !subject.getAssistant().getId().equals(teacherId)) {
-                throw new RuntimeException(
-                        "You are not authorized to add materials to this subject");
+                throw new ForbiddenException(
+                        "You are not allowed to add materials to this subject");
             }
         }
 
@@ -64,7 +65,7 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
                                                             .getId()
                                                             .equals(teacherId));
             if (forbidden) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException("You are not allowed to delete these exams");
             }
         }
 
@@ -73,12 +74,7 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
 
     @Override
     protected List<ExamDTO> mapMissingValues(List<ExamDTO> exams) {
-        map(
-                exams,
-                ExamDTO::getSubject,
-                ExamDTO::setSubject,
-                (ID) -> subjectFeignClient.getSubject(ID));
-
+        map(exams, ExamDTO::getSubject, ExamDTO::setSubject, subjectFeignClient::getSubject);
         return exams;
     }
 

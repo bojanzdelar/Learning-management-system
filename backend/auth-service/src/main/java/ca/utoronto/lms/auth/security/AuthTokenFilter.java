@@ -2,7 +2,7 @@ package ca.utoronto.lms.auth.security;
 
 import ca.utoronto.lms.shared.security.TokenUtils;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,9 +17,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+@RequiredArgsConstructor
 public class AuthTokenFilter extends UsernamePasswordAuthenticationFilter {
-    @Autowired private UserDetailsService userDetailsService;
-    @Autowired private TokenUtils tokenUtils;
+    private final UserDetailsService userDetailsService;
+    private final TokenUtils tokenUtils;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

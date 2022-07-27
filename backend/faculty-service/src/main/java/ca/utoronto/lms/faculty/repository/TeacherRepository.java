@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface TeacherRepository extends BaseRepository<Teacher, Long> {
     @Override
@@ -16,5 +18,5 @@ public interface TeacherRepository extends BaseRepository<Teacher, Long> {
                     + "or x.firstName like :search or x.lastName like :search)")
     Page<Teacher> findContaining(Pageable pageable, String search);
 
-    Teacher findByUserId(Long userId);
+    Optional<Teacher> findByUserId(Long userId);
 }

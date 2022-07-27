@@ -1,5 +1,7 @@
 package ca.utoronto.lms.subject.service;
 
+import ca.utoronto.lms.shared.exception.ForbiddenException;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
@@ -10,7 +12,6 @@ import ca.utoronto.lms.subject.mapper.SubjectTermMapper;
 import ca.utoronto.lms.subject.model.Subject;
 import ca.utoronto.lms.subject.model.SubjectTerm;
 import ca.utoronto.lms.subject.repository.SubjectTermRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,13 +24,19 @@ import java.util.Set;
 public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTermDTO, Long> {
     private final SubjectTermRepository repository;
     private final SubjectTermMapper mapper;
+    private final SubjectTermRepository subjectRepository;
+    private final FacultyFeignClient facultyFeignClient;
 
-    @Autowired private FacultyFeignClient facultyFeignClient;
-
-    public SubjectTermService(SubjectTermRepository repository, SubjectTermMapper mapper) {
+    public SubjectTermService(
+            SubjectTermRepository repository,
+            SubjectTermMapper mapper,
+            SubjectTermRepository subjectRepository,
+            FacultyFeignClient facultyFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.subjectRepository = subjectRepository;
+        this.facultyFeignClient = facultyFeignClient;
     }
 
     @Override
@@ -40,7 +47,7 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
             SubjectDTO subject = subjectTermDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacher.getId())
                     && !subject.getAssistant().getId().equals(teacher.getId())) {
-                throw new RuntimeException("You are not authorized to add terms to this subject");
+                throw new ForbiddenException("You are not allowed to add terms to this subject");
             }
 
             if (subjectTermDTO.getTeacher() == null) {
@@ -65,7 +72,7 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
                                                 && !subject.getAssistantId().equals(teacherId);
                                     });
             if (forbidden) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException("You are not allowed to delete these subject terms");
             }
         }
 
@@ -78,18 +85,26 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
                 subjectTerms,
                 SubjectTermDTO::getTeacher,
                 SubjectTermDTO::setTeacher,
-                (ID) -> facultyFeignClient.getTeacher(ID));
+                facultyFeignClient::getTeacher);
 
         return subjectTerms;
     }
 
     public List<SubjectTermDTO> findBySubjectId(Long id) {
+        if (!subjectRepository.existsById(id)) {
+            throw new NotFoundException("Subject not found");
+        }
+
         List<SubjectTermDTO> subjectTerms =
                 mapper.toDTO(repository.findBySubjectIdAndDeletedFalseOrderByStartTimeDesc(id));
         return subjectTerms.isEmpty() ? subjectTerms : this.mapMissingValues(subjectTerms);
     }
 
     public Page<SubjectTermDTO> findBySubjectId(Long id, Pageable pageable, String search) {
+        if (!subjectRepository.existsById(id)) {
+            throw new NotFoundException("Subject not found");
+        }
+
         Page<SubjectTermDTO> subjectTerms =
                 repository
                         .findBySubjectIdContaining(id, pageable, "%" + search + "%")

@@ -6,7 +6,6 @@ import ca.utoronto.lms.faculty.service.StudentService;
 import ca.utoronto.lms.faculty.util.StudentPDFExporter;
 import ca.utoronto.lms.faculty.util.StudentsOnSubjectPDFExporter;
 import ca.utoronto.lms.shared.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,19 +15,22 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/faculty-service/students")
 public class StudentController extends BaseController<Student, StudentDTO, Long> {
     private final StudentService service;
+    private final StudentPDFExporter studentPDFExporter;
+    private final StudentsOnSubjectPDFExporter studentsOnSubjectPDFExporter;
 
-    @Autowired private StudentPDFExporter studentPDFExporter;
-    @Autowired private StudentsOnSubjectPDFExporter studentsOnSubjectPDFExporter;
-
-    public StudentController(StudentService service) {
+    public StudentController(
+            StudentService service,
+            StudentPDFExporter studentPDFExporter,
+            StudentsOnSubjectPDFExporter studentsOnSubjectPDFExporter) {
         super(service);
         this.service = service;
+        this.studentPDFExporter = studentPDFExporter;
+        this.studentsOnSubjectPDFExporter = studentsOnSubjectPDFExporter;
     }
 
     @GetMapping(value = "/all/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
@@ -61,29 +63,17 @@ public class StudentController extends BaseController<Student, StudentDTO, Long>
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        try {
-            return new ResponseEntity<>(
-                    this.service.findBySubjectId(id, pageable, search), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(
+                this.service.findBySubjectId(id, pageable, search), HttpStatus.OK);
     }
 
     @GetMapping("/user-id/{id}/id")
     public ResponseEntity<Long> getIdByUserId(@PathVariable Long id) {
-        StudentDTO student = this.service.findByUserId(id);
-        return student == null
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(student.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(this.service.findByUserId(id).getId(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/thesis/id")
     public ResponseEntity<Long> getThesisId(@PathVariable Long id) {
-        StudentDTO student = this.service.findById(Set.of(id)).get(0);
-        if (student == null || student.getThesis() == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(student.getThesis().getId(), HttpStatus.OK);
+        return new ResponseEntity<>(this.service.findThesisId(id), HttpStatus.OK);
     }
 }

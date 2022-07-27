@@ -8,9 +8,9 @@ import ca.utoronto.lms.faculty.repository.AdministratorRepository;
 import ca.utoronto.lms.shared.dto.RoleDTO;
 import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +21,16 @@ import java.util.stream.Collectors;
 public class AdministratorService extends ExtendedService<Administrator, AdministratorDTO, Long> {
     private final AdministratorRepository repository;
     private final AdministratorMapper mapper;
+    private final UserFeignClient userFeignClient;
 
-    @Autowired private UserFeignClient userFeignClient;
-
-    public AdministratorService(AdministratorRepository repository, AdministratorMapper mapper) {
+    public AdministratorService(
+            AdministratorRepository repository,
+            AdministratorMapper mapper,
+            UserFeignClient userFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.userFeignClient = userFeignClient;
     }
 
     @Override
@@ -66,12 +69,16 @@ public class AdministratorService extends ExtendedService<Administrator, Adminis
                 administrators,
                 AdministratorDTO::getUser,
                 AdministratorDTO::setUser,
-                (ID) -> userFeignClient.getUser(ID));
+                userFeignClient::getUser);
 
         return administrators;
     }
 
     public AdministratorDTO findByUserId(Long userId) {
-        return mapper.toDTO(repository.findByUserId(userId));
+        Administrator administrator =
+                repository
+                        .findByUserId(userId)
+                        .orElseThrow(() -> new NotFoundException("User id not found"));
+        return mapper.toDTO(administrator);
     }
 }

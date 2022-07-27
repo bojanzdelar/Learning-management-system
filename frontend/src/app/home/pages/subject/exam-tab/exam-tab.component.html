@@ -1,0 +1,18 @@
+<div class="px-2 py-5 space-y-4">
+  <mat-card *ngFor="let exam of exams" class="mat-elevation-z8">
+    <mat-card-header>
+      <mat-card-title>
+        {{ exam.name }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ getExamTypeDisplay(exam.examType) }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Minimum score: {{ exam.minimumScore }}</p>
+      <p class="mb-2">Maximum score: {{ exam.maximumScore }}</p>
+      <p class="mb-1">{{ exam.description }}</p>
+    </mat-card-content>
+  </mat-card>
+  <p *ngIf="!exams">No exams are found!</p>
+</div>

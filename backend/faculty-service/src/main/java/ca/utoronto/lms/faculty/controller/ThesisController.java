@@ -23,10 +23,6 @@ public class ThesisController extends BaseController<Thesis, ThesisDTO, Long> {
 
     @GetMapping("/student/{id}")
     public ResponseEntity<ThesisDTO> getByStudentId(@PathVariable Long id) {
-        ThesisDTO thesis = this.service.findByStudentId(id);
-        if (thesis == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(thesis, HttpStatus.OK);
+        return new ResponseEntity<>(this.service.findByStudentId(id), HttpStatus.OK);
     }
 }

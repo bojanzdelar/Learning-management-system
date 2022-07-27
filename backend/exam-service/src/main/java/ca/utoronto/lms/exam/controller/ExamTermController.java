@@ -37,12 +37,6 @@ public class ExamTermController extends BaseController<ExamTerm, ExamTermDTO, Lo
             @PathVariable Long id,
             Pageable pageable,
             @RequestParam(defaultValue = "") String search) {
-        try {
-            return new ResponseEntity<>(
-                    service.findByStudentId(id, pageable, search), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(service.findByStudentId(id, pageable, search), HttpStatus.OK);
     }
 }

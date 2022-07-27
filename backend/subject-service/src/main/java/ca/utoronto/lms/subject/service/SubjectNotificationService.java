@@ -1,5 +1,7 @@
 package ca.utoronto.lms.subject.service;
 
+import ca.utoronto.lms.shared.exception.ForbiddenException;
+import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
@@ -10,7 +12,7 @@ import ca.utoronto.lms.subject.mapper.SubjectNotificationMapper;
 import ca.utoronto.lms.subject.model.Subject;
 import ca.utoronto.lms.subject.model.SubjectNotification;
 import ca.utoronto.lms.subject.repository.SubjectNotificationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import ca.utoronto.lms.subject.repository.SubjectRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +26,19 @@ public class SubjectNotificationService
         extends ExtendedService<SubjectNotification, SubjectNotificationDTO, Long> {
     private final SubjectNotificationRepository repository;
     private final SubjectNotificationMapper mapper;
-
-    @Autowired private FacultyFeignClient facultyFeignClient;
+    private final SubjectRepository subjectRepository;
+    private final FacultyFeignClient facultyFeignClient;
 
     public SubjectNotificationService(
-            SubjectNotificationRepository repository, SubjectNotificationMapper mapper) {
+            SubjectNotificationRepository repository,
+            SubjectNotificationMapper mapper,
+            SubjectRepository subjectRepository,
+            FacultyFeignClient facultyFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
+        this.subjectRepository = subjectRepository;
+        this.facultyFeignClient = facultyFeignClient;
     }
 
     @Override
@@ -42,7 +49,8 @@ public class SubjectNotificationService
             SubjectDTO subject = subjectNotificationDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacher.getId())
                     && !subject.getAssistant().getId().equals(teacher.getId())) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException(
+                        "You are not allowed to manage this subject notification");
             }
 
             if (subjectNotificationDTO.getTeacher() == null) {
@@ -68,7 +76,8 @@ public class SubjectNotificationService
                                                 && !subject.getAssistantId().equals(teacherId);
                                     });
             if (forbidden) {
-                throw new RuntimeException("Forbidden");
+                throw new ForbiddenException(
+                        "You are not allowed to delete these subject notifications");
             }
         }
 
@@ -82,12 +91,16 @@ public class SubjectNotificationService
                 subjectNotifications,
                 SubjectNotificationDTO::getTeacher,
                 SubjectNotificationDTO::setTeacher,
-                (ID) -> facultyFeignClient.getTeacher(ID));
+                facultyFeignClient::getTeacher);
 
         return subjectNotifications;
     }
 
     public List<SubjectNotificationDTO> findBySubjectId(Long id) {
+        if (!subjectRepository.existsById(id)) {
+            throw new NotFoundException("Subject not found");
+        }
+
         List<SubjectNotificationDTO> subjectNotifications =
                 mapper.toDTO(
                         repository.findBySubjectIdAndDeletedFalseOrderByPublicationDateDesc(id));
@@ -97,6 +110,10 @@ public class SubjectNotificationService
     }
 
     public Page<SubjectNotificationDTO> findBySubjectId(Long id, Pageable pageable, String search) {
+        if (!subjectRepository.existsById(id)) {
+            throw new NotFoundException("Subject not found");
+        }
+
         Page<SubjectNotificationDTO> subjectNotifications =
                 repository
                         .findBySubjectIdContaining(id, pageable, "%" + search + "%")
