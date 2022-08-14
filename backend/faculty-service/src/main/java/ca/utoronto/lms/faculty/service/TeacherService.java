@@ -1,7 +1,7 @@
 package ca.utoronto.lms.faculty.service;
 
 import ca.utoronto.lms.faculty.dto.TeacherDTO;
-import ca.utoronto.lms.faculty.feign.UserFeignClient;
+import ca.utoronto.lms.faculty.client.UserFeignClient;
 import ca.utoronto.lms.faculty.mapper.TeacherMapper;
 import ca.utoronto.lms.faculty.model.Teacher;
 import ca.utoronto.lms.faculty.repository.TeacherRepository;

@@ -4,7 +4,7 @@ import ca.utoronto.lms.exam.dto.ExamRealizationDTO;
 import ca.utoronto.lms.exam.dto.ExamTermDTO;
 import ca.utoronto.lms.exam.dto.SubjectDTO;
 import ca.utoronto.lms.exam.dto.SubjectEnrollmentDTO;
-import ca.utoronto.lms.exam.feign.SubjectFeignClient;
+import ca.utoronto.lms.exam.client.SubjectFeignClient;
 import ca.utoronto.lms.exam.mapper.ExamRealizationMapper;
 import ca.utoronto.lms.exam.model.Exam;
 import ca.utoronto.lms.exam.model.ExamRealization;

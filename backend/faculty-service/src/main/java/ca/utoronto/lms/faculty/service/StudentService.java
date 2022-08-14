@@ -1,8 +1,8 @@
 package ca.utoronto.lms.faculty.service;
 
 import ca.utoronto.lms.faculty.dto.StudentDTO;
-import ca.utoronto.lms.faculty.feign.SubjectFeignClient;
-import ca.utoronto.lms.faculty.feign.UserFeignClient;
+import ca.utoronto.lms.faculty.client.SubjectFeignClient;
+import ca.utoronto.lms.faculty.client.UserFeignClient;
 import ca.utoronto.lms.faculty.mapper.StudentMapper;
 import ca.utoronto.lms.faculty.model.Student;
 import ca.utoronto.lms.faculty.repository.StudentRepository;

@@ -4,7 +4,7 @@ import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
-import ca.utoronto.lms.subject.feign.FacultyFeignClient;
+import ca.utoronto.lms.subject.client.FacultyFeignClient;
 import ca.utoronto.lms.subject.mapper.SubjectMapper;
 import ca.utoronto.lms.subject.model.Subject;
 import ca.utoronto.lms.subject.repository.SubjectRepository;

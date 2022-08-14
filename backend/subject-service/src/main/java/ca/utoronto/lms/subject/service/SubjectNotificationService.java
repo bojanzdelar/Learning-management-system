@@ -6,7 +6,7 @@ import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
 import ca.utoronto.lms.subject.dto.SubjectNotificationDTO;
 import ca.utoronto.lms.subject.dto.TeacherDTO;
-import ca.utoronto.lms.subject.feign.FacultyFeignClient;
+import ca.utoronto.lms.subject.client.FacultyFeignClient;
 import ca.utoronto.lms.subject.mapper.SubjectNotificationMapper;
 import ca.utoronto.lms.subject.model.Subject;
 import ca.utoronto.lms.subject.model.SubjectNotification;

@@ -1,4 +1,4 @@
-package ca.utoronto.lms.faculty.feign;
+package ca.utoronto.lms.faculty.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

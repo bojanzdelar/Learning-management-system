@@ -1,0 +1,64 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:4200"
+              - "http://127.0.0.1:4200"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+      routes:
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth-service/**
+          filters:
+            - RewritePath=/api/auth-service/(?<path>.*), /$\{path}
+        - id: faculty-service
+          uri: lb://FACULTY-SERVICE
+          predicates:
+            - Path=/api/faculty-service/**
+          filters:
+            - RewritePath=/api/faculty-service/(?<path>.*), /$\{path}
+        - id: subject-service
+          uri: lb://SUBJECT-SERVICE
+          predicates:
+            - Path=/api/subject-service/**
+          filters:
+            - RewritePath=/api/subject-service/(?<path>.*), /$\{path}
+        - id: exam-service
+          uri: lb://EXAM-SERVICE
+          predicates:
+            - Path=/api/exam-service/**
+          filters:
+            - RewritePath=/api/exam-service/(?<path>.*), /$\{path}
+
+springdoc:
+  swagger-ui:
+    path: docs
+    urls:
+      - name: auth-service
+        url: /api/auth-service/docs
+      - name: faculty-service
+        url: /api/faculty-service/docs
+      - name: subject-service
+        url: /api/subject-service/docs
+      - name: exam-service
+        url: /api/exam-service/docs
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka

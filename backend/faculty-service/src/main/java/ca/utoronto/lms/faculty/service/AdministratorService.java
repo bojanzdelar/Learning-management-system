@@ -1,7 +1,7 @@
 package ca.utoronto.lms.faculty.service;
 
 import ca.utoronto.lms.faculty.dto.AdministratorDTO;
-import ca.utoronto.lms.faculty.feign.UserFeignClient;
+import ca.utoronto.lms.faculty.client.UserFeignClient;
 import ca.utoronto.lms.faculty.mapper.AdministratorMapper;
 import ca.utoronto.lms.faculty.model.Administrator;
 import ca.utoronto.lms.faculty.repository.AdministratorRepository;

@@ -1,6 +1,6 @@
 package ca.utoronto.lms.auth.security;
 
-import ca.utoronto.lms.auth.feign.FacultyFeignClient;
+import ca.utoronto.lms.auth.client.FacultyFeignClient;
 import ca.utoronto.lms.auth.model.User;
 import ca.utoronto.lms.auth.repository.UserRepository;
 import ca.utoronto.lms.shared.exception.BadRequestException;

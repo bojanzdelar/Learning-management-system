@@ -3,7 +3,7 @@ package ca.utoronto.lms.faculty.mapper;
 import ca.utoronto.lms.faculty.dto.StudentDTO;
 import ca.utoronto.lms.faculty.dto.StudyProgramDTO;
 import ca.utoronto.lms.faculty.dto.ThesisDTO;
-import ca.utoronto.lms.faculty.feign.SubjectFeignClient;
+import ca.utoronto.lms.faculty.client.SubjectFeignClient;
 import ca.utoronto.lms.faculty.model.Student;
 import ca.utoronto.lms.faculty.model.StudyProgram;
 import ca.utoronto.lms.faculty.model.Thesis;

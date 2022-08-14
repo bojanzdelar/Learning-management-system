@@ -1,7 +1,7 @@
 package ca.utoronto.lms.exam.service;
 
 import ca.utoronto.lms.exam.dto.ExamPeriodDTO;
-import ca.utoronto.lms.exam.feign.FacultyFeignClient;
+import ca.utoronto.lms.exam.client.FacultyFeignClient;
 import ca.utoronto.lms.exam.mapper.ExamPeriodMapper;
 import ca.utoronto.lms.exam.model.ExamPeriod;
 import ca.utoronto.lms.exam.repository.ExamPeriodRepository;

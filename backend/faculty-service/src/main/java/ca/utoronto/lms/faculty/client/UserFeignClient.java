@@ -1,4 +1,4 @@
-package ca.utoronto.lms.faculty.feign;
+package ca.utoronto.lms.faculty.client;
 
 import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;

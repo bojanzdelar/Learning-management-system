@@ -2,7 +2,7 @@ package ca.utoronto.lms.exam.service;
 
 import ca.utoronto.lms.exam.dto.ExamDTO;
 import ca.utoronto.lms.exam.dto.SubjectDTO;
-import ca.utoronto.lms.exam.feign.SubjectFeignClient;
+import ca.utoronto.lms.exam.client.SubjectFeignClient;
 import ca.utoronto.lms.exam.mapper.ExamMapper;
 import ca.utoronto.lms.exam.model.Exam;
 import ca.utoronto.lms.exam.repository.ExamRepository;

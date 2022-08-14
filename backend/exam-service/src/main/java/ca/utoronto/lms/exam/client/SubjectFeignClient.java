@@ -1,4 +1,4 @@
-package ca.utoronto.lms.exam.feign;
+package ca.utoronto.lms.exam.client;
 
 import ca.utoronto.lms.exam.dto.SubjectDTO;
 import ca.utoronto.lms.exam.dto.SubjectEnrollmentDTO;

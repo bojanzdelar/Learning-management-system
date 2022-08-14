@@ -1,4 +1,4 @@
-package ca.utoronto.lms.subject.feign;
+package ca.utoronto.lms.subject.client;
 
 import ca.utoronto.lms.subject.dto.StudentDTO;
 import ca.utoronto.lms.subject.dto.StudyProgramDTO;
