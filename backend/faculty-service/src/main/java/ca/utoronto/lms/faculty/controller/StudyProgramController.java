@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/faculty-service/study-programs")
+@RequestMapping("/study-programs")
 public class StudyProgramController extends BaseController<StudyProgram, StudyProgramDTO, Long> {
     private final StudyProgramService service;
 

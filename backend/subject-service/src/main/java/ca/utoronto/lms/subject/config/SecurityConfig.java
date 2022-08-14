@@ -1,7 +1,6 @@
 package ca.utoronto.lms.subject.config;
 
 import ca.utoronto.lms.shared.security.AuthenticationTokenFilter;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Configuration
 @EnableWebSecurity
@@ -25,34 +26,37 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/subject-service/subjects/student/*/all").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_ADMIN)
+                        "/docs/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/subject-service/subjects/**",
-                        "/api/subject-service/subject-materials/**",
-                        "/api/subject-service/subject-notifications/**",
-                        "/api/subject-service/subject-terms/**").permitAll()
+                        "/subjects/student/*/all").hasAnyAuthority(ROLE_STUDENT, ROLE_ADMIN)
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/subject-service/subject-enrollments/*",
-                        "/api/subject-service/subject-enrollments/student/*/average-grade",
-                        "/api/subject-service/subject-enrollments/student/*/total-ects").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
+                        "/subjects/**",
+                        "/subject-materials/**",
+                        "/subject-notifications/**",
+                        "/subject-terms/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/subject-service/subject-enrollments/student/**").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_ADMIN)
+                        "/subject-enrollments/*",
+                        "/subject-enrollments/student/*/average-grade",
+                        "/subject-enrollments/student/*/total-ects").hasAnyAuthority(ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN)
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/subject-service/subject-enrollments/subject/*",
-                        "/api/subject-service/subject-enrollments/subject/*/student-id/all").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
+                        "/subject-enrollments/student/**").hasAnyAuthority(ROLE_STUDENT, ROLE_ADMIN)
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/subject-enrollments/subject/*",
+                        "/subject-enrollments/subject/*/student-id/all").hasAnyAuthority(ROLE_TEACHER, ROLE_ADMIN)
                 .antMatchers(
                         HttpMethod.PATCH,
-                        "/api/subject-service/subjects/*/syllabus",
-                        "/api/subject-service/subject-enrollments/*/grade").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
+                        "/subjects/*/syllabus",
+                        "/subject-enrollments/*/grade").hasAnyAuthority(ROLE_TEACHER, ROLE_ADMIN)
                 .antMatchers(
-                        "/api/subject-service/subject-materials/**",
-                        "/api/subject-service/subject-notifications/**",
-                        "/api/subject-service/subject-terms/**").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
-                .anyRequest().hasAuthority(SecurityUtils.ROLE_ADMIN)
+                        "/subject-materials/**",
+                        "/subject-notifications/**",
+                        "/subject-terms/**").hasAnyAuthority(ROLE_TEACHER, ROLE_ADMIN)
+                .anyRequest().hasAuthority(ROLE_ADMIN)
                 .and()
                 .build();
     }

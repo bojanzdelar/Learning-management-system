@@ -2,7 +2,6 @@ package ca.utoronto.lms.subject.service;
 
 import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
 import ca.utoronto.lms.subject.dto.SubjectTermDTO;
@@ -19,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTermDTO, Long> {
@@ -41,9 +42,8 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
 
     @Override
     public SubjectTermDTO save(SubjectTermDTO subjectTermDTO) {
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
-            TeacherDTO teacher =
-                    facultyFeignClient.getTeacher(Set.of(SecurityUtils.getTeacherId())).get(0);
+        if (hasAuthority(ROLE_TEACHER)) {
+            TeacherDTO teacher = facultyFeignClient.getTeacher(Set.of(getTeacherId())).get(0);
             SubjectDTO subject = subjectTermDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacher.getId())
                     && !subject.getAssistant().getId().equals(teacher.getId())) {
@@ -60,8 +60,8 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
 
     @Override
     public void delete(Set<Long> id) {
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
-            Long teacherId = SecurityUtils.getTeacherId();
+        if (hasAuthority(ROLE_TEACHER)) {
+            Long teacherId = getTeacherId();
             List<SubjectTerm> subjectTerms = (List<SubjectTerm>) repository.findAllById(id);
             boolean forbidden =
                     subjectTerms.stream()

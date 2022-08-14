@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/exam-service/exam-periods")
+@RequestMapping("/exam-periods")
 public class ExamPeriodController extends BaseController<ExamPeriod, ExamPeriodDTO, Long> {
     private final ExamPeriodService service;
 

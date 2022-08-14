@@ -11,7 +11,6 @@ import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
 import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,6 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
@@ -47,8 +48,7 @@ public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
 
     @Override
     public List<StudentDTO> findById(Set<Long> id) {
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
-                && (id.size() > 1 || !id.contains(SecurityUtils.getStudentId()))) {
+        if (hasAuthority(ROLE_STUDENT) && (id.size() > 1 || !id.contains(getStudentId()))) {
             throw new ForbiddenException("You are not allowed to view these students");
         }
 
@@ -67,9 +67,8 @@ public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
                                         .authorities(
                                                 Set.of(
                                                         RoleDTO.builder()
-                                                                .id(SecurityUtils.ROLE_STUDENT_ID)
-                                                                .authority(
-                                                                        SecurityUtils.ROLE_STUDENT)
+                                                                .id(ROLE_STUDENT_ID)
+                                                                .authority(ROLE_STUDENT)
                                                                 .build()))
                                         .build())
                         : userFeignClient.patchUser(userRequest.getId(), userRequest);

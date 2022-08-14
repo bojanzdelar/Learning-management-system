@@ -9,7 +9,6 @@ import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
 import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.BaseService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class UserService extends BaseService<User, UserDetailsDTO, Long> {
@@ -83,8 +84,7 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
     }
 
     public UserDetailsDTO findByUsername(String username) throws UsernameNotFoundException {
-        if (!SecurityUtils.getUsername().equals(username)
-                && !SecurityUtils.hasAuthority(SecurityUtils.ROLE_ADMIN)) {
+        if (!getUsername().equals(username) && !hasAuthority(ROLE_ADMIN)) {
             throw new ForbiddenException("You are not allowed to view this user's details");
         }
 

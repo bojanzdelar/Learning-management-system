@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/faculty-service/theses")
+@RequestMapping("/theses")
 public class ThesisController extends BaseController<Thesis, ThesisDTO, Long> {
     private final ThesisService service;
 

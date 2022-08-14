@@ -10,7 +10,6 @@ import ca.utoronto.lms.exam.model.ExamTerm;
 import ca.utoronto.lms.exam.repository.ExamRealizationRepository;
 import ca.utoronto.lms.exam.repository.ExamTermRepository;
 import ca.utoronto.lms.shared.exception.ForbiddenException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class ExamTermService extends ExtendedService<ExamTerm, ExamTermDTO, Long> {
@@ -70,8 +71,7 @@ public class ExamTermService extends ExtendedService<ExamTerm, ExamTermDTO, Long
     }
 
     public Page<ExamTermDTO> findByStudentId(Long id, Pageable pageable, String search) {
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
-                && !id.equals(SecurityUtils.getStudentId())) {
+        if (hasAuthority(ROLE_STUDENT) && !id.equals(getStudentId())) {
             throw new ForbiddenException("You are not allowed to view these exam terms");
         }
 

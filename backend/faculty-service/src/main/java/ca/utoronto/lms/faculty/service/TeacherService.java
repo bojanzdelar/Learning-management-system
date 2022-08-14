@@ -9,13 +9,15 @@ import ca.utoronto.lms.shared.dto.RoleDTO;
 import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
 import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.ROLE_TEACHER;
+import static ca.utoronto.lms.shared.security.SecurityUtils.ROLE_TEACHER_ID;
 
 @Service
 public class TeacherService extends ExtendedService<Teacher, TeacherDTO, Long> {
@@ -43,9 +45,8 @@ public class TeacherService extends ExtendedService<Teacher, TeacherDTO, Long> {
                                         .authorities(
                                                 Set.of(
                                                         RoleDTO.builder()
-                                                                .id(SecurityUtils.ROLE_TEACHER_ID)
-                                                                .authority(
-                                                                        SecurityUtils.ROLE_TEACHER)
+                                                                .id(ROLE_TEACHER_ID)
+                                                                .authority(ROLE_TEACHER)
                                                                 .build()))
                                         .build())
                         : userFeignClient.patchUser(userRequest.getId(), userRequest);

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/exam-service/exam-realizations")
+@RequestMapping("/exam-realizations")
 public class ExamRealizationController
         extends BaseController<ExamRealization, ExamRealizationDTO, Long> {
     private final ExamRealizationService service;

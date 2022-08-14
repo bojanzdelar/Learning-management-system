@@ -2,7 +2,6 @@ package ca.utoronto.lms.subject.service;
 
 import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
 import ca.utoronto.lms.subject.dto.SubjectNotificationDTO;
@@ -20,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class SubjectNotificationService
@@ -43,9 +44,8 @@ public class SubjectNotificationService
 
     @Override
     public SubjectNotificationDTO save(SubjectNotificationDTO subjectNotificationDTO) {
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
-            TeacherDTO teacher =
-                    facultyFeignClient.getTeacher(Set.of(SecurityUtils.getTeacherId())).get(0);
+        if (hasAuthority(ROLE_TEACHER)) {
+            TeacherDTO teacher = facultyFeignClient.getTeacher(Set.of(getTeacherId())).get(0);
             SubjectDTO subject = subjectNotificationDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacher.getId())
                     && !subject.getAssistant().getId().equals(teacher.getId())) {
@@ -63,8 +63,8 @@ public class SubjectNotificationService
 
     @Override
     public void delete(Set<Long> id) {
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
-            Long teacherId = SecurityUtils.getTeacherId();
+        if (hasAuthority(ROLE_TEACHER)) {
+            Long teacherId = getTeacherId();
             List<SubjectNotification> subjectNotifications =
                     (List<SubjectNotification>) repository.findAllById(id);
             boolean forbidden =

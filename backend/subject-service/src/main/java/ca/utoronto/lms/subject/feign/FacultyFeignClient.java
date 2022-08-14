@@ -12,12 +12,12 @@ import java.util.Set;
 
 @FeignClient("faculty-service")
 public interface FacultyFeignClient {
-    @GetMapping("/api/faculty-service/study-programs/{id}")
+    @GetMapping("/study-programs/{id}")
     List<StudyProgramDTO> getStudyProgram(@PathVariable Set<Long> id);
 
-    @GetMapping("/api/faculty-service/teachers/{id}")
+    @GetMapping("/teachers/{id}")
     List<TeacherDTO> getTeacher(@PathVariable Set<Long> id);
 
-    @GetMapping("/api/faculty-service/students/{id}")
+    @GetMapping("/students/{id}")
     List<StudentDTO> getStudent(@PathVariable Set<Long> id);
 }

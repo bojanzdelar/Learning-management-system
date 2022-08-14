@@ -10,6 +10,6 @@ import java.util.Set;
 
 @FeignClient("faculty-service")
 public interface FacultyFeignClient {
-    @GetMapping("/api/faculty-service/faculties/{id}")
+    @GetMapping("/faculties/{id}")
     List<FacultyDTO> getFaculty(@PathVariable Set<Long> id);
 }

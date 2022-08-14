@@ -1,7 +1,6 @@
 package ca.utoronto.lms.faculty.config;
 
 import ca.utoronto.lms.shared.security.AuthenticationTokenFilter;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Configuration
 @EnableWebSecurity
@@ -25,21 +26,24 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/faculty-service/faculties/**",
-                        "/api/faculty-service/study-programs/**",
-                        "/api/faculty-service/teachers/**",
-                        "/api/faculty-service/theses/**",
-                        "/api/faculty-service/addresses/**",
-                        "/api/faculty-service/cities/**",
-                        "/api/faculty-service/countries/**",
-                        "/api/faculty-service/*/user-id/*/id").permitAll()
+                        "/docs/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/faculty-service/students/*").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
+                        "/faculties/**",
+                        "/study-programs/**",
+                        "/teachers/**",
+                        "/theses/**",
+                        "/addresses/**",
+                        "/cities/**",
+                        "/countries/**",
+                        "/*/user-id/*/id").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/faculty-service/students/**").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
-                .anyRequest().hasAuthority(SecurityUtils.ROLE_ADMIN)
+                        "/students/*").hasAnyAuthority(ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN)
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/students/**").hasAnyAuthority(ROLE_TEACHER, ROLE_ADMIN)
+                .anyRequest().hasAuthority(ROLE_ADMIN)
                 .and()
                 .build();
     }

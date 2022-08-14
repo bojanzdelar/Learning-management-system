@@ -5,7 +5,6 @@ import ca.utoronto.lms.auth.model.User;
 import ca.utoronto.lms.auth.repository.UserRepository;
 import ca.utoronto.lms.shared.exception.BadRequestException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,6 +18,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Component
 @RequiredArgsConstructor
@@ -52,11 +53,11 @@ public class TokenGenerator {
                 userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         claims.put("roles", authorities);
 
-        if (authorities.contains(SecurityUtils.ROLE_ADMIN)) {
+        if (authorities.contains(ROLE_ADMIN)) {
             claims.put("adminId", facultyFeignClient.getAdministratorIdByUserId(userId));
-        } else if (authorities.contains(SecurityUtils.ROLE_TEACHER)) {
+        } else if (authorities.contains(ROLE_TEACHER)) {
             claims.put("teacherId", facultyFeignClient.getTeacherIdByUserId(userId));
-        } else if (authorities.contains(SecurityUtils.ROLE_STUDENT)) {
+        } else if (authorities.contains(ROLE_STUDENT)) {
             claims.put("studentId", facultyFeignClient.getStudentIdByUserId(userId));
         }
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subject-service/subject-notifications")
+@RequestMapping("/subject-notifications")
 public class SubjectNotificationController
         extends BaseController<SubjectNotification, SubjectNotificationDTO, Long> {
     private final SubjectNotificationService service;

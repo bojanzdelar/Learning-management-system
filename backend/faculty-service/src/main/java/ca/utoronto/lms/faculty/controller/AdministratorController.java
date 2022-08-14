@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/faculty-service/administrators")
+@RequestMapping("/administrators")
 public class AdministratorController extends BaseController<Administrator, AdministratorDTO, Long> {
     private final AdministratorService service;
 

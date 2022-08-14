@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subject-service/subjects")
+@RequestMapping("/subjects")
 public class SubjectController extends BaseController<Subject, SubjectDTO, Long> {
     private final SubjectService service;
 

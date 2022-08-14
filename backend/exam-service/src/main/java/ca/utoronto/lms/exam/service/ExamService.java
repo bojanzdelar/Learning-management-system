@@ -7,7 +7,6 @@ import ca.utoronto.lms.exam.mapper.ExamMapper;
 import ca.utoronto.lms.exam.model.Exam;
 import ca.utoronto.lms.exam.repository.ExamRepository;
 import ca.utoronto.lms.shared.exception.ForbiddenException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
@@ -34,8 +35,8 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
 
     @Override
     public ExamDTO save(ExamDTO examDTO) {
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
-            Long teacherId = SecurityUtils.getTeacherId();
+        if (hasAuthority(ROLE_TEACHER)) {
+            Long teacherId = getTeacherId();
             SubjectDTO subject = examDTO.getSubject();
             if (!subject.getProfessor().getId().equals(teacherId)
                     && !subject.getAssistant().getId().equals(teacherId)) {
@@ -49,8 +50,8 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
 
     @Override
     public void delete(Set<Long> id) {
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
-            Long teacherId = SecurityUtils.getTeacherId();
+        if (hasAuthority(ROLE_TEACHER)) {
+            Long teacherId = getTeacherId();
             List<Exam> exams = (List<Exam>) repository.findAllById(id);
             List<SubjectDTO> subjects =
                     subjectFeignClient.getSubject(

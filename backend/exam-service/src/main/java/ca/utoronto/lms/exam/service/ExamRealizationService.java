@@ -14,7 +14,6 @@ import ca.utoronto.lms.exam.repository.ExamTermRepository;
 import ca.utoronto.lms.shared.exception.BadRequestException;
 import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,6 +23,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class ExamRealizationService
@@ -64,11 +65,11 @@ public class ExamRealizationService
             throw new NotFoundException("Exam term id not found");
         }
 
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
+        if (hasAuthority(ROLE_TEACHER)) {
             ExamTermDTO examTerm = examTermService.findById(Set.of(id)).get(0);
             SubjectDTO subject = examTerm.getExam().getSubject();
 
-            Long teacherId = SecurityUtils.getTeacherId();
+            Long teacherId = getTeacherId();
             if (!teacherId.equals(subject.getProfessor().getId())
                     && !teacherId.equals(subject.getAssistant().getId())) {
                 throw new ForbiddenException("You are not allowed to view this exam realization");
@@ -85,11 +86,11 @@ public class ExamRealizationService
             throw new NotFoundException("Exam term id not found");
         }
 
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
+        if (hasAuthority(ROLE_TEACHER)) {
             ExamTermDTO examTerm = examTermService.findById(Set.of(id)).get(0);
             SubjectDTO subject = examTerm.getExam().getSubject();
 
-            Long teacherId = SecurityUtils.getTeacherId();
+            Long teacherId = getTeacherId();
             if (!teacherId.equals(subject.getProfessor().getId())
                     && !teacherId.equals(subject.getAssistant().getId())) {
                 throw new ForbiddenException("You are not allowed to view this exam realizations");
@@ -109,8 +110,7 @@ public class ExamRealizationService
     }
 
     public Page<ExamRealizationDTO> findByStudentId(Long id, Pageable pageable, String search) {
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
-                && !id.equals(SecurityUtils.getStudentId())) {
+        if (hasAuthority(ROLE_STUDENT) && !id.equals(getStudentId())) {
             throw new ForbiddenException("You are not allowed to view these exam realizations.");
         }
 
@@ -141,7 +141,7 @@ public class ExamRealizationService
             throw new BadRequestException("Exam term id does not exist");
         }
 
-        if (!SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)) {
+        if (!hasAuthority(ROLE_STUDENT)) {
             throw new ForbiddenException(
                     "You are not allowed to create exam realizations for this exam term");
         }
@@ -150,7 +150,7 @@ public class ExamRealizationService
         List<Long> subjectIds =
                 examTerms.stream().map(ExamTerm::getExam).map(Exam::getSubjectId).toList();
         List<SubjectEnrollmentDTO> subjectEnrollments =
-                subjectFeignClient.getSubjectEnrollmentByStudentId(SecurityUtils.getStudentId());
+                subjectFeignClient.getSubjectEnrollmentByStudentId(getStudentId());
 
         List<ExamRealization> examRealizations = new ArrayList<>();
         for (int i = 0; i < examTerms.size(); i++) {
@@ -171,9 +171,9 @@ public class ExamRealizationService
     public ExamRealizationDTO updateScore(Long id, ExamRealizationDTO examRealizationDTO) {
         ExamRealizationDTO examRealization = findById(Set.of(id)).get(0);
 
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
+        if (hasAuthority(ROLE_TEACHER)) {
             SubjectDTO subject = examRealization.getSubjectEnrollment().getSubject();
-            Long teacherId = SecurityUtils.getTeacherId();
+            Long teacherId = getTeacherId();
             if (!subject.getProfessor().getId().equals(teacherId)
                     && !subject.getAssistant().getId().equals(teacherId)) {
                 throw new ForbiddenException(
@@ -190,10 +190,10 @@ public class ExamRealizationService
             Long id, List<ExamRealizationDTO> examRealizationsDTO) {
         ExamTermDTO examTerm = examTermService.findById(Set.of(id)).get(0);
 
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)) {
+        if (hasAuthority(ROLE_TEACHER)) {
             SubjectDTO subject = examTerm.getExam().getSubject();
 
-            Long teacherId = SecurityUtils.getTeacherId();
+            Long teacherId = getTeacherId();
             if (!subject.getProfessor().getId().equals(teacherId)
                     && !subject.getAssistant().getId().equals(teacherId)) {
                 throw new ForbiddenException(

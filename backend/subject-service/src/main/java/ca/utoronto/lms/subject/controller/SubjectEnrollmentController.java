@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subject-service/subject-enrollments")
+@RequestMapping("/subject-enrollments")
 public class SubjectEnrollmentController
         extends BaseController<SubjectEnrollment, SubjectEnrollmentDTO, Long> {
     private final SubjectEnrollmentService service;

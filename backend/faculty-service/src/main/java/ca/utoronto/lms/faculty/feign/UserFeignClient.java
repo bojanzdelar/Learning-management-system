@@ -10,15 +10,15 @@ import java.util.Set;
 
 @FeignClient(name = "auth-service", contextId = "userFeignClient")
 public interface UserFeignClient {
-    @GetMapping("/api/auth-service/users/{id}/public")
+    @GetMapping("/users/{id}/public")
     List<UserDTO> getUser(@PathVariable Set<Long> id);
 
-    @PostMapping("/api/auth-service/users")
+    @PostMapping("/users")
     UserDTO createUser(UserDetailsDTO user);
 
-    @PatchMapping("/api/auth-service/users/{id}")
+    @PatchMapping("/users/{id}")
     UserDTO patchUser(@PathVariable Long id, UserDTO user);
 
-    @DeleteMapping("/api/auth-service/users/{id}")
+    @DeleteMapping("/users/{id}")
     void deleteUser(@PathVariable Set<Long> id);
 }

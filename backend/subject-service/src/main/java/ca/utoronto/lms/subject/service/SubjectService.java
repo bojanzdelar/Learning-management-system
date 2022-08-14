@@ -2,7 +2,6 @@ package ca.utoronto.lms.subject.service;
 
 import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
 import ca.utoronto.lms.subject.feign.FacultyFeignClient;
@@ -12,6 +11,8 @@ import ca.utoronto.lms.subject.repository.SubjectRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
@@ -67,8 +68,7 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
     }
 
     public List<SubjectDTO> findByStudentId(Long id) {
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_STUDENT)
-                && !id.equals(SecurityUtils.getStudentId())) {
+        if (hasAuthority(ROLE_STUDENT) && !id.equals(getStudentId())) {
             throw new ForbiddenException("You are not allowed to view this student");
         }
 
@@ -83,9 +83,9 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
                         .findById(id)
                         .orElseThrow(() -> new NotFoundException("Subject not found"));
 
-        if (SecurityUtils.hasAuthority(SecurityUtils.ROLE_TEACHER)
-                && !subject.getProfessorId().equals(SecurityUtils.getTeacherId())
-                && !subject.getAssistantId().equals(SecurityUtils.getTeacherId())) {
+        if (hasAuthority(ROLE_TEACHER)
+                && !subject.getProfessorId().equals(getTeacherId())
+                && !subject.getAssistantId().equals(getTeacherId())) {
             throw new ForbiddenException("You are not allowed to update this subject syllabus");
         }
 

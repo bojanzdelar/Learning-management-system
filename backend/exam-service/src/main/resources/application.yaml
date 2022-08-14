@@ -18,6 +18,10 @@ spring:
   jackson:
     default-property-inclusion: non_empty
 
+springdoc:
+  api-docs:
+    path: /docs
+
 eureka:
   instance:
     hostname: localhost

@@ -8,12 +8,12 @@ import java.util.List;
 
 @FeignClient("subject-service")
 public interface SubjectFeignClient {
-    @GetMapping("/api/subject-service/subject-enrollments/subject/{id}/student-id/all")
+    @GetMapping("/subject-enrollments/subject/{id}/student-id/all")
     List<Long> getStudentIdsBySubjectId(@PathVariable Long id);
 
-    @GetMapping("/api/subject-service/subject-enrollments/student/{id}/average-grade")
+    @GetMapping("/subject-enrollments/student/{id}/average-grade")
     List<Double> getAverageGradesByStudentId(@PathVariable List<Long> id);
 
-    @GetMapping("/api/subject-service/subject-enrollments/student/{id}/total-ects")
+    @GetMapping("/subject-enrollments/student/{id}/total-ects")
     List<Integer> getTotalECTSByStudentId(@PathVariable List<Long> id);
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subject-service/subject-materials")
+@RequestMapping("/subject-materials")
 public class SubjectMaterialController
         extends BaseController<SubjectMaterial, SubjectMaterialDTO, Long> {
     private final SubjectMaterialService service;

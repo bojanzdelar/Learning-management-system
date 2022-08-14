@@ -9,13 +9,15 @@ import ca.utoronto.lms.shared.dto.RoleDTO;
 import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.dto.UserDetailsDTO;
 import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.ROLE_ADMIN;
+import static ca.utoronto.lms.shared.security.SecurityUtils.ROLE_ADMIN_ID;
 
 @Service
 public class AdministratorService extends ExtendedService<Administrator, AdministratorDTO, Long> {
@@ -45,8 +47,8 @@ public class AdministratorService extends ExtendedService<Administrator, Adminis
                                         .authorities(
                                                 Set.of(
                                                         RoleDTO.builder()
-                                                                .id(SecurityUtils.ROLE_ADMIN_ID)
-                                                                .authority(SecurityUtils.ROLE_ADMIN)
+                                                                .id(ROLE_ADMIN_ID)
+                                                                .authority(ROLE_ADMIN)
                                                                 .build()))
                                         .build())
                         : userFeignClient.patchUser(userRequest.getId(), userRequest);

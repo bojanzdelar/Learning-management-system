@@ -24,18 +24,39 @@ spring:
           uri: lb://AUTH-SERVICE
           predicates:
             - Path=/api/auth-service/**
+          filters:
+            - RewritePath=/api/auth-service/(?<path>.*), /$\{path}
         - id: faculty-service
           uri: lb://FACULTY-SERVICE
           predicates:
             - Path=/api/faculty-service/**
+          filters:
+            - RewritePath=/api/faculty-service/(?<path>.*), /$\{path}
         - id: subject-service
           uri: lb://SUBJECT-SERVICE
           predicates:
             - Path=/api/subject-service/**
+          filters:
+            - RewritePath=/api/subject-service/(?<path>.*), /$\{path}
         - id: exam-service
           uri: lb://EXAM-SERVICE
           predicates:
             - Path=/api/exam-service/**
+          filters:
+            - RewritePath=/api/exam-service/(?<path>.*), /$\{path}
+
+springdoc:
+  swagger-ui:
+    path: "docs"
+    urls:
+      - name: auth-service
+        url: /api/auth-service/docs
+      - name: faculty-service
+        url: /api/faculty-service/docs
+      - name: subject-service
+        url: /api/subject-service/docs
+      - name: exam-service
+        url: /api/exam-service/docs
 
 eureka:
   instance:

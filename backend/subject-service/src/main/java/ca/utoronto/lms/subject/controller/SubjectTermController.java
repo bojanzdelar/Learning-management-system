@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subject-service/subject-terms")
+@RequestMapping("/subject-terms")
 public class SubjectTermController extends BaseController<SubjectTerm, SubjectTermDTO, Long> {
     private final SubjectTermService service;
 

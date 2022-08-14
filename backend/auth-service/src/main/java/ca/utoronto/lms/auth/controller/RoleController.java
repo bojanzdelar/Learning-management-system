@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth-service/roles")
+@RequestMapping("/roles")
 public class RoleController extends BaseController<Role, RoleDTO, Long> {
     private final RoleService service;
 

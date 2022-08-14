@@ -1,34 +1,33 @@
 package ca.utoronto.lms.auth.config;
 
 import ca.utoronto.lms.auth.security.AuthTokenFilter;
-import ca.utoronto.lms.shared.security.SecurityUtils;
-import ca.utoronto.lms.shared.security.TokenUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
+            throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
-    public AuthTokenFilter authTokenFilter(UserDetailsService service, TokenUtils token, AuthenticationManager manager) {
-        AuthTokenFilter authTokenFilter = new AuthTokenFilter(service, token);
-        authTokenFilter.setAuthenticationManager(manager);
-        return authTokenFilter;
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -41,17 +40,20 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
+                        HttpMethod.GET,
+                        "/docs/**").permitAll()
+                .antMatchers(
                         HttpMethod.POST,
-                        "/api/auth-service/login").permitAll()
+                        "/login").anonymous()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/auth-service/users/username/*/id",
-                        "/api/auth-service/users/**/public").permitAll()
+                        "/users/username/*/id",
+                        "/users/**/public").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/auth-service/users/username/*").authenticated()
-                .antMatchers("/api/auth-service/users/**").hasAuthority(SecurityUtils.ROLE_ADMIN)
-                .anyRequest().hasAuthority(SecurityUtils.ROLE_ROOT)
+                        "/users/username/*").authenticated()
+                .antMatchers("/users/**").hasAuthority(ROLE_ADMIN)
+                .anyRequest().hasAuthority(ROLE_ROOT)
                 .and()
                 .build();
     }

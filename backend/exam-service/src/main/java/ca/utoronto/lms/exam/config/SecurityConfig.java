@@ -1,7 +1,6 @@
 package ca.utoronto.lms.exam.config;
 
 import ca.utoronto.lms.shared.security.AuthenticationTokenFilter;
-import ca.utoronto.lms.shared.security.SecurityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
 @Configuration
 @EnableWebSecurity
@@ -25,28 +26,31 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(
                         HttpMethod.GET,
-                       "/api/exam-service/exam-terms/student/{id}").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_ADMIN)
+                        "/docs/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/exam-service/exams/**",
-                        "/api/exam-service/exam-periods/**",
-                        "/api/exam-service/exam-terms/**",
-                        "/api/exam-service/exam-types/**").permitAll()
+                       "/exam-terms/student/{id}").hasAnyAuthority(ROLE_STUDENT, ROLE_ADMIN)
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/exam-service/exam-realizations/student/*").hasAnyAuthority(SecurityUtils.ROLE_STUDENT, SecurityUtils.ROLE_ADMIN)
+                        "/exams/**",
+                        "/exam-periods/**",
+                        "/exam-terms/**",
+                        "/exam-types/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/api/exam-service/exam-realizations/exam-term/*",
-                        "/api/exam-service/exam-realizations/exam-term/*/all/pdf").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
+                        "/exam-realizations/student/*").hasAnyAuthority(ROLE_STUDENT, ROLE_ADMIN)
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/exam-realizations/exam-term/*",
+                        "/exam-realizations/exam-term/*/all/pdf").hasAnyAuthority(ROLE_TEACHER, ROLE_ADMIN)
                 .antMatchers(
                         HttpMethod.POST,
-                        "/api/exam-service/exam-realizations/exam-term/*").hasAuthority(SecurityUtils.ROLE_STUDENT)
+                        "/exam-realizations/exam-term/*").hasAuthority(ROLE_STUDENT)
                 .antMatchers(
                         HttpMethod.PATCH,
-                        "/api/exam-service/exam-realizations/*/score",
-                        "/api/exam-service/exam-realizations/exam-term/*/score").hasAnyAuthority(SecurityUtils.ROLE_TEACHER, SecurityUtils.ROLE_ADMIN)
-                .anyRequest().hasAuthority(SecurityUtils.ROLE_ADMIN)
+                        "/exam-realizations/*/score",
+                        "/exam-realizations/exam-term/*/score").hasAnyAuthority(ROLE_TEACHER, ROLE_ADMIN)
+                .anyRequest().hasAuthority(ROLE_ADMIN)
                 .and()
                 .build();
     }

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/faculty-service/students")
+@RequestMapping("/students")
 public class StudentController extends BaseController<Student, StudentDTO, Long> {
     private final StudentService service;
     private final StudentPDFExporter studentPDFExporter;

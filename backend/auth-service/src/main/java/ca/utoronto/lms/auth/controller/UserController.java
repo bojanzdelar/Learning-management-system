@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/auth-service/users")
+@RequestMapping("/users")
 public class UserController extends BaseController<User, UserDetailsDTO, Long> {
     private final UserService service;
 
