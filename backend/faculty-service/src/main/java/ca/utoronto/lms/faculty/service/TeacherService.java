@@ -1,7 +1,7 @@
 package ca.utoronto.lms.faculty.service;
 
-import ca.utoronto.lms.faculty.dto.TeacherDTO;
 import ca.utoronto.lms.faculty.client.UserFeignClient;
+import ca.utoronto.lms.faculty.dto.TeacherDTO;
 import ca.utoronto.lms.faculty.mapper.TeacherMapper;
 import ca.utoronto.lms.faculty.model.Teacher;
 import ca.utoronto.lms.faculty.repository.TeacherRepository;
@@ -11,6 +11,7 @@ import ca.utoronto.lms.shared.dto.UserDetailsDTO;
 import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -34,6 +35,7 @@ public class TeacherService extends ExtendedService<Teacher, TeacherDTO, Long> {
     }
 
     @Override
+    @Transactional
     public TeacherDTO save(TeacherDTO teacher) {
         UserDTO userRequest = teacher.getUser();
         UserDTO userResponse =
@@ -55,6 +57,7 @@ public class TeacherService extends ExtendedService<Teacher, TeacherDTO, Long> {
     }
 
     @Override
+    @Transactional
     public void delete(Set<Long> id) {
         List<Teacher> teachers = (List<Teacher>) repository.findAllById(id);
         Set<Long> userIds = teachers.stream().map(Teacher::getUserId).collect(Collectors.toSet());

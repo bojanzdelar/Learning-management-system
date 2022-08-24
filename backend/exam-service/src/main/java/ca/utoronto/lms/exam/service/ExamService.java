@@ -1,8 +1,8 @@
 package ca.utoronto.lms.exam.service;
 
+import ca.utoronto.lms.exam.client.SubjectFeignClient;
 import ca.utoronto.lms.exam.dto.ExamDTO;
 import ca.utoronto.lms.exam.dto.SubjectDTO;
-import ca.utoronto.lms.exam.client.SubjectFeignClient;
 import ca.utoronto.lms.exam.mapper.ExamMapper;
 import ca.utoronto.lms.exam.model.Exam;
 import ca.utoronto.lms.exam.repository.ExamRepository;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -34,6 +35,7 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
     }
 
     @Override
+    @Transactional
     public ExamDTO save(ExamDTO examDTO) {
         if (hasAuthority(ROLE_TEACHER)) {
             Long teacherId = getTeacherId();
@@ -49,6 +51,7 @@ public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {
     }
 
     @Override
+    @Transactional
     public void delete(Set<Long> id) {
         if (hasAuthority(ROLE_TEACHER)) {
             Long teacherId = getTeacherId();

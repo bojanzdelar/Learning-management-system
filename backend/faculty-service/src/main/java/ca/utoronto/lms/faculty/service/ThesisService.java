@@ -9,6 +9,7 @@ import ca.utoronto.lms.faculty.repository.ThesisRepository;
 import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.service.BaseService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,7 @@ public class ThesisService extends BaseService<Thesis, ThesisDTO, Long> {
     }
 
     @Override
+    @Transactional
     public ThesisDTO save(ThesisDTO thesisDTO) {
         ThesisDTO savedThesisDTO = super.save(thesisDTO);
 
@@ -55,6 +57,7 @@ public class ThesisService extends BaseService<Thesis, ThesisDTO, Long> {
     }
 
     @Override
+    @Transactional
     public void delete(Set<Long> ids) {
         List<Thesis> thesis = (List<Thesis>) repository.findAllById(ids);
         thesis.forEach(

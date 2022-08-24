@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -51,6 +52,7 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
     }
 
     @Override
+    @Transactional
     public UserDetailsDTO save(UserDetailsDTO userDetailsDTO) {
         userDetailsDTO.setPassword(passwordEncoder.encode(userDetailsDTO.getPassword()));
         userDetailsDTO.setAccountNonExpired(true);
@@ -60,6 +62,7 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
         return super.save(userDetailsDTO);
     }
 
+    @Transactional
     public UserDetailsDTO update(UserDetailsDTO userDetailsDTO) {
         User existingUser =
                 repository

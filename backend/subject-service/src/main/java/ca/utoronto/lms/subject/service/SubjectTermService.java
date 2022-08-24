@@ -3,10 +3,10 @@ package ca.utoronto.lms.subject.service;
 import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.service.ExtendedService;
+import ca.utoronto.lms.subject.client.FacultyFeignClient;
 import ca.utoronto.lms.subject.dto.SubjectDTO;
 import ca.utoronto.lms.subject.dto.SubjectTermDTO;
 import ca.utoronto.lms.subject.dto.TeacherDTO;
-import ca.utoronto.lms.subject.client.FacultyFeignClient;
 import ca.utoronto.lms.subject.mapper.SubjectTermMapper;
 import ca.utoronto.lms.subject.model.Subject;
 import ca.utoronto.lms.subject.model.SubjectTerm;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,7 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
     }
 
     @Override
+    @Transactional
     public SubjectTermDTO save(SubjectTermDTO subjectTermDTO) {
         if (hasAuthority(ROLE_TEACHER)) {
             TeacherDTO teacher = facultyFeignClient.getTeacher(Set.of(getTeacherId())).get(0);
@@ -59,6 +61,7 @@ public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTerm
     }
 
     @Override
+    @Transactional
     public void delete(Set<Long> id) {
         if (hasAuthority(ROLE_TEACHER)) {
             Long teacherId = getTeacherId();

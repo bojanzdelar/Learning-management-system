@@ -1,10 +1,10 @@
 package ca.utoronto.lms.exam.service;
 
+import ca.utoronto.lms.exam.client.SubjectFeignClient;
 import ca.utoronto.lms.exam.dto.ExamRealizationDTO;
 import ca.utoronto.lms.exam.dto.ExamTermDTO;
 import ca.utoronto.lms.exam.dto.SubjectDTO;
 import ca.utoronto.lms.exam.dto.SubjectEnrollmentDTO;
-import ca.utoronto.lms.exam.client.SubjectFeignClient;
 import ca.utoronto.lms.exam.mapper.ExamRealizationMapper;
 import ca.utoronto.lms.exam.model.Exam;
 import ca.utoronto.lms.exam.model.ExamRealization;
@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +134,7 @@ public class ExamRealizationService
                         examRealizations.getTotalElements());
     }
 
+    @Transactional
     public List<ExamRealizationDTO> createByExamTermId(Set<Long> examTermIds) {
         boolean notExists =
                 examTermIds.stream()
@@ -168,6 +170,7 @@ public class ExamRealizationService
         return mapper.toDTO((List<ExamRealization>) repository.saveAll(examRealizations));
     }
 
+    @Transactional
     public ExamRealizationDTO updateScore(Long id, ExamRealizationDTO examRealizationDTO) {
         ExamRealizationDTO examRealization = findById(Set.of(id)).get(0);
 
@@ -186,6 +189,7 @@ public class ExamRealizationService
         return mapper.toDTO(updatedExamRealization);
     }
 
+    @Transactional
     public List<ExamRealizationDTO> updateScoresByExamTermId(
             Long id, List<ExamRealizationDTO> examRealizationsDTO) {
         ExamTermDTO examTerm = examTermService.findById(Set.of(id)).get(0);

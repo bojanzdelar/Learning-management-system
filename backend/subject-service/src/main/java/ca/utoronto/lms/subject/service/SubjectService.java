@@ -3,12 +3,13 @@ package ca.utoronto.lms.subject.service;
 import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.service.ExtendedService;
-import ca.utoronto.lms.subject.dto.SubjectDTO;
 import ca.utoronto.lms.subject.client.FacultyFeignClient;
+import ca.utoronto.lms.subject.dto.SubjectDTO;
 import ca.utoronto.lms.subject.mapper.SubjectMapper;
 import ca.utoronto.lms.subject.model.Subject;
 import ca.utoronto.lms.subject.repository.SubjectRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -77,6 +78,7 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
         return subjects.isEmpty() ? subjects : this.mapMissingValues(subjects);
     }
 
+    @Transactional
     public SubjectDTO updateSyllabus(Long id, String syllabus) {
         Subject subject =
                 repository

@@ -10,13 +10,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody UserDetailsDTO userDetailsDTO) {
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody UserDetailsDTO userDetailsDTO) {
         return new ResponseEntity<>(userService.login(userDetailsDTO), HttpStatus.OK);
     }
 }

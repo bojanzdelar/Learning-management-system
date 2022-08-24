@@ -1,7 +1,7 @@
 package ca.utoronto.lms.faculty.service;
 
-import ca.utoronto.lms.faculty.dto.AdministratorDTO;
 import ca.utoronto.lms.faculty.client.UserFeignClient;
+import ca.utoronto.lms.faculty.dto.AdministratorDTO;
 import ca.utoronto.lms.faculty.mapper.AdministratorMapper;
 import ca.utoronto.lms.faculty.model.Administrator;
 import ca.utoronto.lms.faculty.repository.AdministratorRepository;
@@ -11,6 +11,7 @@ import ca.utoronto.lms.shared.dto.UserDetailsDTO;
 import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,7 @@ public class AdministratorService extends ExtendedService<Administrator, Adminis
     }
 
     @Override
+    @Transactional
     public AdministratorDTO save(AdministratorDTO administrator) {
         UserDTO userRequest = administrator.getUser();
         UserDTO userResponse =
@@ -57,6 +59,7 @@ public class AdministratorService extends ExtendedService<Administrator, Adminis
     }
 
     @Override
+    @Transactional
     public void delete(Set<Long> id) {
         List<Administrator> administrators = (List<Administrator>) repository.findAllById(id);
         Set<Long> userIds =

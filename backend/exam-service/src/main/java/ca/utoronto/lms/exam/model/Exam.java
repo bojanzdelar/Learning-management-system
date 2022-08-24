@@ -23,6 +23,7 @@ public class Exam extends BaseEntity<Long> {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
     private Integer minimumScore;
 
     @Column(nullable = false)

@@ -1,8 +1,8 @@
 package ca.utoronto.lms.faculty.service;
 
-import ca.utoronto.lms.faculty.dto.StudentDTO;
 import ca.utoronto.lms.faculty.client.SubjectFeignClient;
 import ca.utoronto.lms.faculty.client.UserFeignClient;
+import ca.utoronto.lms.faculty.dto.StudentDTO;
 import ca.utoronto.lms.faculty.mapper.StudentMapper;
 import ca.utoronto.lms.faculty.model.Student;
 import ca.utoronto.lms.faculty.repository.StudentRepository;
@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -56,6 +57,7 @@ public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
     }
 
     @Override
+    @Transactional
     public StudentDTO save(StudentDTO student) {
         UserDTO userRequest = student.getUser();
         UserDTO userResponse =
@@ -77,6 +79,7 @@ public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
     }
 
     @Override
+    @Transactional
     public void delete(Set<Long> id) {
         List<Student> students = (List<Student>) repository.findAllById(id);
         Set<Long> userIds = students.stream().map(Student::getUserId).collect(Collectors.toSet());

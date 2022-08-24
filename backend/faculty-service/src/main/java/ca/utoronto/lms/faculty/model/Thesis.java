@@ -32,7 +32,8 @@ public class Thesis extends BaseEntity<Long> {
 
     private Integer grade;
 
-    @OneToOne private Student student;
+    @OneToOne(optional = false)
+    private Student student;
 
     @ManyToOne(optional = false)
     private Teacher mentor;

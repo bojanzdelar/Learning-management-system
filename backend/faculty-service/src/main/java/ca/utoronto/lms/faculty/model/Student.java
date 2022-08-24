@@ -31,7 +31,8 @@ public class Student extends BaseEntity<Long> {
     @Column(nullable = false)
     private Integer yearOfEnrollment;
 
-    @OneToOne private Thesis thesis;
+    @OneToOne(optional = false)
+    private Thesis thesis;
 
     @ManyToOne(optional = false)
     private StudyProgram studyProgram;
