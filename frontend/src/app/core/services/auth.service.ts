@@ -19,8 +19,13 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {
     this.token = localStorage.getItem('token');
-    if (this.token) {
-      this.user = JSON.parse(atob(this.token.split('.')[1]));
+    if (!this.token) {
+      return;
+    }
+
+    this.user = JSON.parse(atob(this.token.split('.')[1]));
+    if (this.hasTokenExpired()) {
+      this.logout();
     }
   }
 

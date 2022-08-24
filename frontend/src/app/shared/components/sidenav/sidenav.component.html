@@ -1,5 +1,19 @@
+<mat-toolbar class="bg-stone-700 text-white">
+  <button mat-icon-button class="mr-2 sm:mr-4" (click)="snav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h1 class="text-lg sm:text-xl">{{ text }}</h1>
+  <span class="flex-auto"></span>
+  <p class="text-sm sm:text-base">{{ getUsername() }}</p>
+</mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav mode="side" opened [disableClose]="true" class="p-1">
+  <mat-sidenav
+    #snav
+    mode="side"
+    [opened]="!mobileQuery.matches"
+    [disableClose]="true"
+    class="p-1"
+  >
     <mat-nav-list>
       <ng-container *ngFor="let item of items">
         <a mat-list-item *ngIf="item !== '-'" [routerLink]="item.link">

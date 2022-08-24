@@ -23,7 +23,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { TableComponent } from './components/table/table.component';
 import { DialogFormComponent } from './components/dialog-form/dialog-form.component';
@@ -38,7 +37,6 @@ import { DialogUploadComponent } from './components/dialog-upload/dialog-upload.
   declarations: [
     NotFoundComponent,
     ToolbarComponent,
-    HeaderComponent,
     FooterComponent,
     TableComponent,
     DialogFormComponent,
@@ -94,7 +92,6 @@ import { DialogUploadComponent } from './components/dialog-upload/dialog-upload.
     MatTabsModule,
     NotFoundComponent,
     ToolbarComponent,
-    HeaderComponent,
     FooterComponent,
     TableComponent,
     DialogFormComponent,
