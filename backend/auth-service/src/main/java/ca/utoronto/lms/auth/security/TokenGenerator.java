@@ -5,13 +5,13 @@ import ca.utoronto.lms.auth.model.User;
 import ca.utoronto.lms.auth.repository.UserRepository;
 import ca.utoronto.lms.shared.exception.BadRequestException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
-import io.jsonwebtoken.Claims;
+import ca.utoronto.lms.shared.security.TokenUtils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -26,31 +26,55 @@ import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 public class TokenGenerator {
     private final UserRepository userRepository;
     private final FacultyFeignClient facultyFeignClient;
+    private final TokenUtils tokenUtils;
 
     @Value("${token.secret}")
     private String secret;
 
-    @Value("${token.expiration}")
-    private Long expiration;
+    @Value("${token.accessExpiration}")
+    private Long accessExpiration;
 
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(Claims.SUBJECT, userDetails.getUsername());
-        claims.put(Claims.ISSUED_AT, new Date(System.currentTimeMillis()));
+    @Value("${token.refreshExpiration}")
+    private Long refreshExpiration;
 
-        User user =
-                userRepository
-                        .findByUsername(userDetails.getUsername())
-                        .orElseThrow(() -> new NotFoundException("User not found"));
-        if (user.isDeleted()) {
-            throw new BadRequestException("User is deleted");
+    public String refreshAccessToken(String refreshToken) {
+        String username = tokenUtils.getUsername(refreshToken);
+        if (username == null) {
+            throw new AuthenticationException("Refresh token isn't valid!") {};
         }
+        return generateAccessToken(username);
+    }
 
+    public String generateAccessToken(String username) {
+        Map<String, Object> claims = generateClaims(username);
+        return Jwts.builder()
+                .setClaims(claims) // It has to be first because it overwrites the rest
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpiration * 1000))
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+    }
+
+    public String generateRefreshToken(String username) {
+        validateUser(username);
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration * 1000))
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+    }
+
+    private Map<String, Object> generateClaims(String username) {
+        Map<String, Object> claims = new HashMap<>();
+
+        User user = validateUser(username);
         Long userId = user.getId();
         claims.put("userId", userId);
 
         List<String> authorities =
-                userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+                user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         claims.put("roles", authorities);
 
         if (authorities.contains(ROLE_ADMIN)) {
@@ -61,10 +85,17 @@ public class TokenGenerator {
             claims.put("studentId", facultyFeignClient.getStudentIdByUserId(userId));
         }
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
+        return claims;
+    }
+
+    private User validateUser(String username) {
+        User user =
+                userRepository
+                        .findByUsername(username)
+                        .orElseThrow(() -> new NotFoundException("User not found"));
+        if (user.isDeleted()) {
+            throw new BadRequestException("User is deleted");
+        }
+        return user;
     }
 }

@@ -14,6 +14,8 @@ The system is using the client-server and layered architecture.
 
 The backend is implemented with microservices architecture and database per service pattern. 
 
+Authentication and authorization are realized with JWT, including access and refresh tokens.
+
 ![system-architecture](https://user-images.githubusercontent.com/66832914/184617342-b7a26ee3-f7be-4aba-914c-4a2a8dfc3749.jpg)
 
 ## Technologies used

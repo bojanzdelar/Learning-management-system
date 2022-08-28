@@ -69,7 +69,7 @@ public class StudentController extends BaseController<Student, StudentDTO, Long>
 
     @GetMapping("/user-id/{id}/id")
     public ResponseEntity<Long> getIdByUserId(@PathVariable Long id) {
-        return new ResponseEntity<>(this.service.findByUserId(id).getId(), HttpStatus.OK);
+        return new ResponseEntity<>(this.service.findIdByUserId(id), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/thesis/id")

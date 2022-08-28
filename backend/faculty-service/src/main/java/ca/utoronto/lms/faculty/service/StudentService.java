@@ -101,6 +101,13 @@ public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
         return mapper.toDTO(student);
     }
 
+    public Long findIdByUserId(Long userId) {
+        return repository
+                .findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException("User id not found"))
+                .getId();
+    }
+
     public List<StudentDTO> findBySubjectId(Long id) {
         Set<Long> studentIds = new HashSet<>(subjectFeignClient.getStudentIdsBySubjectId(id));
         List<StudentDTO> students = mapper.toDTO(repository.findByIdInAndDeletedFalse(studentIds));

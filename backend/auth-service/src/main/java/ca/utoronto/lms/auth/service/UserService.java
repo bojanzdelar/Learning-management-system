@@ -1,6 +1,6 @@
 package ca.utoronto.lms.auth.service;
 
-import ca.utoronto.lms.auth.dto.TokenDTO;
+import ca.utoronto.lms.auth.dto.TokensDTO;
 import ca.utoronto.lms.auth.mapper.UserMapper;
 import ca.utoronto.lms.auth.model.User;
 import ca.utoronto.lms.auth.repository.UserRepository;
@@ -14,7 +14,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -101,15 +100,20 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
                 .getId();
     }
 
-    public TokenDTO login(UserDetailsDTO userDetailsDTO) {
+    public TokensDTO login(UserDTO userDTO) {
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(
-                        userDetailsDTO.getUsername(), userDetailsDTO.getPassword());
+                        userDTO.getUsername(), userDTO.getPassword());
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetails userDetails =
-                userDetailsService.loadUserByUsername(userDetailsDTO.getUsername());
-        String jwt = tokenGenerator.generateToken(userDetails);
-        return new TokenDTO(jwt);
+        String username = userDTO.getUsername();
+        return new TokensDTO(
+                tokenGenerator.generateAccessToken(username),
+                tokenGenerator.generateRefreshToken(username));
+    }
+
+    public TokensDTO refresh(String refreshToken) {
+        refreshToken = refreshToken.substring(BEARER_PREFIX.length());
+        return new TokensDTO(tokenGenerator.refreshAccessToken(refreshToken), refreshToken);
     }
 }

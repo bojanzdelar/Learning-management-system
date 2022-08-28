@@ -13,12 +13,18 @@ export class RequestInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(
-    request: HttpRequest<unknown>,
+    request: HttpRequest<any>,
     next: HttpHandler
-  ): Observable<HttpEvent<unknown>> {
-    if (this.authService.token) {
+  ): Observable<HttpEvent<any>> {
+    if (
+      this.authService.accessToken &&
+      !request.url.includes('/auth-service/refresh')
+    ) {
       const newRequest = request.clone({
-        headers: request.headers.set('Authorization', this.authService.token),
+        headers: request.headers.set(
+          'Authorization',
+          `Bearer ${this.authService.accessToken}`
+        ),
       });
 
       return next.handle(newRequest);

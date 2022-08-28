@@ -41,7 +41,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/docs/**").permitAll()
+                        "/docs/**",
+                        "/refresh").permitAll()
                 .antMatchers(
                         HttpMethod.POST,
                         "/login").anonymous()

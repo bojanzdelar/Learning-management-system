@@ -30,4 +30,5 @@ eureka:
 
 token:
   secret: GieJX^>%Pd;Z]#&?kmZY4SRZNlWsjr%JJiH!q9KM~,Zd./[oh*=dus&p_M3Ab#B
-  expiration: 7200
+  accessExpiration: 7200
+  refreshExpiration: 86400
