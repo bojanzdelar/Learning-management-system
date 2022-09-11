@@ -35,11 +35,6 @@ public class TeacherController extends BaseController<Teacher, TeacherDTO, Long>
         pdfExporter.export(teachers, response);
     }
 
-    @GetMapping(value = "/all/xml", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<List<TeacherDTO>> getAllXml() {
-        return new ResponseEntity<>(this.service.findAll(), HttpStatus.OK);
-    }
-
     @GetMapping("/user-id/{id}/id")
     public ResponseEntity<Long> getIdByUserId(@PathVariable Long id) {
         return new ResponseEntity<>(this.service.findByUserId(id).getId(), HttpStatus.OK);

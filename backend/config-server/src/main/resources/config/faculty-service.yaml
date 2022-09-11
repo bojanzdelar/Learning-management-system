@@ -34,3 +34,9 @@ feign:
 
 token:
   secret: GieJX^>%Pd;Z]#&?kmZY4SRZNlWsjr%JJiH!q9KM~,Zd./[oh*=dus&p_M3Ab#B
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

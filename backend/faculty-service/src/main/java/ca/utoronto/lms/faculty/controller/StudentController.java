@@ -40,9 +40,9 @@ public class StudentController extends BaseController<Student, StudentDTO, Long>
         studentPDFExporter.export(students, response);
     }
 
-    @GetMapping(value = "/all/xml", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<List<StudentDTO>> getAllXml() {
-        return new ResponseEntity<>(this.service.findAll(), HttpStatus.OK);
+    @GetMapping(value = "/subject/{id}/all")
+    public ResponseEntity<List<StudentDTO>> getAllBySubjectId(@PathVariable Long id) {
+        return new ResponseEntity<>(this.service.findBySubjectId(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/subject/{id}/all/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
@@ -51,11 +51,6 @@ public class StudentController extends BaseController<Student, StudentDTO, Long>
         response.setHeader("Content-Disposition", "attachment; filename=students-on-subject.pdf");
         List<StudentDTO> students = service.findBySubjectId(id);
         studentsOnSubjectPDFExporter.export(students, response);
-    }
-
-    @GetMapping(value = "/subject/{id}/all/xml", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<List<StudentDTO>> getAllBySubjectIdXml(@PathVariable Long id) {
-        return new ResponseEntity<>(this.service.findBySubjectId(id), HttpStatus.OK);
     }
 
     @GetMapping("/subject/{id}")

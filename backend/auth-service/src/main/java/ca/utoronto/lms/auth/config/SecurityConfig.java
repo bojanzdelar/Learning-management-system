@@ -40,9 +40,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
-                        HttpMethod.GET,
-                        "/docs/**",
-                        "/refresh").permitAll()
+                    HttpMethod.GET,
+                    "/actuator/**",
+                    "/refresh").permitAll()
                 .antMatchers(
                         HttpMethod.POST,
                         "/login").anonymous()

@@ -11,7 +11,10 @@ export class StudentService extends RestService<Student> {
   override url: string = `${this.url}/faculty-service/students`;
 
   getAllXml(): Observable<string> {
-    return this.http.get(`${this.url}/all/xml`, { responseType: 'text' });
+    return this.http.get(`${this.url}/all`, {
+      headers: { Accept: 'application/xml' },
+      responseType: 'text',
+    });
   }
 
   getAllPdf(): Observable<Blob> {
@@ -19,7 +22,8 @@ export class StudentService extends RestService<Student> {
   }
 
   getBySubjectIdAllXml(id: number): Observable<string> {
-    return this.http.get(`${this.url}/subject/${id}/all/xml`, {
+    return this.http.get(`${this.url}/subject/${id}/all`, {
+      headers: { Accept: 'application/xml' },
       responseType: 'text',
     });
   }

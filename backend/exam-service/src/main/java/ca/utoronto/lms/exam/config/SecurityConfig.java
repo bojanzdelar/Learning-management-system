@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(
                         HttpMethod.GET,
+                        "/actuator/**",
                         "/docs/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,

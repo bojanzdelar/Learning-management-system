@@ -32,3 +32,9 @@ token:
   secret: GieJX^>%Pd;Z]#&?kmZY4SRZNlWsjr%JJiH!q9KM~,Zd./[oh*=dus&p_M3Ab#B
   accessExpiration: 7200
   refreshExpiration: 86400
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
