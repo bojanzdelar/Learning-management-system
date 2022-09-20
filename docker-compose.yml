@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  database-auth-dev:
+    image: mysql:8.0.30-debian
+    ports: 
+      - 3307:3306
+    volumes:
+      - auth-data-dev:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lms-auth
+
+  database-faculty-dev:
+    image: mysql:8.0.30-debian
+    ports: 
+      - 3308:3306
+    volumes:
+      - faculty-data-dev:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lms-faculty
+
+  database-subject-dev:
+    image: mysql:8.0.30-debian
+    ports: 
+      - 3309:3306
+    volumes:
+      - subject-data-dev:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lms-subject
+
+  database-exam-dev:
+    image: mysql:8.0.30-debian
+    ports: 
+      - 3310:3306
+    volumes:
+      - exam-data-dev:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lms-exam
+
+volumes:
+  auth-data-dev:
+  faculty-data-dev:
+  subject-data-dev:
+  exam-data-dev:

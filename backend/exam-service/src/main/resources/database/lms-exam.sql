@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.29, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: lms
+-- Host: 127.0.0.1    Database: lms-exam
 -- ------------------------------------------------------
 -- Server version	8.0.29
 

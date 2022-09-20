@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8083
 
 spring:
   jpa:
@@ -10,7 +10,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://localhost:3306/lms-subject?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3309/lms-subject?createDatabaseIfNotExist=true
     username: root
     password: root
   jackson:
@@ -23,10 +23,9 @@ springdoc:
 eureka:
   instance:
     hostname: localhost
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     service-url:
-      default-zone: http://localhost:8761/eureka
+      defaultZone: http://localhost:8761/eureka
 
 token:
   secret: GieJX^>%Pd;Z]#&?kmZY4SRZNlWsjr%JJiH!q9KM~,Zd./[oh*=dus&p_M3Ab#B
@@ -35,4 +34,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: "*"

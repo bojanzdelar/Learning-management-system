@@ -30,21 +30,25 @@ public class AppStartupRunner implements ApplicationRunner {
 
         UserDetailsDTO user =
                 UserDetailsDTO.builder()
-                        .id(1337L)
+                        .id(ROOT_USER_ID)
                         .username("admin@utoronto.ca")
                         .password(passwordEncoder.encode("password"))
                         .authorities(Set.of(root, admin))
+                        .accountNonExpired(true)
+                        .accountNonLocked(true)
+                        .credentialsNonExpired(true)
+                        .enabled(true)
                         .build();
 
         if (roleService.findAll().isEmpty()) {
-            roleService.save(root);
-            roleService.save(admin);
-            roleService.save(teacher);
-            roleService.save(student);
+            roleService.forceSave(root);
+            roleService.forceSave(admin);
+            roleService.forceSave(teacher);
+            roleService.forceSave(student);
         }
 
         if (userService.findAll().isEmpty()) {
-            userService.save(user);
+            userService.forceSave(user);
         }
     }
 }

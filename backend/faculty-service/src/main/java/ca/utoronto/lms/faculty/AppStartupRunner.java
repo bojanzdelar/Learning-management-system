@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static ca.utoronto.lms.shared.security.SecurityUtils.ROOT_USER_ID;
+
 @Component
 @RequiredArgsConstructor
 public class AppStartupRunner implements ApplicationRunner {
@@ -22,8 +24,8 @@ public class AppStartupRunner implements ApplicationRunner {
         if (administrators.isEmpty()) {
             administratorRepository.save(
                     Administrator.builder()
-                            .id(1337L)
-                            .userId(1337L)
+                            .id(ROOT_USER_ID)
+                            .userId(ROOT_USER_ID)
                             .firstName("Bojan")
                             .lastName("Zdelar")
                             .build());

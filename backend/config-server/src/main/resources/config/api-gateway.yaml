@@ -6,10 +6,8 @@ spring:
     gateway:
       globalcors:
         cors-configurations:
-          '[/**]':
-            allowedOrigins:
-              - "http://localhost:4200"
-              - "http://127.0.0.1:4200"
+          "[/**]":
+            allowedOrigins: "*"
             allowedHeaders: "*"
             allowedMethods:
               - GET
@@ -61,10 +59,10 @@ eureka:
     hostname: localhost
   client:
     service-url:
-      default-zone: http://localhost:8761/eureka
+      defaultZone: http://localhost:8761/eureka
 
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: "*"
