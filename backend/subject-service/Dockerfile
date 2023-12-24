@@ -4,7 +4,7 @@ COPY pom.xml /build/
 COPY src /build/src/
 
 WORKDIR /build/
-RUN mvn package -q
+RUN mvn package -q -Dspring.profiles.active="prod"
 
 FROM amazoncorretto:17-alpine3.15
 
